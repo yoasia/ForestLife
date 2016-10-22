@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 5bd4c2c69c31f9e4b8002db20bb4c2d9
 timeCreated: 1476305628
+=======
+guid: ed2ec33602b2d0c4db226bc1547a7413
+timeCreated: 1476642471
+>>>>>>> b9b5809... movement using accelerometers - horizontal axis
 licenseType: Free
 NativeFormatImporter:
   userData: 
