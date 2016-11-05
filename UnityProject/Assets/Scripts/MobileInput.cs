@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MobileInput : MonoBehaviour
 {
@@ -27,9 +23,9 @@ public class MobileInput : MonoBehaviour
     {
         if (currentAcc != Vector3.zero)
         {
-            Debug.LogFormat("x: {0}", Input.acceleration.x);
-            Debug.LogFormat("y: {0}", Input.acceleration.y);
-            Debug.LogFormat("z: {0}", Input.acceleration.z);
+            //Debug.LogFormat("x: {0}", Input.acceleration.x);
+            //Debug.LogFormat("y: {0}", Input.acceleration.y);
+            //Debug.LogFormat("z: {0}", Input.acceleration.z);
             float angle;
             switch (axis)
             {
