@@ -3,16 +3,41 @@ using System.Collections;
 
 public class TreeControll : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
+    public bool selected = false;
+    public Material newMaterialRef;
+    Renderer rend;
+
+    Ray ray;
+    RaycastHit hit;
+    // Use this for initialization
+    void Start () {
+        rend = GetComponent<Renderer>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
 	
-	}
+        
+        if (selected)
+        {
+            if (rend != null)
+            {
+                rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+            }
+            
+        }
+        else
+        {
+            if (rend != null)
+            {
+                rend.material.shader = Shader.Find("Diffuse");
+            }
+        }
+    }
+
+   
 
 
-  
+
+
 }
