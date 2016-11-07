@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class SeedController : MonoBehaviour
 {
@@ -15,15 +14,13 @@ public class SeedController : MonoBehaviour
 
     private Vector3 startingCameraPosition;
 
-    // Use this for initialization
     void Start()
     {
         MobInput.ResetAxes();
         startingCameraPosition = SeedCamera.transform.localPosition;
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         var baseSpeed = Speed * 1.5F;
 
@@ -36,8 +33,8 @@ public class SeedController : MonoBehaviour
         float move = vertAxis * Speed + baseSpeed;
         float rotation = horAxis * RotationSpeed;
 
-        Debug.LogFormat("Vertical: {0}", vertAxis);
-        Debug.LogFormat("Horizontal: {0}", horAxis);
+        //Debug.LogFormat("Vertical: {0}", vertAxis);
+        //Debug.LogFormat("Horizontal: {0}", horAxis);
 
         move *= Time.deltaTime;
         rotation *= Time.deltaTime;
