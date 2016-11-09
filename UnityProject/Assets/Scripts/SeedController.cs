@@ -25,27 +25,31 @@ public class SeedController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var baseSpeed = Speed * 1.5F;
+        if (GameManager.instance.currentGameState == GameManager.GameState.GS_SEED)
+        {
+            var baseSpeed = Speed * 1.5F;
 
-        var vertAxis = MobInput.GetAxis("Vertical");
-        var horAxis = MobInput.GetAxis("Horizontal");
-        if (Mathf.Abs(vertAxis) == 1)
-            horAxis = 0;
-        if (horAxis != 0)
-            vertAxis = 0;
-        float move = vertAxis * Speed + baseSpeed;
-        float rotation = horAxis * RotationSpeed;
+            var vertAxis = MobInput.GetAxis("Vertical");
+            var horAxis = MobInput.GetAxis("Horizontal");
+            if (Mathf.Abs(vertAxis) == 1)
+                horAxis = 0;
+            if (horAxis != 0)
+                vertAxis = 0;
+            float move = vertAxis * Speed + baseSpeed;
+            float rotation = horAxis * RotationSpeed;
 
-        Debug.LogFormat("Vertical: {0}", vertAxis);
-        Debug.LogFormat("Horizontal: {0}", horAxis);
+            Debug.LogFormat("Vertical: {0}", vertAxis);
+            Debug.LogFormat("Horizontal: {0}", horAxis);
 
-        move *= Time.deltaTime;
-        rotation *= Time.deltaTime;
+            move *= Time.deltaTime;
+            rotation *= Time.deltaTime;
 
-        GetComponent<Rigidbody>().AddRelativeForce(0, move, 0);
-        GetComponent<Rigidbody>().AddTorque(0, rotation, 0);
+            GetComponent<Rigidbody>().AddRelativeForce(0, move, 0);
+            GetComponent<Rigidbody>().AddTorque(0, rotation, 0);
 
-        Vector3 newCameraPosition = new Vector3(startingCameraPosition.x - horAxis * HorizontalSway, startingCameraPosition.y - vertAxis * VerticalSway, startingCameraPosition.z);
-        SeedCamera.transform.localPosition = newCameraPosition;
+            Vector3 newCameraPosition = new Vector3(startingCameraPosition.x - horAxis * HorizontalSway, startingCameraPosition.y - vertAxis * VerticalSway, startingCameraPosition.z);
+            SeedCamera.transform.localPosition = newCameraPosition;
+
+        }
     }
 }
