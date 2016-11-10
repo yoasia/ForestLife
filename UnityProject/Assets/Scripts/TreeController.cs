@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TreeControll : MonoBehaviour
+public class TreeController : MonoBehaviour
 {
 
     public bool selected = false;
@@ -23,6 +23,7 @@ public class TreeControll : MonoBehaviour
 
         if (selected)
         {
+			Debug.Log ("dzrewozaznaczone");
             if (rend != null)
             {
                 rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");

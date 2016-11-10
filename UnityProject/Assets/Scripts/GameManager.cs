@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -7,11 +8,16 @@ public class GameManager : MonoBehaviour {
     public Camera worldCamera;
 
     public GameObject leftMenuPanel;
+	public bool selectingMode = false;
 
     private Animator animatorLeftMenu;
     private bool leftMenuVisable = false;
+	public Button es;
+	public Sprite s;
 
 
+	Ray ray;
+	RaycastHit hit;
 
     public static GameManager instance;
 
@@ -42,7 +48,10 @@ public class GameManager : MonoBehaviour {
 	
 	void Update () {
         CameraChange();
+		if (selectingMode) {
+			PointSelect ();
 
+		}
 
 
     }
@@ -90,7 +99,60 @@ public class GameManager : MonoBehaviour {
         
     }
     
-   
+	public void SelectModeOnOff() {
+		if (selectingMode) {
+			selectingMode = false;
+			Sprite temp = es.image.sprite;
 
+			es.image.sprite = s;
+			s = temp;
+			//es.current.SetSelectedGameObject(selectedButton.gameObject, new BaseEventData(EventSystem.current));
+			//es.Select();
+		}
+		else {
+			Sprite temp = es.image.sprite;
+
+			es.image.sprite = s;
+			s = temp;
+			selectingMode = true;
+			//es.OnDeselect(;
+
+		}
+
+	}
+	private void PointSelect()
+	{
+
+		if (Input.touchCount > 0)
+		{
+			ray = worldCamera.ScreenPointToRay(Input.GetTouch(0).position);
+			Debug.DrawRay(ray.origin, ray.direction * 2000);
+			if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+			{
+				Debug.Log ("hit");
+				Debug.Log (hit.transform.gameObject.name);
+				if (hit.transform.gameObject.tag == "Tree")
+				{
+					Debug.Log ("drzewo");
+					if (hit.transform.gameObject.GetComponent<TreeController> ().selected) 
+					{
+						
+						hit.transform.gameObject.GetComponent<TreeController> ().selected = false;
+						Debug.Log ("odznacz");
+					}
+					else 
+					{
+						hit.transform.gameObject.GetComponent<TreeController> ().selected = true;
+						Debug.Log ("zaznacz");
+					}
+				}
+
+
+
+			}
+
+		}
+
+	}
 
 }
