@@ -14,11 +14,11 @@ public class CameraController : MonoBehaviour
     void Update()
     {
 
-		if (GameManager.instance.selectingMode == false) {
+		//if (GameManager.instance.selectingMode == false) {
 			RotateCamera ();
 			ZoomCamera ();
 			MoveCamera ();
-		}
+		//}
 
     }
     

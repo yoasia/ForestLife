@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\MobileInput.cs" />
      <Compile Include="Assets\Scripts\SeedController.cs" />
+     <Compile Include="Assets\Scripts\SelectionCameraController.cs" />
      <Compile Include="Assets\Scripts\TreeController.cs" />
      <Compile Include="Assets\Scripts\Water.cs" />
      <None Include="Assets\Standard Assets\Effects\AntiAliasing\FXAA\Resources\FXAA3.cginc" />
