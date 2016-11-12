@@ -24,8 +24,8 @@ public class GameManager : MonoBehaviour {
 
     public List <GameObject> selectedTrees = new List<GameObject>();
 
-    int addKora = 0, addKorzen = 0, addLiscie = 0; 
-
+    int addKora = 0, addKorzen = 0, addLiscie = 0;
+    int upgradeAddValue = 10;
 	Ray ray;
 	RaycastHit hit;
 
@@ -160,41 +160,41 @@ public class GameManager : MonoBehaviour {
         
         if(b.name == "AddKoraButton")
         {
-            addKora += 10;
+            addKora += upgradeAddValue;
             koraAddText.text = "+" + addKora;
         }
         if(b.name == "AddLiscieButton")
         {
-            addLiscie += 10;
+            addLiscie += upgradeAddValue;
             liscieAddText.text = "+" + addLiscie;
         }
         if (b.name == "AddKorzenButton")
         {
-           addKorzen += 10;
+            addKorzen += upgradeAddValue;
            korzenAddText.text = "+" + addKorzen;
         }
         if (b.name == "SubKoraButton")
         {
-            if (addKora - 10 >= 0)
+            if (addKora - upgradeAddValue >= 0)
             {
-                addKora -= 10;
+                addKora -= upgradeAddValue;
                 koraAddText.text = "+" + addKora;
             }
             
         }
         if (b.name == "SubLiscieButton")
         {
-            if (addLiscie - 10 >= 0)
+            if (addLiscie - upgradeAddValue >= 0)
             {
-                addLiscie -= 10;
+                addLiscie -= upgradeAddValue;
                 liscieAddText.text = "+" + addLiscie;
             }
         }
         if (b.name == "SubKorzenButton")
         {
-            if (addKorzen - 10 >= 0)
+            if (addKorzen - upgradeAddValue >= 0)
             {
-                addKorzen -= 10;
+                addKorzen -= upgradeAddValue;
                 korzenAddText.text = "+" + addKorzen;
             }
         }
