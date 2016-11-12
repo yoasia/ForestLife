@@ -107,6 +107,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\MapGeneratorEditor.cs" />
     <Compile Include="Assets\Editor\Object2Terrain.cs" />
   </ItemGroup>
   <ItemGroup>
