@@ -107,12 +107,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\DepthOfFieldEditor.cs" />
     <Compile Include="Assets\Editor\MapGeneratorEditor.cs" />
     <Compile Include="Assets\Editor\Object2Terrain.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Realistic Hail Set\README.txt" />
     <None Include="Assets\Shaders\FlatShadedWaterWithEdgeBlend.shader" />
+    <None Include="Assets\Shaders\Low Poly Transparent.shader" />
+    <None Include="Assets\Shaders\NewSurfaceShader-2.shader" />
     <None Include="Assets\Standard Assets\Effects\AmbientOcclusion\Resources\AmbientOcclusion.cginc" />
     <None Include="Assets\Standard Assets\Effects\AmbientOcclusion\Resources\AmbientOcclusion.shader" />
     <None Include="Assets\Standard Assets\Effects\AntiAliasing\FXAA\Resources\FXAA.shader" />
