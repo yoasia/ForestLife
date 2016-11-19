@@ -36,9 +36,10 @@ public class TreeController : MonoBehaviour
     private float startTime;
     private float lastGrowth;
     private float timeBetweenGrowth = 1;
+    private float growthRatePerSecond = 1F / 100;
 
     private float soilMid = 5;
-    
+        
     public float Age { get { return Time.time - startTime; } }
     
     // Use this for initialization
@@ -135,7 +136,7 @@ public class TreeController : MonoBehaviour
 
         growth *= (Time.time - lastGrowth);
 
-        float growthDemand = baseGrowthDemand + baseGrowthDemand * (size - 1)/2;
+        float growthDemand = baseGrowthDemand + baseGrowthDemand * (size - 1)/5;
 
         growth = growth - growthDemand;
 
@@ -144,13 +145,15 @@ public class TreeController : MonoBehaviour
         if (growth > maxGrowth)
             growth = maxGrowth;
 
+        growth *= growthRatePerSecond;
+
         if (growth > 0)
         {
             upgradePoints += growth;
             if (upgradePoints > maxUpgradePoints)
                 upgradePoints = maxUpgradePoints;
 
-            size += growth / 10;
+            size += growth;
         }
 
         healthPoints += growth;
