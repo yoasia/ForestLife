@@ -1,5 +1,6 @@
 Base path: D:/Programy/Unity/Editor/Data
 Cmd: getPlatforms
+<<<<<<< HEAD
 Cmd: preprocess
   insize=9008 outsize=1515 ok=1
 Cmd: preprocess
@@ -32,3 +33,5 @@ Cmd: preprocess
   insize=3372 outsize=2030 ok=1
 Cmd: compileCompute
   api=4 insize=2749 outsize=4053 ok=1
+=======
+>>>>>>> terrain

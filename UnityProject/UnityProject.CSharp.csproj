@@ -70,6 +70,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Realistic Hail Set\Demo Scene\Scripts\DemoSceneController.cs" />
+    <Compile Include="Assets\Scripts\MapMesh\MapDisplay.cs" />
+    <Compile Include="Assets\Scripts\MapMesh\MapGenerator.cs" />
+    <Compile Include="Assets\Scripts\MapMesh\MeshGenerator.cs" />
+    <Compile Include="Assets\Scripts\MapMesh\Noise.cs" />
+    <Compile Include="Assets\Scripts\MapMesh\TextureGenerator.cs" />
     <Compile Include="Assets\Scripts\MobileInput.cs" />
     <Compile Include="Assets\Scripts\SeedController.cs" />
     <Compile Include="Assets\Scripts\Water.cs" />
@@ -77,6 +82,8 @@
   <ItemGroup>
     <None Include="Assets\Realistic Hail Set\README.txt" />
     <None Include="Assets\Shaders\FlatShadedWaterWithEdgeBlend.shader" />
+    <None Include="Assets\Shaders\Low Poly Transparent.shader" />
+    <None Include="Assets\Shaders\NewSurfaceShader-2.shader" />
     <None Include="Assets\Standard Assets\Effects\AmbientOcclusion\Resources\AmbientOcclusion.cginc" />
     <None Include="Assets\Standard Assets\Effects\AmbientOcclusion\Resources\AmbientOcclusion.shader" />
     <None Include="Assets\Standard Assets\Effects\AntiAliasing\FXAA\Resources\FXAA.shader" />
