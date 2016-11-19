@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityProject.CSharp.Plugins", "UnityProject.CSharp.Plugins.csproj", "{353BF0E8-F7B0-288C-C929-51857470B0EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityProject.CSharp", "UnityProject.CSharp.csproj", "{F5F9D48D-6914-C6F2-CF81-CF8D045EAAD0}"
