@@ -17,6 +17,7 @@ public class TreeController : MonoBehaviour
 
     public float size;
 
+    public float growthRate = 1F;
     public float maxGrowth = 1F;
 
     public float badTerrainFactor = 1F;

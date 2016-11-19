@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System.Linq;
 
 public class GameManager : MonoBehaviour {
 
@@ -21,6 +22,9 @@ public class GameManager : MonoBehaviour {
 	public Sprite s;
     public EventSystem eventSystem;
     public Text koraAddText, korzenAddText, liscieAddText;
+
+    public Terrain terrain;
+    public List<TreeController> treesSpecies;
 
     public List <GameObject> selectedTrees = new List<GameObject>();
 
@@ -55,6 +59,8 @@ public class GameManager : MonoBehaviour {
         animatorLeftMenu = leftMenuPanel.GetComponent<Animator>();
         animatorLeftMenu.enabled = false;
         CameraChange();
+
+        seedLanding(73, 37, "birch");
     }
 	
 	
@@ -66,7 +72,14 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    
+    public void seedLanding(float x, float z, string type)
+    {
+        var treeToAdd = treesSpecies.First(s=>s.species == type);
+        var pos = new Vector3(x, 0, z);
+        pos.y = terrain.SampleHeight(pos);
+
+        Instantiate(treeToAdd, pos, new Quaternion(0, 0, 0, 0));
+    }
 
 
     public void CameraChange()
