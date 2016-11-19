@@ -103,19 +103,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Standard Assets\Effects\AmbientOcclusion\Editor\AmbientOcclusionEditor.cs" />
-    <Compile Include="Assets\Standard Assets\Effects\AntiAliasing\Editor\AntiAliasingEditor.cs" />
-    <Compile Include="Assets\Standard Assets\Effects\AntiAliasing\Editor\IAntiAliasingEditor.cs" />
     <Compile Include="Assets\Standard Assets\Effects\AntiAliasing\FXAA\Editor\FXAAEditor.cs" />
-    <Compile Include="Assets\Standard Assets\Effects\AntiAliasing\SMAA\Editor\SMAAEditor.cs" />
-    <Compile Include="Assets\Standard Assets\Effects\Bloom\Editor\BloomEditor.cs" />
-    <Compile Include="Assets\Standard Assets\Effects\Bloom\Editor\BloomGraphDrawer.cs" />
-    <Compile Include="Assets\Standard Assets\Effects\Common\Editor\EditorGUIHelper.cs" />
-    <Compile Include="Assets\Standard Assets\Effects\Common\Editor\FieldFinder.cs" />
-    <Compile Include="Assets\Standard Assets\Effects\Common\Editor\MinDrawer.cs" />
-    <Compile Include="Assets\Standard Assets\Effects\LensAberrations\Editor\LensAberrationsEditor.cs" />
-    <Compile Include="Assets\Standard Assets\Effects\ScreenSpaceReflection\Editor\ScreenSpaceReflectionEditor.cs" />
-    <Compile Include="Assets\Standard Assets\Effects\TonemappingColorGrading\Editor\TonemappingColorGradingEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Realistic Hail Set\README.txt" />

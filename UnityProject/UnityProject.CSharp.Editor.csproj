@@ -101,15 +101,24 @@
       <Project>{F5F9D48D-6914-C6F2-CF81-CF8D045EAAD0}</Project>
       <Name>UnityProject.CSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="UnityProject.CSharp.Editor.Plugins.csproj">
-      <Project>{954B9EDE-EF0A-EE8C-721B-41565588E43D}</Project>
-      <Name>UnityProject.CSharp.Editor.Plugins</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\AmbientOcclusionEditor.cs" />
+    <Compile Include="Assets\Editor\AntiAliasingEditor.cs" />
+    <Compile Include="Assets\Editor\BloomEditor.cs" />
+    <Compile Include="Assets\Editor\BloomGraphDrawer.cs" />
     <Compile Include="Assets\Editor\DepthOfFieldEditor.cs" />
+    <Compile Include="Assets\Editor\EditorGUIHelper.cs" />
+    <Compile Include="Assets\Editor\FXAAEditor.cs" />
+    <Compile Include="Assets\Editor\FieldFinder.cs" />
+    <Compile Include="Assets\Editor\IAntiAliasingEditor.cs" />
+    <Compile Include="Assets\Editor\LensAberrationsEditor.cs" />
     <Compile Include="Assets\Editor\MapGeneratorEditor.cs" />
+    <Compile Include="Assets\Editor\MinDrawer.cs" />
     <Compile Include="Assets\Editor\Object2Terrain.cs" />
+    <Compile Include="Assets\Editor\SMAAEditor.cs" />
+    <Compile Include="Assets\Editor\ScreenSpaceReflectionEditor.cs" />
+    <Compile Include="Assets\Editor\TonemappingColorGradingEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Realistic Hail Set\README.txt" />
