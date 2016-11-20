@@ -52,18 +52,17 @@ public class GameManager : MonoBehaviour {
     
     void Start () {
 
-        currentGameState = GameState.GS_SEED;
+        //currentGameState = GameState.GS_SEED;
 
-        animatorLeftMenu = leftMenuPanel.GetComponent<Animator>();
-        animatorLeftMenu.enabled = false;
+
 
         CameraChange();
     }
 	
 	
 	void Update () {
-        
-        
+
+        CameraChange();
 
 
     }
@@ -106,7 +105,7 @@ public class GameManager : MonoBehaviour {
             popupCanvas.SetActive(true);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
-
+            seed.SetActive(true);
             worldCamera.enabled = false;
             seedCamera.enabled = true;
             selectCamera.enabled = false;
@@ -133,10 +132,10 @@ public class GameManager : MonoBehaviour {
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(true);
 
-            worldCamera.enabled = false;
-            seedCamera.enabled = true;
+            worldCamera.enabled = true;
+            seedCamera.enabled = false;
             selectCamera.enabled = false;
-
+            seed.SetActive(false);
         }
         else if (currentGameState == GameState.GS_SELECT_TREEKIND)
         {
@@ -146,11 +145,12 @@ public class GameManager : MonoBehaviour {
             treeChooserCanvas.SetActive(true);
             startCanvas.SetActive(false);
 
-            worldCamera.enabled = false;
+            worldCamera.enabled = true;
             seedCamera.enabled = false;
-            selectCamera.enabled = true;
+            selectCamera.enabled = false;
             seed.SetActive(false);
         }
+        CameraChange();
     }
     public void SetGameState(GameState newGameState)
     {
