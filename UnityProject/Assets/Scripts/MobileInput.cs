@@ -73,7 +73,7 @@ public class MobileInput : MonoBehaviour
 
         var tmp = Mathf.Sqrt(acceleration.y * acceleration.y + miu * acceleration.z * acceleration.z);
         angle = Mathf.Atan2(acceleration.x, sign * tmp) * Mathf.Rad2Deg;
-        Debug.LogFormat("Horizontal: {0}", angle);
+        //Debug.LogFormat("Horizontal: {0}", angle);
 
         return angle;
     }
@@ -84,7 +84,7 @@ public class MobileInput : MonoBehaviour
 
         var tmp = Mathf.Sqrt(acceleration.x * acceleration.x + acceleration.y * acceleration.y);
         angle = Mathf.Atan2(-acceleration.z, tmp) * Mathf.Rad2Deg;
-        Debug.LogFormat("Vertical: {0}", angle);
+        //Debug.LogFormat("Vertical: {0}", angle);
 
         return angle;
     }

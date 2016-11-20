@@ -55,12 +55,11 @@ public class GameManager : MonoBehaviour {
 
     
     void Start () {
-	
+        currentGameState = GameState.GS_SEED;
+
         animatorLeftMenu = leftMenuPanel.GetComponent<Animator>();
         animatorLeftMenu.enabled = false;
         CameraChange();
-
-        seedLanding(73, 37, "birch");
     }
 	
 	
@@ -72,13 +71,16 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    public void seedLanding(float x, float z, string type)
+    public bool seedLanding(float x, float z, string type)
     {
-        var treeToAdd = treesSpecies.First(s=>s.species == type);
+        var treeToAdd = treesSpecies.First(s=>s.species.ToLower() == type.ToLower());
         var pos = new Vector3(x, 0, z);
         pos.y = terrain.SampleHeight(pos);
 
         Instantiate(treeToAdd, pos, new Quaternion(0, 0, 0, 0));
+        SetGameState(GameState.GS_ISLAND);
+
+        return true;
     }
 
 
