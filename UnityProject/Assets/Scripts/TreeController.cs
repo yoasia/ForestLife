@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class TreeController : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class TreeController : MonoBehaviour
 
     public float minWaterLevel = 6F;
     public float maxWaterLevel = 8F;
+    public float maxTerrainGradient = 60F;
     public float sunFactor = 1F;
 
     public bool selected = false;
@@ -40,9 +42,9 @@ public class TreeController : MonoBehaviour
     private float growthRatePerSecond = 1F / 100;
 
     private float soilMid = 5;
-        
+
     public float Age { get { return Time.time - startTime; } }
-    
+
     // Use this for initialization
     void Start()
     {
@@ -59,7 +61,7 @@ public class TreeController : MonoBehaviour
 
         if (selected)
         {
-			Debug.Log ("dzrewozaznaczone");
+            Debug.Log("dzrewozaznaczone");
             if (rend != null)
             {
                 rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
@@ -80,7 +82,7 @@ public class TreeController : MonoBehaviour
 
     public bool CanBeUpgraded(int rootsUpgrade, int leavesUpgrade, int barkUpgrade)
     {
-        if(GetUpgradesCost(rootsUpgrade, leavesUpgrade, barkUpgrade) <= upgradePoints)
+        if (GetUpgradesCost(rootsUpgrade, leavesUpgrade, barkUpgrade) <= upgradePoints)
             return false;
         return true;
     }
@@ -96,7 +98,7 @@ public class TreeController : MonoBehaviour
         barkStrength += barkUpgrade;
         upgradePoints -= cost;
 
-        return true;            
+        return true;
     }
 
     public void Kill()
@@ -137,7 +139,7 @@ public class TreeController : MonoBehaviour
 
         growth *= (Time.time - lastGrowth);
 
-        float growthDemand = baseGrowthDemand + baseGrowthDemand * (size - 1)/5;
+        float growthDemand = baseGrowthDemand + baseGrowthDemand * (size - 1) / 5;
 
         growth = growth - growthDemand;
 
@@ -162,5 +164,49 @@ public class TreeController : MonoBehaviour
         lastGrowth = Time.time;
 
         Debug.LogFormat("Size: {0}; Health: {1}; Upgrade Points: {2}", size, healthPoints, upgradePoints);
+    }
+
+    private bool CanGrow(float x, float y)
+    {
+        int map_x = (int)(x / TerrainManager.instance.map_size_factor);
+        int map_y = (int)(y / TerrainManager.instance.map_size_factor);
+        bool result = false;
+
+        if (TerrainManager.instance.IsWater(map_x, map_y) == false &&
+            Math.Abs(TerrainManager.instance.GetHeightDif(map_x, map_y)) <= maxTerrainGradient)
+        {
+            result = true;
+        }
+
+        return result;
+    }
+
+    private float GetTerrainFactor(float x, float y)
+    {
+        int map_x = (int)(x / TerrainManager.instance.map_size_factor);
+        int map_y = (int)(y / TerrainManager.instance.map_size_factor);
+        float result = 0F;
+
+        if (CanGrow(x, y) == false)
+        {
+            return -1F;
+        }
+        else
+        {
+            result = TerrainManager.instance.GetTexture(map_x, map_y);
+
+            result = result + 90 - Math.Abs(TerrainManager.instance.GetHeightDif(map_x, map_y));
+
+            float light = TerrainManager.instance.GetLight(map_x, map_y);
+
+            if (light > 0)
+            {
+                result = result + 100 - 100 * (light / TerrainManager.instance.max_light);
+            }
+
+            result = result * 1 / TerrainManager.instance.GetWaterDistance(map_x, map_y);
+        }
+
+        return result;
     }
 }
