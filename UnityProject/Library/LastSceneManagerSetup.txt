@@ -1,8 +1,4 @@
 sceneSetups:
-<<<<<<< HEAD
-- path: Assets/scene1.unity
-=======
-- path: Assets/Terrain1.unity
->>>>>>> terrain
+- path: Assets/Cloud.unity
   isLoaded: 1
   isActive: 1

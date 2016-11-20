@@ -1,37 +1,36 @@
-Base path: D:/Programy/Unity/Editor/Data
+Base path: A:/Program Files/Unity 5.4.1/Editor/Data
 Cmd: getPlatforms
-<<<<<<< HEAD
 Cmd: preprocess
-  insize=9008 outsize=1515 ok=1
+  insize=8715 outsize=1452 ok=1
 Cmd: preprocess
-  insize=2993 outsize=373 ok=1
+  insize=2889 outsize=353 ok=1
 Cmd: preprocess
-  insize=6432 outsize=1281 ok=1
-Cmd: compileSnippet
-  error: 1 plat 4 at (78): Output value 'vert' is not completely initialized\nCompiling Vertex program with WATER_EDGEBLEND_ON
-Platform defines: UNITY_ENABLE_REFLECTION_BUFFERS UNITY_PBS_USE_BRDF1 UNITY_SPECCUBE_BOX_PROJECTION UNITY_SPECCUBE_BLENDING
-  api=4 type=0 insize=5462 outsize=2334 kw=WATER_EDGEBLEND_ON pd=UNITY_ENABLE_REFLECTION_BUFFERS UNITY_PBS_USE_BRDF1 UNITY_SPECCUBE_BOX_PROJECTION UNITY_SPECCUBE_BLENDING ok=1
-Cmd: compileSnippet
-  api=4 type=1 insize=5462 outsize=2414 kw=WATER_EDGEBLEND_ON pd=UNITY_ENABLE_REFLECTION_BUFFERS UNITY_PBS_USE_BRDF1 UNITY_SPECCUBE_BOX_PROJECTION UNITY_SPECCUBE_BLENDING ok=1
+  insize=6213 outsize=1234 ok=1
 Cmd: preprocess
-  insize=11801 outsize=2421 ok=1
+  insize=11419 outsize=2318 ok=1
 Cmd: preprocess
-  insize=3935 outsize=2520 ok=1
+  insize=2266 outsize=453 ok=1
 Cmd: preprocess
-  insize=41431 outsize=2266 ok=1
+  insize=3806 outsize=2449 ok=1
 Cmd: preprocess
-  insize=11123 outsize=2414 ok=1
+  insize=40482 outsize=2190 ok=1
 Cmd: preprocess
-  insize=3069 outsize=486 ok=1
+  insize=3863 outsize=574 ok=1
 Cmd: preprocess
-  insize=6375 outsize=549 ok=1
+  insize=10818 outsize=2321 ok=1
 Cmd: preprocess
-  insize=41681 outsize=7004 ok=1
+  insize=2965 outsize=462 ok=1
 Cmd: preprocess
-  insize=7215 outsize=1103 ok=1
+  insize=6213 outsize=520 ok=1
 Cmd: preprocess
-  insize=3372 outsize=2030 ok=1
+  insize=40460 outsize=6733 ok=1
+Cmd: preprocess
+  insize=6980 outsize=1059 ok=1
+Cmd: preprocess
+  insize=3254 outsize=1967 ok=1
 Cmd: compileCompute
-  api=4 insize=2749 outsize=4053 ok=1
-=======
->>>>>>> terrain
+  api=4 insize=2664 outsize=4053 ok=1
+Cmd: preprocess
+  insize=3864 outsize=575 ok=1
+Cmd: disassembleShader
+  api=6 insize=4692 outsize=4692 ok=1
