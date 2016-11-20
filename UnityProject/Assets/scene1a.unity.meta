@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:UnityProject/Assets/scene1a.unity.meta
 guid: f071c9129b154e04d85e762f1e9a1e98
 timeCreated: 1479674943
+=======
+guid: 65938d3f349c1b64fb05cae5f320b996
+timeCreated: 1479675155
+>>>>>>> ec5d5b0faa3ec6f3ebe2af653541b72a89a9ac3a:UnityProject/Assets/Models/Materials/leaves.mat.meta
 licenseType: Free
 DefaultImporter:
   userData: 
