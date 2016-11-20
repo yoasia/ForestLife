@@ -11,27 +11,22 @@ public class GameManager : MonoBehaviour {
     public Camera worldCamera;
     public Camera selectCamera;
 
+    public GameObject mainCanvas;
+    public GameObject selectCanvas;
+    public GameObject popupCanvas;
+    public GameObject treeChooserCanvas;
+    public GameObject startCanvas;
+
     public GameObject seed;
 
-    public GameObject leftMenuPanel;
-	public bool selectingMode = false;
-
-    private Animator animatorLeftMenu;
-    private bool leftMenuVisable = false;
-	public Button es;
-	public Sprite s;
-    public EventSystem eventSystem;
-    public Text koraAddText, korzenAddText, liscieAddText;
 
     public Terrain terrain;
     public List<TreeController> treesSpecies;
 
     public List <GameObject> selectedTrees = new List<GameObject>();
 
-    int addKora = 0, addKorzen = 0, addLiscie = 0;
-    int upgradeAddValue = 10;
-	Ray ray;
-	RaycastHit hit;
+
+    
 
     public static GameManager instance;
 
@@ -39,7 +34,8 @@ public class GameManager : MonoBehaviour {
     {
         GS_SEED,
         GS_ISLAND,
-        GS_MENU,
+        GS_START_MENU,
+        GS_SELECT_TREEKIND,
         GS_SELECTING
 
     }
@@ -55,10 +51,12 @@ public class GameManager : MonoBehaviour {
 
     
     void Start () {
+
         currentGameState = GameState.GS_SEED;
 
         animatorLeftMenu = leftMenuPanel.GetComponent<Animator>();
         animatorLeftMenu.enabled = false;
+
         CameraChange();
     }
 	
@@ -88,7 +86,14 @@ public class GameManager : MonoBehaviour {
     {
 
         if (currentGameState == GameState.GS_ISLAND)
+
         {
+            selectCanvas.SetActive(false);
+            mainCanvas.SetActive(true);
+            popupCanvas.SetActive(false);
+            treeChooserCanvas.SetActive(false);
+            startCanvas.SetActive(false);
+
             worldCamera.enabled = true;
             seedCamera.enabled = false;
             selectCamera.enabled = false;
@@ -96,6 +101,12 @@ public class GameManager : MonoBehaviour {
         }
         else if (currentGameState == GameState.GS_SEED)
         {
+            selectCanvas.SetActive(false);
+            mainCanvas.SetActive(false);
+            popupCanvas.SetActive(true);
+            treeChooserCanvas.SetActive(false);
+            startCanvas.SetActive(false);
+
             worldCamera.enabled = false;
             seedCamera.enabled = true;
             selectCamera.enabled = false;
@@ -103,6 +114,38 @@ public class GameManager : MonoBehaviour {
         }
         else if (currentGameState == GameState.GS_SELECTING)
         {
+            selectCanvas.SetActive(true);
+            mainCanvas.SetActive(false);
+            popupCanvas.SetActive(false);
+            treeChooserCanvas.SetActive(false);
+            startCanvas.SetActive(false);
+
+            worldCamera.enabled = false;
+            seedCamera.enabled = false;
+            selectCamera.enabled = true;
+            seed.SetActive(false);
+        }
+        else if (currentGameState == GameState.GS_START_MENU)
+        {
+            selectCanvas.SetActive(false);
+            mainCanvas.SetActive(false);
+            popupCanvas.SetActive(false);
+            treeChooserCanvas.SetActive(false);
+            startCanvas.SetActive(true);
+
+            worldCamera.enabled = false;
+            seedCamera.enabled = true;
+            selectCamera.enabled = false;
+
+        }
+        else if (currentGameState == GameState.GS_SELECT_TREEKIND)
+        {
+            selectCanvas.SetActive(false);
+            mainCanvas.SetActive(false);
+            popupCanvas.SetActive(false);
+            treeChooserCanvas.SetActive(true);
+            startCanvas.SetActive(false);
+
             worldCamera.enabled = false;
             seedCamera.enabled = false;
             selectCamera.enabled = true;
@@ -132,7 +175,7 @@ public class GameManager : MonoBehaviour {
         else if (newGameState == "select")
         {
             currentGameState = GameState.GS_SELECTING;
-            selectingMode = true;
+            //selectingMode = true;
         }
         
         CameraChange();
@@ -145,116 +188,7 @@ public class GameManager : MonoBehaviour {
         CameraChange();
     }
 
-    public void LeftMenuOnOff()
-    {
-        if (leftMenuVisable) {
-            leftMenuVisable = false;
-            animatorLeftMenu.Play("LeftMenuSlideOut");
-            //set back the time scale to normal time scale
-            Time.timeScale = 1;
-        }
-        else
-        {
-            animatorLeftMenu.enabled = true;
-            animatorLeftMenu.Play("LeftMenuSlideIn");
-            leftMenuVisable = true;
-            //freeze the timescale
-            Time.timeScale = 0;
-        }
-        
-    }
     
-	
-	
-
-
-
-    public void setValuesToUpgradeTrees(Button b)
-    {
-
-        
-        if(b.name == "AddKoraButton")
-        {
-            addKora += upgradeAddValue;
-            koraAddText.text = "+" + addKora;
-        }
-        if(b.name == "AddLiscieButton")
-        {
-            addLiscie += upgradeAddValue;
-            liscieAddText.text = "+" + addLiscie;
-        }
-        if (b.name == "AddKorzenButton")
-        {
-            addKorzen += upgradeAddValue;
-           korzenAddText.text = "+" + addKorzen;
-        }
-        if (b.name == "SubKoraButton")
-        {
-            if (addKora - upgradeAddValue >= 0)
-            {
-                addKora -= upgradeAddValue;
-                koraAddText.text = "+" + addKora;
-            }
-            
-        }
-        if (b.name == "SubLiscieButton")
-        {
-            if (addLiscie - upgradeAddValue >= 0)
-            {
-                addLiscie -= upgradeAddValue;
-                liscieAddText.text = "+" + addLiscie;
-            }
-        }
-        if (b.name == "SubKorzenButton")
-        {
-            if (addKorzen - upgradeAddValue >= 0)
-            {
-                addKorzen -= upgradeAddValue;
-                korzenAddText.text = "+" + addKorzen;
-            }
-        }
-        
-            
-                
-    }
-
-    public void DisableSubButtons(Button b)
-    {
-        if (b.name == "SubKoraButton")
-        {
-            if (addKora <= 0)
-            {
-                b.interactable = false;
-            }
-            else
-            {
-                b.interactable = true;
-            }
-
-        }
-        if (b.name == "SubLiscieButton")
-        {
-            if (addLiscie <= 0)
-            {
-                b.interactable = false;
-            }
-            else
-            {
-                b.interactable = true;
-            }
-        }
-        if (b.name == "SubKorzenButton")
-        {
-            if (addKorzen <= 0)
-            {
-                b.interactable = false;
-            }
-            else
-            {
-                b.interactable = true;
-            }
-        }
-    } 
   
 
 }

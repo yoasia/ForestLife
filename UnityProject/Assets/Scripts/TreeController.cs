@@ -30,7 +30,7 @@ public class TreeController : MonoBehaviour
     public float sunFactor = 1F;
 
     public bool selected = false;
-    public Material newMaterialRef;
+    
     Renderer rend;
 
     Ray ray;
@@ -45,12 +45,14 @@ public class TreeController : MonoBehaviour
 
     public float Age { get { return Time.time - startTime; } }
 
+
     // Use this for initialization
     void Start()
     {
         startTime = Time.time;
         lastGrowth = startTime;
         rend = GetComponent<Renderer>();
+        rend.material.shader = Shader.Find("Standard");
     }
 
     // Update is called once per frame
@@ -59,25 +61,41 @@ public class TreeController : MonoBehaviour
         if (Time.time - lastGrowth > timeBetweenGrowth)
             Grow();
 
+
         if (selected)
         {
-            Debug.Log("dzrewozaznaczone");
+            
             if (rend != null)
             {
                 rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
             }
 
         }
-        else
-        {
-            if (rend != null)
-            {
-                rend.material.shader = Shader.Find("Diffuse");
-            }
-        }
-
         if (healthPoints <= 0)
             Kill();
+    }
+
+
+
+    public void SelectTree()
+    {
+        selected = true;
+        if (rend != null)
+        {
+            rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+            
+        }
+
+    }
+    public void DeselectTree()
+    {
+        selected = false;
+        if (rend != null)
+        {
+            rend.material.shader = Shader.Find("Standard");
+        }
+
+        
     }
 
     public bool CanBeUpgraded(int rootsUpgrade, int leavesUpgrade, int barkUpgrade)
@@ -166,6 +184,7 @@ public class TreeController : MonoBehaviour
         Debug.LogFormat("Size: {0}; Health: {1}; Upgrade Points: {2}", size, healthPoints, upgradePoints);
     }
 
+
     private bool CanGrow(float x, float y)
     {
         int map_x = (int)(x / TerrainManager.instance.map_size_factor);
@@ -209,4 +228,5 @@ public class TreeController : MonoBehaviour
 
         return result;
     }
+
 }
