@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour {
 
     public GameObject mainCanvas;
     public GameObject selectCanvas;
+    public GameObject popupCanvas;
+    public GameObject treeChooserCanvas;
+    public GameObject startCanvas;
 
     public GameObject seed;
 
@@ -25,7 +28,8 @@ public class GameManager : MonoBehaviour {
     {
         GS_SEED,
         GS_ISLAND,
-        GS_MENU,
+        GS_START_MENU,
+        GS_SELECT_TREEKIND,
         GS_SELECTING
 
     }
@@ -66,6 +70,10 @@ public class GameManager : MonoBehaviour {
         {
             selectCanvas.SetActive(false);
             mainCanvas.SetActive(true);
+            popupCanvas.SetActive(false);
+            treeChooserCanvas.SetActive(false);
+            startCanvas.SetActive(false);
+
             worldCamera.enabled = true;
             seedCamera.enabled = false;
             selectCamera.enabled = false;
@@ -75,6 +83,10 @@ public class GameManager : MonoBehaviour {
         {
             selectCanvas.SetActive(false);
             mainCanvas.SetActive(false);
+            popupCanvas.SetActive(true);
+            treeChooserCanvas.SetActive(false);
+            startCanvas.SetActive(false);
+
             worldCamera.enabled = false;
             seedCamera.enabled = true;
             selectCamera.enabled = false;
@@ -84,6 +96,36 @@ public class GameManager : MonoBehaviour {
         {
             selectCanvas.SetActive(true);
             mainCanvas.SetActive(false);
+            popupCanvas.SetActive(false);
+            treeChooserCanvas.SetActive(false);
+            startCanvas.SetActive(false);
+
+            worldCamera.enabled = false;
+            seedCamera.enabled = false;
+            selectCamera.enabled = true;
+            seed.SetActive(false);
+        }
+        else if (currentGameState == GameState.GS_START_MENU)
+        {
+            selectCanvas.SetActive(false);
+            mainCanvas.SetActive(false);
+            popupCanvas.SetActive(false);
+            treeChooserCanvas.SetActive(false);
+            startCanvas.SetActive(true);
+
+            worldCamera.enabled = false;
+            seedCamera.enabled = true;
+            selectCamera.enabled = false;
+
+        }
+        else if (currentGameState == GameState.GS_SELECT_TREEKIND)
+        {
+            selectCanvas.SetActive(false);
+            mainCanvas.SetActive(false);
+            popupCanvas.SetActive(false);
+            treeChooserCanvas.SetActive(true);
+            startCanvas.SetActive(false);
+
             worldCamera.enabled = false;
             seedCamera.enabled = false;
             selectCamera.enabled = true;
