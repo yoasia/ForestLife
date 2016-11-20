@@ -53,10 +53,7 @@ public class GameManager : MonoBehaviour {
     void Start () {
 
         //currentGameState = GameState.GS_SEED;
-
-
-
-        CameraChange();
+        //CameraChange();
     }
 	
 	
@@ -150,7 +147,6 @@ public class GameManager : MonoBehaviour {
             selectCamera.enabled = false;
             seed.SetActive(false);
         }
-        CameraChange();
     }
     public void SetGameState(GameState newGameState)
     {
