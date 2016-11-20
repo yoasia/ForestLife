@@ -5,15 +5,14 @@ public class TreeController : MonoBehaviour
 {
 
     public bool selected = false;
-    public Material newMaterialRef;
+    public int korzen, kora, liscie, lp;
     Renderer rend;
 
-    Ray ray;
-    RaycastHit hit;
     // Use this for initialization
     void Start()
     {
         rend = GetComponent<Renderer>();
+        rend.material.shader = Shader.Find("Standard");
     }
 
     // Update is called once per frame
@@ -21,25 +20,27 @@ public class TreeController : MonoBehaviour
     {
 
 
-        if (selected)
-        {
-			Debug.Log ("dzrewozaznaczone");
-            if (rend != null)
-            {
-                rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-            }
-
-        }
-        else
-        {
-            if (rend != null)
-            {
-                rend.material.shader = Shader.Find("Diffuse");
-            }
-        }
+        
     }
 
-    
 
+    public void SelectTree()
+    {
+        selected = true;
+        if (rend != null)
+        {
+            rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+            
+        }
+
+    }
+    public void DeselectTree()
+    {
+        selected = false;
+        if (rend != null)
+        {
+            rend.material.shader = Shader.Find("Standard");
+        }
+    }
 
 }

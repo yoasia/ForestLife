@@ -77,12 +77,19 @@
     <Compile Include="Assets\Scripts\SeedController.cs" />
     <Compile Include="Assets\Scripts\SelectionCameraController.cs" />
     <Compile Include="Assets\Scripts\TreeController.cs" />
+    <Compile Include="Assets\Scripts\UIControllers\MainCanvasController.cs" />
+    <Compile Include="Assets\Scripts\UIControllers\PopupController.cs" />
+    <Compile Include="Assets\Scripts\UIControllers\SelectCanvasController.cs" />
+    <Compile Include="Assets\Scripts\UIControllers\TreeKindChooserController.cs" />
     <Compile Include="Assets\Scripts\Water.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\$self_illuminated_outlined_diffuse_113.shader" />
     <None Include="Assets\Realistic Hail Set\README.txt" />
+    <None Include="Assets\Shaders\$self_illuminated_outlined_diffuse_113.shader" />
     <None Include="Assets\Shaders\FlatShadedWaterWithEdgeBlend.shader" />
+    <None Include="Assets\Shaders\NewSurfaceShader.shader" />
+    <None Include="Assets\Shaders\markBlue.shader" />
+    <None Include="Assets\Shaders\markRedShader.shader" />
     <None Include="Assets\Standard Assets\Effects\AmbientOcclusion\Resources\AmbientOcclusion.cginc" />
     <None Include="Assets\Standard Assets\Effects\AmbientOcclusion\Resources\AmbientOcclusion.shader" />
     <None Include="Assets\Standard Assets\Effects\AntiAliasing\FXAA\Resources\FXAA.shader" />
