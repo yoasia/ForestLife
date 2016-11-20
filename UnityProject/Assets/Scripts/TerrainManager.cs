@@ -4,10 +4,12 @@ using System;
 
 public class TerrainManager : MonoBehaviour
 {
-    public static TerrainManager terrain_manager;
+    public static TerrainManager instance;
+
     public GameObject water;
     public GameObject sun;
     public int map_size_factor = 5;
+    public float max_light = -1;
 
     Terrain terrain;
 
@@ -23,6 +25,79 @@ public class TerrainManager : MonoBehaviour
 
     int size_x;
     int size_z;
+
+    public float GetHeight(int x, int y)
+    {
+        if (x >= 0 && x < size_x && y >= 0 && y < size_z)
+        {
+            return heights[x, y];
+        }
+        else
+        {
+            return 1.0f/0.0f;
+        }
+    }
+    
+    public float GetHeightDif(int x, int y)
+    {
+        if (x >= 0 && x < size_x && y >= 0 && y < size_z)
+        {
+            return heights_dif[x, y];
+        }
+        else
+        {
+            return 1.0f / 0.0f;
+        }
+    }
+
+    public int GetTexture(int x, int y)
+    {
+        if (x >= 0 && x < size_x && y >= 0 && y < size_z)
+        {
+            return textures[x, y];
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+    public float GetWaterDistance(int x, int y)
+    {
+        if (x >= 0 && x < size_x && y >= 0 && y < size_z)
+        {
+            return water_dist[x, y];
+        }
+        else
+        {
+            return 1.0f / 0.0f;
+        }
+    }
+
+    public bool IsWater(int x, int y)
+    {
+        if (x >= 0 && x < size_x && y >= 0 && y < size_z)
+        {
+            return is_water[x, y];
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public float GetLight(int x, int y)
+    {
+        if (x >= 0 && x < size_x && y >= 0 && y < size_z)
+        {
+            return lightmap[x, y];
+        }
+        else
+        {
+            return 1.0f / 0.0f;
+        }
+    }
+
 
     float GetAngle(int x, int y)
     {
@@ -137,8 +212,7 @@ public class TerrainManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        terrain_manager = this;
-
+        instance = this;
         terrain = gameObject.GetComponent<Terrain>();
         Vector3 size = terrain.terrainData.size;
 
@@ -195,20 +269,13 @@ public class TerrainManager : MonoBehaviour
                 {
                     lightmap[i, j] = Vector3.Distance(point, sun.transform.position) * sun.GetComponent<Light>().intensity;
                 }
-                h += lightmap[i, j] + " ";
-                g += heights[i, j] + " ";
+
+                if (lightmap[i, j] > max_light)
+                {
+                    max_light = lightmap[i, j];
+                }
             }
-            h += Environment.NewLine;
-            g += Environment.NewLine;
         }
-        System.IO.StreamWriter file = new System.IO.StreamWriter("E:\\light.txt");
-        file.WriteLine(h);
-
-        file.Close();
-        file = new System.IO.StreamWriter("E:\\heights.txt");
-        file.WriteLine(g);
-
-        file.Close();
     }
 
     // Update is called once per frame
@@ -226,14 +293,11 @@ public class TerrainManager : MonoBehaviour
         // The number of values in the array will equal the number
         // of textures added to the terrain.
 
-        // calculate which splat map cell the worldPos falls within (ignoring y)
         int mapX = (int)(((point.x - position.x) / terrain.terrainData.size.x) * terrain.terrainData.alphamapWidth);
         int mapZ = (int)(((point.z - position.z) / terrain.terrainData.size.z) * terrain.terrainData.alphamapHeight);
 
-        // get the splat data for this cell as a 1x1xN 3d array (where N = number of textures)
         float[, ,] splatmapData = terrain.terrainData.GetAlphamaps(mapX, mapZ, 1, 1);
 
-        // extract the 3D array data to a 1D array:
         float[] cellMix = new float[splatmapData.GetUpperBound(2) + 1];
 
         for (int n = 0; n < cellMix.Length; n++)
@@ -252,7 +316,6 @@ public class TerrainManager : MonoBehaviour
         float maxMix = 0;
         int maxIndex = 0;
 
-        // loop through each mix value and find the maximum
         for (int n = 0; n < mix.Length; n++)
         {
             if (mix[n] > maxMix)
