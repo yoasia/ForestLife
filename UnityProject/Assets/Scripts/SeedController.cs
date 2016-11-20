@@ -2,6 +2,7 @@
 
 public class SeedController : MonoBehaviour
 {
+    public string species;
 
     public float Speed = 100.0F;
     public float RotationSpeed = 1.0F;
@@ -13,11 +14,40 @@ public class SeedController : MonoBehaviour
     public Camera SeedCamera;
 
     private Vector3 startingCameraPosition;
+    private Vector3 startPosition;
+    private Quaternion startRotation;
+    private Rigidbody rigidBody;
 
     void Start()
     {
+        rigidBody = GetComponent<Rigidbody>();
         MobInput.ResetAxes();
         startingCameraPosition = SeedCamera.transform.localPosition;
+        startPosition = transform.position;
+        startRotation = transform.rotation;
+    }
+
+    void Reset()
+    {
+        transform.position = startPosition;
+        transform.rotation = startRotation;
+        rigidBody.velocity = new Vector3(0f, 0f, 0f);
+        rigidBody.angularVelocity = new Vector3(0f, 0f, 0f);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Terrain")
+        {
+            var position = collision.contacts[0].point;
+            if (GameManager.instance.seedLanding(position.x, position.z, species))
+            {
+                Destroy(gameObject);
+                return;
+            }
+        }
+
+        Reset();
     }
 
     void FixedUpdate()
@@ -41,8 +71,8 @@ public class SeedController : MonoBehaviour
             move *= Time.deltaTime;
             rotation *= Time.deltaTime;
 
-            GetComponent<Rigidbody>().AddRelativeForce(0, move, 0);
-            GetComponent<Rigidbody>().AddTorque(0, rotation, 0);
+            rigidBody.AddRelativeForce(0, move, 0);
+            rigidBody.AddTorque(0, rotation, 0);
 
             Vector3 newCameraPosition = new Vector3(startingCameraPosition.x - horAxis * HorizontalSway, startingCameraPosition.y - vertAxis * VerticalSway, startingCameraPosition.z);
             SeedCamera.transform.localPosition = newCameraPosition;
