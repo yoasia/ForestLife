@@ -11,7 +11,7 @@ Shader "Low Poly"
     SubShader
     {
    
-        Tags { "Queue"="Overlay" "IgnoreProjector"="True" "RenderType"="Transparent" }
+        Tags { "Queue"="Geometry" "IgnoreProjector"="True" "RenderType"="Transparent" }
         Blend SrcAlpha OneMinusSrcAlpha
  
         Pass
