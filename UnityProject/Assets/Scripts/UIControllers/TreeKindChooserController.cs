@@ -9,10 +9,12 @@ public class TreeKindChooserController : MonoBehaviour {
     public Text TreeNameText;
     public List<TreeKind> treeKindList = new List<TreeKind>();
     public Sprite s1Brzoza, s2Magnolia, s3Swierk;
+    public GameObject seed;
     public struct TreeKind
     {
         public Sprite image;
         public string name;
+        public string symbol;
     }
 
     
@@ -25,10 +27,13 @@ public class TreeKindChooserController : MonoBehaviour {
         TreeKind t1, t2, t3;
         t1.name = "Brzoza brodawkowata";
         t1.image = s1Brzoza;
+        t1.symbol = "Birch";
         t2.name = "Magnolia pośrednia";
         t2.image = s2Magnolia;
+        t2.symbol = "Magnolia";
         t3.name = "Świerk pospolity";
         t3.image = s3Swierk;
+        t3.symbol = "Spruce";
 
         treeKindList.Add(t1);
         treeKindList.Add(t2);
@@ -85,9 +90,9 @@ public class TreeKindChooserController : MonoBehaviour {
         TreeNameText.text = chosenTree.name;
     }
 
-    public string ReturnChosenKind()
+    public void ReturnChosenKind()
     {
-        return chosenTree.name;
+        seed.GetComponent<SeedController>().species = chosenTree.symbol;
     }
 
 }

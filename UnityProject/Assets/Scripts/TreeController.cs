@@ -44,7 +44,7 @@ public class TreeController : MonoBehaviour
     private float soilMid = 5;
 
     public float Age { get { return Time.time - startTime; } }
-    public int korzen, kora, liscie, lp;
+    
 
     // Use this for initialization
     void Start()

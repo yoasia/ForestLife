@@ -148,10 +148,10 @@ public class MainCanvasController : MonoBehaviour {
     {
         
         
-        koraSlider.value = activeTree.GetComponent<TreeController>().kora;
-        liscieSlider.value = activeTree.GetComponent<TreeController>().liscie;
-        korzenSlider.value = activeTree.GetComponent<TreeController>().korzen;
-        livePointsText.text = activeTree.GetComponent<TreeController>().lp.ToString();
+        koraSlider.value = activeTree.GetComponent<TreeController>().barkStrength;
+        liscieSlider.value = activeTree.GetComponent<TreeController>().leavesStrength;
+        korzenSlider.value = activeTree.GetComponent<TreeController>().rootsStrength;
+        livePointsText.text = activeTree.GetComponent<TreeController>().upgradePoints.ToString();
     }
 
     public void ChangeActive(Button directionButton)

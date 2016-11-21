@@ -53,6 +53,9 @@ public class GameManager : MonoBehaviour {
     void Start () {
 
         //currentGameState = GameState.GS_SEED;
+
+
+
         //CameraChange();
     }
 	
@@ -72,11 +75,46 @@ public class GameManager : MonoBehaviour {
         pos.y = terrain.SampleHeight(pos);
 
         Instantiate(treeToAdd, pos, new Quaternion(0, 0, 0, 0));
-        SetGameState(GameState.GS_ISLAND);
+        //SetGameState(GameState.GS_ISLAND);
+        GoodLandingPopup();
 
         return true;
     }
 
+
+    public void GoodLandingPopup()
+    {
+        selectCanvas.SetActive(false);
+        mainCanvas.SetActive(false);
+        popupCanvas.SetActive(true);
+        treeChooserCanvas.SetActive(false);
+        startCanvas.SetActive(false);
+
+        worldCamera.enabled = true;
+        seedCamera.enabled = false;
+        selectCamera.enabled = false;
+        seed.SetActive(false);
+
+        popupCanvas.GetComponent<PopupController>().BadLandingPopupOff();
+        popupCanvas.GetComponent<PopupController>().GoodLandingPopupOn();
+    }
+
+    public void BadLandingPopup()
+    {
+        selectCanvas.SetActive(false);
+        mainCanvas.SetActive(false);
+        popupCanvas.SetActive(true);
+        treeChooserCanvas.SetActive(false);
+        startCanvas.SetActive(false);
+
+        worldCamera.enabled = true;
+        seedCamera.enabled = false;
+        selectCamera.enabled = false;
+        seed.SetActive(false);
+
+        popupCanvas.GetComponent<PopupController>().GoodLandingPopupOff();
+        popupCanvas.GetComponent<PopupController>().BadLandingPopupOn();
+    }
 
     public void CameraChange()
     {
@@ -108,6 +146,7 @@ public class GameManager : MonoBehaviour {
             selectCamera.enabled = false;
             
         }
+        
         else if (currentGameState == GameState.GS_SELECTING)
         {
             selectCanvas.SetActive(true);
@@ -147,6 +186,7 @@ public class GameManager : MonoBehaviour {
             selectCamera.enabled = false;
             seed.SetActive(false);
         }
+        //CameraChange();
     }
     public void SetGameState(GameState newGameState)
     {
