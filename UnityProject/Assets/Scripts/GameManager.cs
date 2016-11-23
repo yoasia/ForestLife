@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour {
 	
 	void Update () {
 
-        CameraChange();
+        //CameraChange();
 
 
     }
@@ -80,14 +80,14 @@ public class GameManager : MonoBehaviour {
         pos.y = terrain.SampleHeight(pos);
 
         Instantiate(treeToAdd, pos, new Quaternion(0, 0, 0, 0));
-        
-        GoodLandingPopup();
+
+        OnGoodLandingPopup();
 
         return true;
     }
 
 
-    public void GoodLandingPopup()
+    public void OnGoodLandingPopup()
     {
         selectCanvas.SetActive(false);
         mainCanvas.SetActive(false);
@@ -99,13 +99,13 @@ public class GameManager : MonoBehaviour {
         seedCamera.enabled = false;
         selectCamera.enabled = false;
         currentGameState = GameState.GS_ISLAND;
-        //seed.SetActive(false);
+        seed.SetActive(false);
 
         popupCanvas.GetComponent<PopupController>().BadLandingPopupOff();
         popupCanvas.GetComponent<PopupController>().GoodLandingPopupOn();
     }
 
-    public void BadLandingPopup()
+    public void OnBadLandingPopup()
     {
         selectCanvas.SetActive(false);
         mainCanvas.SetActive(false);
