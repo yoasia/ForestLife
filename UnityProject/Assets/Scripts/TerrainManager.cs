@@ -10,6 +10,7 @@ public class TerrainManager : MonoBehaviour
     public GameObject sun;
     public int map_size_factor = 5;
     public float max_light = -1;
+    public float max_gradient = 60.0f;
     public float irrigation_dry = 0.1f;
     public int irrigation_dry_time = 10;
 
@@ -24,6 +25,7 @@ public class TerrainManager : MonoBehaviour
     float[,] water_dist;
     float[,] irrigation;
     float max_water_dist = -1;
+    float max_light_dist = -1;
 
     float[,] lightmap;
 
@@ -45,7 +47,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public float GetHeightDif(int x, int y)
+    public float GetHeightDif(int x, int y) //<-90, 90>, error -> 180
     {
         if (x >= 0 && x < size_x && y >= 0 && y < size_z)
         {
@@ -57,7 +59,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public int GetTexture(int x, int y)
+    public int GetTexture(int x, int y) //<0, 10>, error -> -1
     {
         if (x >= 0 && x < size_x && y >= 0 && y < size_z)
         {
@@ -69,7 +71,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public float GetWaterDistance(int x, int y)
+    public float GetWaterDistance(int x, int y) //<0, map_size>, error -> -1, water -> 0
     {
         if (x >= 0 && x < size_x && y >= 0 && y < size_z)
         {
@@ -93,7 +95,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public float GetLight(int x, int y)
+    public float GetLight(int x, int y) //<0, 10>, error -> -1
     {
         if (x >= 0 && x < size_x && y >= 0 && y < size_z)
         {
@@ -105,7 +107,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public float GetIrrigation(int x, int y)
+    public float GetIrrigation(int x, int y) //<0, 10>, error -> -1
     {
         if (x >= 0 && x < size_x && y >= 0 && y < size_z)
         {
@@ -211,6 +213,48 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
+    public bool CanGrow(float x, float y)
+    {
+        int map_x = (int)(x / map_size_factor);
+        int map_y = (int)(y / map_size_factor);
+        bool result = false;
+
+        if (IsWater(map_x, map_y) == false && Math.Abs(GetHeightDif(map_x, map_y)) <= max_gradient)
+        {
+            result = true;
+        }
+
+        return result;
+    }
+
+    public float GetTerrainFactor(float x, float y)
+    {
+        int map_x = (int)(x / map_size_factor);
+        int map_y = (int)(y / map_size_factor);
+        float result = 0F;
+
+        if (CanGrow(x, y) == false)
+        {
+            return -1F;
+        }
+        else
+        {
+            result = GetTexture(map_x, map_y);
+            result = result + 90 - Math.Abs(GetHeightDif(map_x, map_y));
+
+            float light = GetLight(map_x, map_y);
+
+            if (light > 0)
+            {
+                result = result + 100 - 100 * (light / max_light);
+            }
+
+            result = result * 1 / GetWaterDistance(map_x, map_y);
+        }
+
+        return result;
+    }
+    
 
     public IEnumerator Dry(int time)
     {
@@ -274,7 +318,7 @@ public class TerrainManager : MonoBehaviour
         }
         else
         {
-            return -1.0f;
+            return 180.0f;
         }
     }
 
@@ -329,7 +373,7 @@ public class TerrainManager : MonoBehaviour
         return dist;
     }
 
-    float GetStartIrrigation(int x, int y)
+    float GetStartIrrigation(int x, int y) //<0, 10>, error -> -1
     {
         float irr;
 
@@ -343,6 +387,17 @@ public class TerrainManager : MonoBehaviour
         }
 
         return irr;
+    }
+
+    void AdjustLight()
+    {
+        for (int i = 0; i < size_x; i++)
+        {
+            for (int j = 0; j < size_z; j++)
+            {
+                lightmap[i, j] = 10.0f * lightmap[i, j] / max_light_dist;
+            }
+        }
     }
 
 
@@ -366,6 +421,12 @@ public class TerrainManager : MonoBehaviour
 
         max_water_dist = -1;
 
+        if (water_height < terrain.transform.position.y)
+        {
+            water_dist = null;
+            Debug.LogError("ERROR: Water below terrain!", terrain);
+        }
+
         for (int i = 0; i < size_x; i++)
         {
             for (int j = 0; j < size_z; j++)
@@ -374,20 +435,18 @@ public class TerrainManager : MonoBehaviour
 
                 heights[i, j] = terrain.SampleHeight(point);
 
-                if (water_height < terrain.transform.position.y)
+                if (water_dist != null)
                 {
-                    water_dist = null;
-                    Debug.LogError("ERROR: Water below terrain!", terrain);
-                }
-                else if (heights[i, j] + terrain.transform.position.y < water_height)
-                {
-                    is_water[i, j] = true;
-                    textures[i, j] = -1;
-                }
-                else
-                {
-                    is_water[i, j] = false;
-                    textures[i, j] = GetMainTexture(point);
+                    if (heights[i, j] + terrain.transform.position.y < water_height)
+                    {
+                        is_water[i, j] = true;
+                        textures[i, j] = -1;
+                    }
+                    else
+                    {
+                        is_water[i, j] = false;
+                        textures[i, j] = GetMainTexture(point);
+                    }
                 }
             }
         }
@@ -420,12 +479,19 @@ public class TerrainManager : MonoBehaviour
                     lightmap[i, j] = Vector3.Distance(point, sun.transform.position) * sun.GetComponent<Light>().intensity;
                 }
 
+                if (lightmap[i, j] > max_light_dist)
+                {
+                    max_light_dist = lightmap[i, j];
+                }
+
                 if (lightmap[i, j] > max_light)
                 {
                     max_light = lightmap[i, j];
                 }
             }
         }
+
+        AdjustLight();
 
         for (int i = 0; i < size_x; i++)
         {
