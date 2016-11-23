@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour {
     public GameObject popupCanvas;
     public GameObject treeChooserCanvas;
     public GameObject startCanvas;
+    public GameObject quizCanvas;
 
     public GameObject seed;
 
@@ -36,7 +37,8 @@ public class GameManager : MonoBehaviour {
         GS_ISLAND,
         GS_START_MENU,
         GS_SELECT_TREEKIND,
-        GS_SELECTING
+        GS_SELECTING,
+        GS_QUIZ
 
     }
 
@@ -89,6 +91,7 @@ public class GameManager : MonoBehaviour {
         popupCanvas.SetActive(true);
         treeChooserCanvas.SetActive(false);
         startCanvas.SetActive(false);
+        quizCanvas.SetActive(false);
 
         worldCamera.enabled = true;
         seedCamera.enabled = false;
@@ -106,6 +109,7 @@ public class GameManager : MonoBehaviour {
         popupCanvas.SetActive(true);
         treeChooserCanvas.SetActive(false);
         startCanvas.SetActive(false);
+        quizCanvas.SetActive(false);
 
         worldCamera.enabled = true;
         seedCamera.enabled = false;
@@ -127,6 +131,7 @@ public class GameManager : MonoBehaviour {
             popupCanvas.SetActive(false);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
+            quizCanvas.SetActive(false);
 
             worldCamera.enabled = true;
             seedCamera.enabled = false;
@@ -140,6 +145,8 @@ public class GameManager : MonoBehaviour {
             popupCanvas.SetActive(true);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
+            quizCanvas.SetActive(false);
+
             seed.SetActive(true);
             worldCamera.enabled = false;
             seedCamera.enabled = true;
@@ -154,6 +161,7 @@ public class GameManager : MonoBehaviour {
             popupCanvas.SetActive(false);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
+            quizCanvas.SetActive(false);
 
             worldCamera.enabled = false;
             seedCamera.enabled = false;
@@ -167,6 +175,7 @@ public class GameManager : MonoBehaviour {
             popupCanvas.SetActive(false);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(true);
+            quizCanvas.SetActive(false);
 
             worldCamera.enabled = true;
             seedCamera.enabled = false;
@@ -180,6 +189,21 @@ public class GameManager : MonoBehaviour {
             popupCanvas.SetActive(false);
             treeChooserCanvas.SetActive(true);
             startCanvas.SetActive(false);
+            quizCanvas.SetActive(false);
+
+            worldCamera.enabled = true;
+            seedCamera.enabled = false;
+            selectCamera.enabled = false;
+            seed.SetActive(false);
+        }
+        else if (currentGameState == GameState.GS_QUIZ)
+        {
+            selectCanvas.SetActive(false);
+            mainCanvas.SetActive(false);
+            popupCanvas.SetActive(false);
+            treeChooserCanvas.SetActive(false);
+            startCanvas.SetActive(false);
+            quizCanvas.SetActive(true);
 
             worldCamera.enabled = true;
             seedCamera.enabled = false;
