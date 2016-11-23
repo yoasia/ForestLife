@@ -141,6 +141,7 @@ public class GameManager : MonoBehaviour {
                 seedCamera.enabled = false;
                 seed.SetActive(false);
             }
+            Time.timeScale = 1;
         }
         else if (currentGameState == GameState.GS_SEED)
         {
@@ -156,6 +157,7 @@ public class GameManager : MonoBehaviour {
                 seedCamera.enabled = true;
             }
             selectCamera.enabled = false;
+            Time.timeScale = 1;
             
         }
         
@@ -174,6 +176,7 @@ public class GameManager : MonoBehaviour {
                 seedCamera.enabled = false;
             }
             selectCamera.enabled = true;
+            Time.timeScale = 1;
         }
         else if (currentGameState == GameState.GS_START_MENU)
         {
@@ -190,6 +193,7 @@ public class GameManager : MonoBehaviour {
                 seedCamera.enabled = false;
             }
             selectCamera.enabled = false;
+            Time.timeScale = 0;
         }
         else if (currentGameState == GameState.GS_SELECT_TREEKIND)
         {
@@ -206,6 +210,7 @@ public class GameManager : MonoBehaviour {
                 seedCamera.enabled = false;
                 seed.SetActive(false);
             }
+            Time.timeScale = 0;
         }
         //CameraChange();
     }
@@ -255,7 +260,9 @@ public class GameManager : MonoBehaviour {
     {
 
         currentGameState = GameState.GS_ISLAND;
+
         CameraChange();
+        Time.timeScale = 1;
     }
 
     
