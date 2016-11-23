@@ -77,7 +77,7 @@ public class SeedController : MonoBehaviour
             Vector3 newCameraPosition = new Vector3(startingCameraPosition.x - horAxis * HorizontalSway, startingCameraPosition.y - vertAxis * VerticalSway, startingCameraPosition.z);
             SeedCamera.transform.localPosition = newCameraPosition;
 
-            if(transform.position.y < TerrainManager.instance.water.transform.position.y)
+            if(transform.position.y < GameManager.instance.terrainManager.water.transform.position.y)
                 GameManager.instance.OnBadLandingPopup();
         }
     }

@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
 
+    public TerrainManager terrainManager;
+
     public enum GameState
     {
         GS_SEED,
@@ -54,6 +56,8 @@ public class GameManager : MonoBehaviour {
     
     void Start () {
 
+        terrainManager = terrain.GetComponent<TerrainManager>();
+
         Time.timeScale = 0;
         if(currentGameState == GameState.GS_SEED)
             Time.timeScale = 1;
@@ -75,7 +79,7 @@ public class GameManager : MonoBehaviour {
 
     public bool seedLanding(float x, float z, string type)
     {
-        if (TerrainManager.instance.CanGrow(x, z))
+        if (terrainManager.CanGrow(x, z))
         {
             var treeToAdd = treesSpecies.First(s => s.species.ToLower() == type.ToLower());
             var pos = new Vector3(x, 0, z);
