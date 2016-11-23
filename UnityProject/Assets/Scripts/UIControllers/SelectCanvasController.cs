@@ -52,7 +52,8 @@ public class SelectCanvasController : MonoBehaviour {
         foreach (GameObject t in selectedTrees)
         {
 
-            t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse"); ;
+            //t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+            t.GetComponent<TreeController>().ReturnDefaultColour();
         }
         ClearValues();
         DisableSubButtons();
@@ -145,7 +146,8 @@ public class SelectCanvasController : MonoBehaviour {
         foreach (GameObject t in selectedTrees)
         {
             
-            t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse"); ;
+            //t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+            t.GetComponent<TreeController>().ReturnDefaultColour();
         }
         
         if (b.name == "AddKoraButton")
@@ -194,7 +196,8 @@ public class SelectCanvasController : MonoBehaviour {
             if (t.GetComponent<TreeController>().CanBeUpgraded(addRoots, addLeaves, addBark) != true)
             {
                 //jesli nie wyswietlenie go na czerwono
-                t.GetComponent<Renderer>().material.shader = Shader.Find("markRed");
+                //t.GetComponent<Renderer>().material.shader = Shader.Find("markRed");
+                t.GetComponent<Renderer>().material.color = Color.red;
             }
             
         }

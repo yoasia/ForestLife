@@ -116,5 +116,7 @@ Shader "Low Poly"
             ENDCG
  
         }
+
+		 UsePass "Legacy Shaders/VertexLit/SHADOWCASTER"
     }
 }
