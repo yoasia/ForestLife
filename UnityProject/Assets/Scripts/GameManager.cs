@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour {
     public Terrain terrain;
     public List<TreeController> treesSpecies;
 
+    public List<TreeController> treesOnIsland;
+
     public List <GameObject> selectedTrees = new List<GameObject>();
 
 
@@ -41,7 +43,7 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    public GameState currentGameState = GameState.GS_ISLAND;
+    public GameState currentGameState = GameState.GS_SEED;
 
 
     public void Awake()
@@ -52,6 +54,7 @@ public class GameManager : MonoBehaviour {
     
     void Start () {
 
+        Time.timeScale = 1;
         //currentGameState = GameState.GS_SEED;
 
 
@@ -75,7 +78,7 @@ public class GameManager : MonoBehaviour {
         pos.y = terrain.SampleHeight(pos);
 
         Instantiate(treeToAdd, pos, new Quaternion(0, 0, 0, 0));
-        //SetGameState(GameState.GS_ISLAND);
+        
         GoodLandingPopup();
 
         return true;
