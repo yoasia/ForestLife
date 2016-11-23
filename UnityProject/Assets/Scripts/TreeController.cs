@@ -154,10 +154,15 @@ public class TreeController : MonoBehaviour
 
     private void Grow()
     {
+        int x = (int)transform.position.x;
+        int z = (int)transform.position.z;
         //TO DO pobieranie jakości gleby, wody i nasłonecznienia z terenu
         float soil = 5; // 0 - 10
         float sun = 1;  // 0 - 1
         float water = 5;    // 0 - 10
+        //float soil = TerrainManager.instance.GetTexture(x, z); // 0 - 10
+        //float sun = TerrainManager.instance.GetLight(x, z)/10;  // 0 - 1
+        //float water = TerrainManager.instance.GetIrrigation(x, z);    // 0 - 10
         //
 
         float growth;// = 1F;

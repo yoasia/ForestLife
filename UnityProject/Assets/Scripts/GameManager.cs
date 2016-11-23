@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour {
     public Terrain terrain;
     public List<TreeController> treesSpecies;
 
-    public List<TreeController> treesOnIsland;
+    public List<Object> treesOnIsland;
 
     public List <GameObject> selectedTrees = new List<GameObject>();
 
@@ -75,13 +75,21 @@ public class GameManager : MonoBehaviour {
 
     public bool seedLanding(float x, float z, string type)
     {
-        var treeToAdd = treesSpecies.First(s=>s.species.ToLower() == type.ToLower());
-        var pos = new Vector3(x, 0, z);
-        pos.y = terrain.SampleHeight(pos);
+        if (TerrainManager.instance.CanGrow(x, z))
+        {
+            var treeToAdd = treesSpecies.First(s => s.species.ToLower() == type.ToLower());
+            var pos = new Vector3(x, 0, z);
+            pos.y = terrain.SampleHeight(pos);
 
-        Instantiate(treeToAdd, pos, new Quaternion(0, 0, 0, 0));
+            var tree = Instantiate(treeToAdd, pos, new Quaternion(0, 0, 0, 0));
+            treesOnIsland.Add(tree);
 
-        OnGoodLandingPopup();
+            OnGoodLandingPopup();
+        }
+        else
+        {
+            OnBadLandingPopup();
+        }
 
         return true;
     }
