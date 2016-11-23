@@ -374,7 +374,12 @@ public class TerrainManager : MonoBehaviour
 
                 heights[i, j] = terrain.SampleHeight(point);
 
-                if (heights[i, j] + terrain.transform.position.y < water_height)
+                if (water_height < terrain.transform.position.y)
+                {
+                    water_dist = null;
+                    Debug.LogError("ERROR: Water below terrain!", terrain);
+                }
+                else if (heights[i, j] + terrain.transform.position.y < water_height)
                 {
                     is_water[i, j] = true;
                     textures[i, j] = -1;
@@ -392,7 +397,11 @@ public class TerrainManager : MonoBehaviour
             for (int j = 0; j < size_z; j++)
             {
                 heights_dif[i, j] = GetAngle(i, j);
-                water_dist[i, j] = WaterDistance(i, j);
+
+                if (water_dist != null)
+                {
+                    water_dist[i, j] = WaterDistance(i, j);
+                }
 
                 if (water_dist[i, j] > max_water_dist)
                 {
