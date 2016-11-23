@@ -191,48 +191,4 @@ public class TreeController : MonoBehaviour
     }
 
 
-    private bool CanGrow(float x, float y)
-    {
-        int map_x = (int)(x / TerrainManager.instance.map_size_factor);
-        int map_y = (int)(y / TerrainManager.instance.map_size_factor);
-        bool result = false;
-
-        if (TerrainManager.instance.IsWater(map_x, map_y) == false &&
-            Math.Abs(TerrainManager.instance.GetHeightDif(map_x, map_y)) <= maxTerrainGradient)
-        {
-            result = true;
-        }
-
-        return result;
-    }
-
-    private float GetTerrainFactor(float x, float y)
-    {
-        int map_x = (int)(x / TerrainManager.instance.map_size_factor);
-        int map_y = (int)(y / TerrainManager.instance.map_size_factor);
-        float result = 0F;
-
-        if (CanGrow(x, y) == false)
-        {
-            return -1F;
-        }
-        else
-        {
-            result = TerrainManager.instance.GetTexture(map_x, map_y);
-
-            result = result + 90 - Math.Abs(TerrainManager.instance.GetHeightDif(map_x, map_y));
-
-            float light = TerrainManager.instance.GetLight(map_x, map_y);
-
-            if (light > 0)
-            {
-                result = result + 100 - 100 * (light / TerrainManager.instance.max_light);
-            }
-
-            result = result * 1 / TerrainManager.instance.GetWaterDistance(map_x, map_y);
-        }
-
-        return result;
-    }
-
 }
