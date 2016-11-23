@@ -93,6 +93,7 @@ public class TreeKindChooserController : MonoBehaviour {
     public void ReturnChosenKind()
     {
         seed.GetComponent<SeedController>().species = chosenTree.symbol;
+        GameManager.instance.SetGameState(GameManager.GameState.GS_SEED);
     }
 
 }
