@@ -4,13 +4,14 @@ using System;
 
 public class TerrainManager : MonoBehaviour
 {
+    static public TerrainManager instance;
     public GameObject water;
     public GameObject sun;
     public int map_size_factor = 5;
     public float max_light = -1;
     public float max_gradient = 60.0f;
     public float irrigation_dry = 0.1f;
-    public int irrigation_dry_time = 10;
+    public int irrigation_drz_time = 10;
 
     Terrain terrain;
 
@@ -45,7 +46,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public float GetHeightDif(int x, int y) //<-90, 90>, error -> 180
+    public float GetHeightDif(int x, int z) //<-90, 90>, error -> 180
     {
         if (x >= 0 && x < size_x && z >= 0 && z < size_z)
         {
@@ -57,7 +58,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public int GetTexture(int x, int y) //<0, 10>, error -> -1
+    public int GetTexture(int x, int z) //<0, 10>, error -> -1
     {
         if (x >= 0 && x < size_x && z >= 0 && z < size_z)
         {
@@ -69,7 +70,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public float GetWaterDistance(int x, int y) //<0, map_size>, error -> -1, water -> 0
+    public float GetWaterDistance(int x, int z) //<0, map_size>, error -> -1, water -> 0
     {
         if (x >= 0 && x < size_x && z >= 0 && z < size_z)
         {
@@ -93,7 +94,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public float GetLight(int x, int y) //<0, 10>, error -> -1
+    public float GetLight(int x, int z) //<0, 10>, error -> -1
     {
         if (x >= 0 && x < size_x && z >= 0 && z < size_z)
         {
@@ -105,7 +106,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public float GetIrrigation(int x, int y) //<0, 10>, error -> -1
+    public float GetIrrigation(int x, int z) //<0, 10>, error -> -1
     {
         if (x >= 0 && x < size_x && z >= 0 && z < size_z)
         {
@@ -119,8 +120,8 @@ public class TerrainManager : MonoBehaviour
 
     public bool WaterArea(int x1, int z1, int x2, int z2, float strenght)
     {
-        if (x1 >= 0 && x1 < size_x + 1 && y1 >= 0 && y1 < size_z + 1 &&
-            x2 >= 0 && x2 < size_x + 1 && y2 >= 0 && y2 < size_z + 1)
+        if (x1 >= 0 && x1 < size_x + 1 && z1 >= 0 && z1 < size_z + 1 &&
+            x2 >= 0 && x2 < size_x + 1 && z2 >= 0 && z2 < size_z + 1)
         {
             int x_start, z_start;
 
@@ -135,15 +136,15 @@ public class TerrainManager : MonoBehaviour
 
             if (z2 > z1)
             {
-                y_start = y1;
+                z_start = z1;
             }
             else
             {
-                y_start = y2;
+                z_start = z2;
             }
 
             int x_dist = Math.Abs(x2 - x1);
-            int y_dist = Math.Abs(y2 - y1);
+            int z_dist = Math.Abs(z2 - z1);
 
             for (int i = 0; i < x_dist; i++)
             {
@@ -165,8 +166,8 @@ public class TerrainManager : MonoBehaviour
 
     public void DryArea(int x1, int z1, int x2, int z2, float strenght)
     {
-        if (x1 >= 0 && x1 < size_x + 1 && y1 >= 0 && y1 < size_z + 1 &&
-            x2 >= 0 && x2 < size_x + 1 && y2 >= 0 && y2 < size_z + 1)
+        if (x1 >= 0 && x1 < size_x + 1 && z1 >= 0 && z1 < size_z + 1 &&
+            x2 >= 0 && x2 < size_x + 1 && z2 >= 0 && z2 < size_z + 1)
         {
             int x_start, z_start;
 
@@ -181,15 +182,15 @@ public class TerrainManager : MonoBehaviour
 
             if (z2 > z1)
             {
-                y_start = y1;
+                z_start = z1;
             }
             else
             {
-                y_start = y2;
+                z_start = z2;
             }
 
             int x_dist = Math.Abs(x2 - x1);
-            int y_dist = Math.Abs(y2 - y1);
+            int z_dist = Math.Abs(z2 - z1);
 
             for (int i = 0; i < x_dist; i++)
             {
@@ -203,12 +204,12 @@ public class TerrainManager : MonoBehaviour
                     }
                     else
                     {
-                        start_irr = GetStartIrrigation(x_start + i, y_start + j);
+                        start_irr = GetStartIrrigation(x_start + i, z_start + j);
                     }
 
-                    if (irrigation[x_start + i, y_start + j] - strenght >= start_irr)
+                    if (irrigation[x_start + i, z_start + j] - strenght >= start_irr)
                     {
-                        irrigation[x_start + i, y_start + j] -= strenght;
+                        irrigation[x_start + i, z_start + j] -= strenght;
                     }
                 }
             }
@@ -221,11 +222,11 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
-    public bool CanGrow(int x, int y)
+    public bool CanGrow(int x, int z)
     {
         bool result = false;
 
-        if (IsWater(x, y) == false && Math.Abs(GetHeightDif(x, y)) <= max_gradient)
+        if (IsWater(x, z) == false && Math.Abs(GetHeightDif(x, z)) <= max_gradient)
         {
             result = true;
         }
@@ -233,86 +234,86 @@ public class TerrainManager : MonoBehaviour
         return result;
     }
 
-    public float GetTerrainFactor(int x, int y)
+    public float GetTerrainFactor(int x, int z)
     {
         float result = 0F;
 
-        if (CanGrow(x, y) == false)
+        if (CanGrow(x, z) == false)
         {
             return -1F;
         }
         else
         {
-            result = GetTexture(x, y);
-            result = result + 90 - Math.Abs(GetHeightDif(x, y));
+            result = GetTexture(x, z);
+            result = result + 90 - Math.Abs(GetHeightDif(x, z));
 
-            float light = GetLight(x, y);
+            float light = GetLight(x, z);
 
             if (light > 0)
             {
                 result = result + 100 - 100 * (light / max_light);
             }
 
-            result = result * 1 / GetWaterDistance(x, y);
+            result = result * 1 / GetWaterDistance(x, z);
         }
 
         return result;
     }
 
 
-    public float GetHeight(float x, float y)
+    public float GetHeight(float x, float z)
     {
-        return GetHeight(ConvertCoordinate(x), ConvertCoordinate(y));
+        return GetHeight(ConvertCoordinate(x), ConvertCoordinate(z));
     }
 
-    public float GetHeightDif(float x, float y) //<-90, 90>, error -> 180
+    public float GetHeightDif(float x, float z) //<-90, 90>, error -> 180
     {
-        return GetHeightDif(ConvertCoordinate(x), ConvertCoordinate(y));
+        return GetHeightDif(ConvertCoordinate(x), ConvertCoordinate(z));
     }
 
-    public int GetTexture(float x, float y) //<0, 10>, error -> -1
+    public int GetTexture(float x, float z) //<0, 10>, error -> -1
     {
-        return GetTexture(ConvertCoordinate(x), ConvertCoordinate(y));
+        return GetTexture(ConvertCoordinate(x), ConvertCoordinate(z));
     }
 
-    public float GetWaterDistance(float x, float y) //<0, map_size>, error -> -1, water -> 0
+    public float GetWaterDistance(float x, float z) //<0, map_size>, error -> -1, water -> 0
     {
-        return GetWaterDistance(ConvertCoordinate(x), ConvertCoordinate(y));
+        return GetWaterDistance(ConvertCoordinate(x), ConvertCoordinate(z));
     }
 
-    public bool IsWater(float x, float y)
+    public bool IsWater(float x, float z)
     {
-        return IsWater(ConvertCoordinate(x), ConvertCoordinate(y));
+        return IsWater(ConvertCoordinate(x), ConvertCoordinate(z));
     }
 
-    public float GetLight(float x, float y) //<0, 10>, error -> -1
+    public float GetLight(float x, float z) //<0, 10>, error -> -1
     {
-        return GetLight(ConvertCoordinate(x), ConvertCoordinate(y));
+        return GetLight(ConvertCoordinate(x), ConvertCoordinate(z));
     }
 
-    public float GetIrrigation(float x, float y) //<0, 10>, error -> -1
+    public float GetIrrigation(float x, float z) //<0, 10>, error -> -1
     {
-        return GetIrrigation(ConvertCoordinate(x), ConvertCoordinate(y));
+        return GetIrrigation(ConvertCoordinate(x), ConvertCoordinate(z));
     }
 
-    public bool WaterArea(float x1, float y1, float x2, float y2, float strenght)
+    public bool WaterArea(float x1, float z1, float x2, float z2, float strenght)
     {
-        return WaterArea(ConvertCoordinate(x1), ConvertCoordinate(y1), ConvertCoordinate(x2), ConvertCoordinate(y2), strenght);
+        return WaterArea(ConvertCoordinate(x1), ConvertCoordinate(z1), ConvertCoordinate(x2), ConvertCoordinate(z2), strenght);
     }
 
-    public void DryArea(float x1, float y1, float x2, float y2, float strenght)
+    public void DryArea(float x1, float z1, float x2, float z2, float strenght)
     {
-        DryArea(ConvertCoordinate(x1), ConvertCoordinate(y1), ConvertCoordinate(x2), ConvertCoordinate(y2), strenght);
+        DryArea(ConvertCoordinate(x1), ConvertCoordinate(z1), ConvertCoordinate(x2), ConvertCoordinate(z2), strenght);
     }
 
-    public bool CanGrow(float x, float y)
+    public bool CanGrow(float x, float z)
     {
-        return CanGrow(ConvertCoordinate(x), ConvertCoordinate(y));
+        return CanGrow(ConvertCoordinate(x), ConvertCoordinate(z));
     }
 
-    public float GetTerrainFactor(float x, float y)
+    public float GetTerrainFactor(float x, float z)
     {
-        return GetTerrainFactor(ConvertCoordinate(x), ConvertCoordinate(y));
+        return GetTerrainFactor(ConvertCoordinate(x), ConvertCoordinate(z));
     }
 
 
@@ -328,9 +329,9 @@ public class TerrainManager : MonoBehaviour
         return (int)(x / map_size_factor);
     }
 
-    float GetAngle(int x, int y)
+    float GetAngle(int x, int z)
     {
-        if (is_water[x, y] == false)
+        if (is_water[x, z] == false)
         {
             float[,] dif = new float[2, 2];
             float[] angle = new float[2];
@@ -339,13 +340,13 @@ public class TerrainManager : MonoBehaviour
             {
                 for (int m = 0; m < 2; m++)
                 {
-                    if (x + n >= size_x || y + m >= size_z)
+                    if (x + n >= size_x || z + m >= size_z)
                     {
-                        dif[n, m] = heights[x, y];
+                        dif[n, m] = heights[x, z];
                     }
                     else
                     {
-                        dif[n, m] = heights[x + n, y + m];
+                        dif[n, m] = heights[x + n, z + m];
                     }
                 }
             }
@@ -438,7 +439,7 @@ public class TerrainManager : MonoBehaviour
         return dist;
     }
 
-    float GetStartIrrigation(int x, int y) //<0, 10>, error -> -1
+    float GetStartIrrigation(int x, int z) //<0, 10>, error -> -1
     {
         float irr;
 
@@ -468,6 +469,7 @@ public class TerrainManager : MonoBehaviour
 
     void Start()
     {
+        instance = this;
         terrain = gameObject.GetComponent<Terrain>();
         Vector3 size = terrain.terrainData.size;
 
@@ -565,7 +567,7 @@ public class TerrainManager : MonoBehaviour
             }
         }
 
-        coroutine = Dry(irrigation_dry_time);
+        coroutine = Dry(irrigation_drz_time);
         StartCoroutine(coroutine);
     }
 
@@ -575,7 +577,7 @@ public class TerrainManager : MonoBehaviour
         {
             DryArea(0, 0, size_x * map_size_factor, size_z * map_size_factor, irrigation_dry);
 
-            coroutine = Dry(irrigation_dry_time);
+            coroutine = Dry(irrigation_drz_time);
             StartCoroutine(coroutine);
         }
     }
