@@ -14,14 +14,15 @@ public class SelectCanvasController : MonoBehaviour {
 
     public Button selectButton, deselectButton;
     public Button acceptSelButton, returnButton;
+    public Button subKora, subKorzen, subLiscie;
     
     public EventSystem eventSystem;
     public Text koraAddText, korzenAddText, liscieAddText;
 
     public List<GameObject> selectedTrees = new List<GameObject>();
-    
 
-    int addKora = 0, addKorzen = 0, addLiscie = 0;
+
+    int addBark = 0, addRoots = 0, addLeaves = 0;
     int upgradeAddValue = 10;
     Ray ray;
     RaycastHit hit;
@@ -51,9 +52,11 @@ public class SelectCanvasController : MonoBehaviour {
         foreach (GameObject t in selectedTrees)
         {
 
-            t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse"); ;
+            //t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+            t.GetComponent<TreeController>().ReturnDefaultColour();
         }
-
+        ClearValues();
+        DisableSubButtons();
         if (rightMenuVisable)
         {
             rightMenuVisable = false;
@@ -143,56 +146,60 @@ public class SelectCanvasController : MonoBehaviour {
         foreach (GameObject t in selectedTrees)
         {
             
-            t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse"); ;
+            //t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+            t.GetComponent<TreeController>().ReturnDefaultColour();
         }
-
+        
         if (b.name == "AddKoraButton")
         {
-            addKora += upgradeAddValue;
-            koraAddText.text = "+" + addKora;
+            addBark += upgradeAddValue;
+            koraAddText.text = "+" + addBark;
         }
         if (b.name == "AddLiscieButton")
         {
-            addLiscie += upgradeAddValue;
-            liscieAddText.text = "+" + addLiscie;
+            addLeaves += upgradeAddValue;
+            liscieAddText.text = "+" + addLeaves;
         }
         if (b.name == "AddKorzenButton")
         {
-            addKorzen += upgradeAddValue;
-            korzenAddText.text = "+" + addKorzen;
+            addRoots += upgradeAddValue;
+            korzenAddText.text = "+" + addRoots;
         }
         if (b.name == "SubKoraButton")
         {
-            if (addKora - upgradeAddValue >= 0)
+            if (addBark - upgradeAddValue >= 0)
             {
-                addKora -= upgradeAddValue;
-                koraAddText.text = "+" + addKora;
+                addBark -= upgradeAddValue;
+                koraAddText.text = "+" + addBark;
             }
 
         }
         if (b.name == "SubLiscieButton")
         {
-            if (addLiscie - upgradeAddValue >= 0)
+            if (addLeaves - upgradeAddValue >= 0)
             {
-                addLiscie -= upgradeAddValue;
-                liscieAddText.text = "+" + addLiscie;
+                addLeaves -= upgradeAddValue;
+                liscieAddText.text = "+" + addLeaves;
             }
         }
         if (b.name == "SubKorzenButton")
         {
-            if (addKorzen - upgradeAddValue >= 0)
+            if (addRoots - upgradeAddValue >= 0)
             {
-                addKorzen -= upgradeAddValue;
-                korzenAddText.text = "+" + addKorzen;
+                addRoots -= upgradeAddValue;
+                korzenAddText.text = "+" + addRoots;
             }
         }
 
         foreach (GameObject t in selectedTrees)
         {
-            //wywolanie funkcji mowiacej czy można zupgradowac drzewo
-            //t.GetComponent<TreeController>().FunkcjaMowiacaCzyDrzewoMozeMiecUpgrade();
-            //jesli nie wyswietlenie go na czerwono
-            t.GetComponent<Renderer>().material.shader = Shader.Find("markRed");
+            if (t.GetComponent<TreeController>().CanBeUpgraded(addRoots, addLeaves, addBark) != true)
+            {
+                //jesli nie wyswietlenie go na czerwono
+                //t.GetComponent<Renderer>().material.shader = Shader.Find("markRed");
+                t.GetComponent<Renderer>().material.color = Color.red;
+            }
+            
         }
         
 
@@ -200,11 +207,31 @@ public class SelectCanvasController : MonoBehaviour {
 
     }
 
+    public void UpgradeTrees()
+    {
+        foreach (GameObject t in selectedTrees)
+        {
+            if (t.GetComponent<TreeController>().CanBeUpgraded(addRoots, addLeaves, addBark))
+            {
+                t.GetComponent<TreeController>().Upgrade(addRoots, addLeaves, addBark);
+            }
+
+        }
+    }
+
+    public void DisableSubButtons()
+    {
+        subKora.interactable = false;
+        subKorzen.interactable = false;
+        subLiscie.interactable = false;
+
+    }
+
     public void DisableSubButtons(Button b)
     {
         if (b.name == "SubKoraButton")
         {
-            if (addKora <= 0)
+            if (addBark <= 0)
             {
                 b.interactable = false;
             }
@@ -216,7 +243,7 @@ public class SelectCanvasController : MonoBehaviour {
         }
         if (b.name == "SubLiscieButton")
         {
-            if (addLiscie <= 0)
+            if (addLeaves <= 0)
             {
                 b.interactable = false;
             }
@@ -227,7 +254,7 @@ public class SelectCanvasController : MonoBehaviour {
         }
         if (b.name == "SubKorzenButton")
         {
-            if (addKorzen <= 0)
+            if (addRoots <= 0)
             {
                 b.interactable = false;
             }
@@ -247,6 +274,16 @@ public class SelectCanvasController : MonoBehaviour {
 
         selectedTrees.Clear();
 
+    }
+
+    public void ClearValues()
+    {
+        koraAddText.text = "+0";
+        liscieAddText.text = "+0";
+        korzenAddText.text = "+0";
+        addRoots = 0;
+        addLeaves = 0;
+        addBark = 0;
     }
 
 

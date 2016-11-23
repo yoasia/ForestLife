@@ -44,8 +44,8 @@ public class TreeController : MonoBehaviour
     private float soilMid = 5;
 
     public float Age { get { return Time.time - startTime; } }
-    public int korzen, kora, liscie, lp;
 
+    private Color defaultColour;
     // Use this for initialization
     void Start()
     {
@@ -53,6 +53,7 @@ public class TreeController : MonoBehaviour
         lastGrowth = startTime;
         rend = GetComponent<Renderer>();
         rend.material.shader = Shader.Find("Standard");
+        defaultColour = rend.material.color;
     }
 
     // Update is called once per frame
@@ -98,11 +99,16 @@ public class TreeController : MonoBehaviour
         
     }
 
+    public void ReturnDefaultColour()
+    {
+        rend.material.color = defaultColour;
+    }
+
     public bool CanBeUpgraded(int rootsUpgrade, int leavesUpgrade, int barkUpgrade)
     {
         if (GetUpgradesCost(rootsUpgrade, leavesUpgrade, barkUpgrade) <= upgradePoints)
-            return false;
-        return true;
+            return true;
+        return false;
     }
 
     public bool Upgrade(int rootsUpgrade, int leavesUpgrade, int barkUpgrade)
