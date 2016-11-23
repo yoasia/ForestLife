@@ -216,6 +216,17 @@ public class GameManager : MonoBehaviour {
             currentGameState = GameState.GS_SELECTING;
             //selectingMode = true;
         }
+        else if (newGameState == "startMenu")
+        {
+            currentGameState = GameState.GS_START_MENU;
+        
+        }
+        else if (newGameState == "selectTree")
+        {
+            currentGameState = GameState.GS_SELECT_TREEKIND;
+            
+        }
+        
         
         CameraChange();
 

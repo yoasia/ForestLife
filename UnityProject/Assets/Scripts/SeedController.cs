@@ -27,7 +27,7 @@ public class SeedController : MonoBehaviour
         startRotation = transform.rotation;
     }
 
-    void Reset()
+    public void Reset()
     {
         transform.position = startPosition;
         transform.rotation = startRotation;
