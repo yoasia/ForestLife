@@ -279,6 +279,13 @@ public class MainCanvasController : MonoBehaviour {
         }
     }
 
-
+    public void DeselectAllTrees()
+    {
+        foreach (GameObject t in selectedTrees)
+        {
+            activeTree.GetComponent<TreeController>().ReturnDefaultColour();
+            activeTree.GetComponent<TreeController>().DeselectTree();
+        }
+    }
 
 }
