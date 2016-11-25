@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class TerrainManager : MonoBehaviour
 {
+    public static TerrainManager instance;
+
     public GameObject water;
     public GameObject sun;
     public int map_size_factor = 5;
@@ -518,6 +520,8 @@ public class TerrainManager : MonoBehaviour
 
     void Start()
     {
+        instance = this;
+
         terrain = gameObject.GetComponent<Terrain>();
         Vector3 size = terrain.terrainData.size;
 
