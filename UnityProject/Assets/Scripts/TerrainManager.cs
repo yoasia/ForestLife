@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class TerrainManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class TerrainManager : MonoBehaviour
     bool[,] is_water;
     float[,] water_dist;
     float[,] irrigation;
+    float[,] fertility;
     float max_water_dist = -1;
     float max_light_dist = -1;
 
@@ -110,6 +112,18 @@ public class TerrainManager : MonoBehaviour
         if (x >= 0 && x < size_x && y >= 0 && y < size_z)
         {
             return irrigation[x, y];
+        }
+        else
+        {
+            return 1.0f / 0.0f;
+        }
+    }
+
+    public float GetFertility(int x, int y)
+    {
+        if (x >= 0 && x < size_x && y >= 0 && y < size_z)
+        {
+            return fertility[x, y];
         }
         else
         {
@@ -296,6 +310,11 @@ public class TerrainManager : MonoBehaviour
         return GetIrrigation(ConvertCoordinate(x), ConvertCoordinate(y));
     }
 
+    public float GetFertility(float x, float y)
+    {
+        return GetFertility(ConvertCoordinate(x), ConvertCoordinate(y));
+    }
+
     public bool WaterArea(float x1, float y1, float x2, float y2, float strenght)
     {
         return WaterArea(ConvertCoordinate(x1), ConvertCoordinate(y1), ConvertCoordinate(x2), ConvertCoordinate(y2), strenght);
@@ -455,6 +474,36 @@ public class TerrainManager : MonoBehaviour
         return irr;
     }
 
+    float GetTextureFertility(int x, int y)
+    {
+        try
+        {
+            SplatPrototype main_texture = terrain.terrainData.splatPrototypes[textures[x, y]];
+            String main_texture_name = main_texture.texture.name;
+
+            if (main_texture_name.Contains("rock"))
+            {
+                return 0.0f;
+            }
+            else if (main_texture_name.Contains("grass"))
+            {
+                return 10.0f;
+            }
+            else if (main_texture_name.Contains("sand"))
+            {
+                return 4.0f;
+            }
+            else
+            {
+                return 5.0f;
+            }
+        }
+        catch (Exception e)
+        {
+            return -1.0f;
+        }
+    }
+
     void AdjustLight()
     {
         for (int i = 0; i < size_x; i++)
@@ -474,7 +523,7 @@ public class TerrainManager : MonoBehaviour
 
         size_x = ConvertCoordinate(size.x);
         size_z = ConvertCoordinate(size.z);
-        float water_height = water.transform.position.y;
+        float water_height;
 
         heights = new float[size_x, size_z];
         heights_dif = new float[size_x, size_z];
@@ -483,8 +532,20 @@ public class TerrainManager : MonoBehaviour
         water_dist = new float[size_x, size_z];
         lightmap = new float[size_x, size_z];
         irrigation = new float[size_x, size_z];
+        fertility = new float[size_x, size_z];
 
         max_water_dist = -1;
+
+        if (water != null)
+        {
+            water_height = water.transform.position.y;
+        }
+        else
+        {
+            water_height = 0;
+            water_dist = null;
+            Debug.LogError("ERROR: No water!", terrain);
+        }
 
         if (water_height < terrain.transform.position.y)
         {
@@ -504,11 +565,13 @@ public class TerrainManager : MonoBehaviour
                 {
                     is_water[i, j] = true;
                     textures[i, j] = -1;
+                    fertility[i, j] = -1;
                 }
                 else
                 {
                     is_water[i, j] = false;
                     textures[i, j] = GetMainTexture(point);
+                    fertility[i, j] = GetTextureFertility(i, j);
                 }
             }
         }
@@ -522,7 +585,7 @@ public class TerrainManager : MonoBehaviour
                 if (water_dist != null)
                 {
                     water_dist[i, j] = WaterDistance(i, j);
-                    
+
                     if (water_dist[i, j] > max_water_dist)
                     {
                         max_water_dist = water_dist[i, j];
@@ -602,8 +665,13 @@ public class TerrainManager : MonoBehaviour
         {
             cellMix[n] = splatmapData[0, 0, n];
         }
-        
+
         return cellMix;
+    }
+
+    private int GetMainTexture(int x, int y)
+    {
+        return GetMainTexture(new Vector3(x, 0, y));
     }
 
     private int GetMainTexture(Vector3 point)
