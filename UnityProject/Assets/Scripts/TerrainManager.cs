@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class TerrainManager : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class TerrainManager : MonoBehaviour
     bool[,] is_water;
     float[,] water_dist;
     float[,] irrigation;
+    float[,] fertility;
     float max_water_dist = -1;
     float max_light_dist = -1;
 
@@ -58,7 +60,11 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD
     public int GetTexture(int x, int z) //<0, 10>, error -> -1
+=======
+    public int GetTexture(int x, int z) //<-1, 10>
+>>>>>>> e3d811eb2470c378ec817b3c7faa2928bbd15563
     {
         if (x >= 0 && x < size_x && z >= 0 && z < size_z)
         {
@@ -118,8 +124,25 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD
     public bool WaterArea(int x1, int z1, int x2, int z2, float strenght)
     {
+=======
+    public float GetFertility(int x, int z) //<-1, 10>
+    {
+        if (x >= 0 && x < size_x && z >= 0 && z < size_z)
+        {
+            return fertility[x, z];
+        }
+        else
+        {
+            return 1.0f / 0.0f;
+        }
+    }
+
+    public bool WaterArea(int x1, int z1, int x2, int z2, float strenght)
+    {
+>>>>>>> e3d811eb2470c378ec817b3c7faa2928bbd15563
         if (x1 >= 0 && x1 < size_x + 1 && z1 >= 0 && z1 < size_z + 1 &&
             x2 >= 0 && x2 < size_x + 1 && z2 >= 0 && z2 < size_z + 1)
         {
@@ -136,6 +159,7 @@ public class TerrainManager : MonoBehaviour
 
             if (z2 > z1)
             {
+<<<<<<< HEAD
                 z_start = z1;
             }
             else
@@ -145,6 +169,17 @@ public class TerrainManager : MonoBehaviour
 
             int x_dist = Math.Abs(x2 - x1);
             int z_dist = Math.Abs(z2 - z1);
+=======
+                y_start = z1;
+            }
+            else
+            {
+                y_start = z2;
+            }
+
+            int x_dist = Math.Abs(x2 - x1);
+            int y_dist = Math.Abs(z2 - z1);
+>>>>>>> e3d811eb2470c378ec817b3c7faa2928bbd15563
 
             for (int i = 0; i < x_dist; i++)
             {
@@ -182,6 +217,7 @@ public class TerrainManager : MonoBehaviour
 
             if (z2 > z1)
             {
+<<<<<<< HEAD
                 z_start = z1;
             }
             else
@@ -191,6 +227,17 @@ public class TerrainManager : MonoBehaviour
 
             int x_dist = Math.Abs(x2 - x1);
             int z_dist = Math.Abs(z2 - z1);
+=======
+                y_start = z1;
+            }
+            else
+            {
+                y_start = z2;
+            }
+
+            int x_dist = Math.Abs(x2 - x1);
+            int y_dist = Math.Abs(z2 - z1);
+>>>>>>> e3d811eb2470c378ec817b3c7faa2928bbd15563
 
             for (int i = 0; i < x_dist; i++)
             {
@@ -271,7 +318,11 @@ public class TerrainManager : MonoBehaviour
         return GetHeightDif(ConvertCoordinate(x), ConvertCoordinate(z));
     }
 
+<<<<<<< HEAD
     public int GetTexture(float x, float z) //<0, 10>, error -> -1
+=======
+    public int GetTexture(float x, float z) //<-1, 10>
+>>>>>>> e3d811eb2470c378ec817b3c7faa2928bbd15563
     {
         return GetTexture(ConvertCoordinate(x), ConvertCoordinate(z));
     }
@@ -296,6 +347,14 @@ public class TerrainManager : MonoBehaviour
         return GetIrrigation(ConvertCoordinate(x), ConvertCoordinate(z));
     }
 
+<<<<<<< HEAD
+=======
+    public float GetFertility(float x, float z)
+    {
+        return GetFertility(ConvertCoordinate(x), ConvertCoordinate(z));
+    } //<-1, 10>
+
+>>>>>>> e3d811eb2470c378ec817b3c7faa2928bbd15563
     public bool WaterArea(float x1, float z1, float x2, float z2, float strenght)
     {
         return WaterArea(ConvertCoordinate(x1), ConvertCoordinate(z1), ConvertCoordinate(x2), ConvertCoordinate(z2), strenght);
@@ -455,6 +514,36 @@ public class TerrainManager : MonoBehaviour
         return irr;
     }
 
+    float GetTextureFertility(int x, int z)
+    {
+        try
+        {
+            SplatPrototype main_texture = terrain.terrainData.splatPrototypes[textures[x, z]];
+            String main_texture_name = main_texture.texture.name;
+
+            if (main_texture_name.Contains("rock"))
+            {
+                return 0.0f;
+            }
+            else if (main_texture_name.Contains("grass"))
+            {
+                return 10.0f;
+            }
+            else if (main_texture_name.Contains("sand"))
+            {
+                return 4.0f;
+            }
+            else
+            {
+                return 5.0f;
+            }
+        }
+        catch (Exception e)
+        {
+            return -1.0f;
+        }
+    }
+
     void AdjustLight()
     {
         for (int i = 0; i < size_x; i++)
@@ -475,7 +564,7 @@ public class TerrainManager : MonoBehaviour
 
         size_x = ConvertCoordinate(size.x);
         size_z = ConvertCoordinate(size.z);
-        float water_height = water.transform.position.y;
+        float water_height;
 
         heights = new float[size_x, size_z];
         heights_dif = new float[size_x, size_z];
@@ -484,8 +573,20 @@ public class TerrainManager : MonoBehaviour
         water_dist = new float[size_x, size_z];
         lightmap = new float[size_x, size_z];
         irrigation = new float[size_x, size_z];
+        fertility = new float[size_x, size_z];
 
         max_water_dist = -1;
+
+        if (water != null)
+        {
+            water_height = water.transform.position.y;
+        }
+        else
+        {
+            water_height = 0;
+            water_dist = null;
+            Debug.LogError("ERROR: No water!", terrain);
+        }
 
         if (water_height < terrain.transform.position.y)
         {
@@ -505,11 +606,13 @@ public class TerrainManager : MonoBehaviour
                 {
                     is_water[i, j] = true;
                     textures[i, j] = -1;
+                    fertility[i, j] = -1;
                 }
                 else
                 {
                     is_water[i, j] = false;
                     textures[i, j] = GetMainTexture(point);
+                    fertility[i, j] = GetTextureFertility(i, j);
                 }
             }
         }
@@ -523,7 +626,7 @@ public class TerrainManager : MonoBehaviour
                 if (water_dist != null)
                 {
                     water_dist[i, j] = WaterDistance(i, j);
-                    
+
                     if (water_dist[i, j] > max_water_dist)
                     {
                         max_water_dist = water_dist[i, j];
@@ -603,8 +706,13 @@ public class TerrainManager : MonoBehaviour
         {
             cellMix[n] = splatmapData[0, 0, n];
         }
-        
+
         return cellMix;
+    }
+
+    private int GetMainTexture(int x, int z)
+    {
+        return GetMainTexture(new Vector3(x, 0, z));
     }
 
     private int GetMainTexture(Vector3 point)

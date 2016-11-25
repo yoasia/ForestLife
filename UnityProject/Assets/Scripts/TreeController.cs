@@ -190,5 +190,4 @@ public class TreeController : MonoBehaviour
         Debug.LogFormat("Size: {0}; Health: {1}; Upgrade Points: {2}", size, healthPoints, upgradePoints);
     }
 
-
 }
