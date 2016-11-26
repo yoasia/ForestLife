@@ -485,7 +485,15 @@ public class TerrainManager : MonoBehaviour
             {
                 return 0.0f;
             }
-            else if (main_texture_name.Contains("grass"))
+            else if (main_texture_name.Contains("grass1"))
+            {
+                return 7.0f;
+            }
+            else if (main_texture_name.Contains("grass2"))
+            {
+                return 8.5f;
+            }
+            else if (main_texture_name.Contains("grass3"))
             {
                 return 10.0f;
             }
