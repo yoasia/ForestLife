@@ -160,10 +160,12 @@ public class TreeController : MonoBehaviour
         //float soil = 5; // 0 - 10
         //float sun = 1;  // 0 - 1
         //float water = 5;    // 0 - 10
-        float soil = GameManager.instance.terrainManager.GetTexture(x, z); // 0 - 10
+        float soil = GameManager.instance.terrainManager.GetFertility(x, z); // 0 - 10
         float sun = GameManager.instance.terrainManager.GetLight(x, z)/10;  // 0 - 1
         float water = GameManager.instance.terrainManager.GetIrrigation(x, z);    // 0 - 10
         //
+
+        //Debug.LogFormat("Soil: {0}; Sun: {1}; Water: {2}", soil, sun, water);
 
         float growth;// = 1F;
         if (soil < soilMid)
