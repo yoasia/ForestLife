@@ -166,7 +166,7 @@ public class Cloud : MonoBehaviour {
                 int x2 = x1 + (int) dimensionOfCloud.x;
                 int z2 = z1 + (int) dimensionOfCloud.z;
 
-                TerrainManager.instance.WaterArea(x1, z1, x2, z2, strength);
+                GameManager.instance.terrainManager.WaterArea(x1, z1, x2, z2, strength);
             }
         }
     }
