@@ -41,10 +41,13 @@ public class PopupController : MonoBehaviour {
     }
     public void GoodLandingPopupOff()
     {
-        animatorGoodLanding.Play("GoodLandPopupOut");
-        //StartCoroutine(Wait(300.0f));
-        //goodPopVisable = false;
-        goodLandingPopup.SetActive(false);
+        if (goodLandingPopup.activeSelf)
+        {
+            animatorGoodLanding.Play("GoodLandPopupOut");
+            //StartCoroutine(Wait(300.0f));
+            //goodPopVisable = false;
+            goodLandingPopup.SetActive(false);
+        }
     }
 
     public void BadLandingPopupOn()
@@ -57,9 +60,12 @@ public class PopupController : MonoBehaviour {
     }
     public void BadLandingPopupOff()
     {
-        animatorBadLanding.Play("BadLandPopupOut");
-        //badPopVisable = false;
-        badLandingPopup.SetActive(false);
+        if (badLandingPopup.activeSelf)
+        {
+            animatorBadLanding.Play("BadLandPopupOut");
+            //badPopVisable = false;
+            badLandingPopup.SetActive(false);
+        }
     }
 
     private IEnumerator Wait(float seconds)

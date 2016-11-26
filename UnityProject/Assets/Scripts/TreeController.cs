@@ -49,6 +49,8 @@ public class TreeController : MonoBehaviour
 
     private float soilMid = 5;
 
+    private bool isAlive = true;
+
     public float Age { get { return Time.time - startTime; } }
 
     private Color defaultColour;
@@ -65,25 +67,28 @@ public class TreeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time - lastGrowth > timeBetweenGrowth)
-            Grow();
-
-        if (size > growthThreshold)
-            ChangeModel(grownTreeMesh);
-
-        transform.localScale = new Vector3(size, size, size);
-
-        if (selected)
+        if (isAlive)
         {
-            
-            if (rend != null)
-            {
-                rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-            }
+            if (Time.time - lastGrowth > timeBetweenGrowth)
+                Grow();
 
+            if (size > growthThreshold)
+                ChangeModel(grownTreeMesh);
+
+            transform.localScale = new Vector3(size, size, size);
+
+            if (selected)
+            {
+
+                if (rend != null)
+                {
+                    rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+                }
+
+            }
+            if (healthPoints <= 0)
+                Kill();
         }
-        if (healthPoints <= 0)
-            Kill();
     }
 
     void ChangeModel(Mesh newMesh)
@@ -144,7 +149,7 @@ public class TreeController : MonoBehaviour
             ChangeModel(deadSmallMesh);
         else
             ChangeModel(deadMesh);
-        //TO DO: może dodać lepszą śmierć drzewa
+        isAlive = false;
     }
 
     private float GetUpgradesCost(int rootsUpgrade, int leavesUpgrade, int barkUpgrade)
