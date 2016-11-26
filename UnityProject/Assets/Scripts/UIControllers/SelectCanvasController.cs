@@ -224,8 +224,11 @@ public class SelectCanvasController : MonoBehaviour {
         }
         if (ulep) 
         {
-            infoText.text = "Zaznaczone drzewa zostały ulepszone";
+            if (addRoots != 0 && addLeaves != 0 && addBark != 0 )
+                infoText.text = "Zaznaczone drzewa zostały ulepszone";
+            
         }
+        
        
     }
 

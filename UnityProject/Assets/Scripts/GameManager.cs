@@ -23,12 +23,16 @@ public class GameManager : MonoBehaviour {
     public Terrain terrain;
     public List<TreeController> treesSpecies;
 
+    public List<Object> treesOnIsland;
+
     public List <GameObject> selectedTrees = new List<GameObject>();
 
 
     
 
     public static GameManager instance;
+
+    public TerrainManager terrainManager;
 
     public enum GameState
     {
@@ -41,7 +45,7 @@ public class GameManager : MonoBehaviour {
     }
 
 
-    public GameState currentGameState = GameState.GS_ISLAND;
+    public GameState currentGameState = GameState.GS_START_MENU;
 
 
     public void Awake()
@@ -52,17 +56,22 @@ public class GameManager : MonoBehaviour {
     
     void Start () {
 
+        terrainManager = terrain.GetComponent<TerrainManager>();
+
+        Time.timeScale = 0;
+        if(currentGameState == GameState.GS_SEED)
+            Time.timeScale = 1;
         //currentGameState = GameState.GS_SEED;
 
 
 
-        //CameraChange();
+        CameraChange();
     }
 	
 	
 	void Update () {
 
-        CameraChange();
+        //CameraChange();
 
 
     }
@@ -70,19 +79,27 @@ public class GameManager : MonoBehaviour {
 
     public bool seedLanding(float x, float z, string type)
     {
-        var treeToAdd = treesSpecies.First(s=>s.species.ToLower() == type.ToLower());
-        var pos = new Vector3(x, 0, z);
-        pos.y = terrain.SampleHeight(pos);
+        if (terrainManager.CanGrow(x, z))
+        {
+            var treeToAdd = treesSpecies.First(s => s.species.ToLower() == type.ToLower());
+            var pos = new Vector3(x, 0, z);
+            pos.y = terrain.SampleHeight(pos);
 
-        Instantiate(treeToAdd, pos, new Quaternion(0, 0, 0, 0));
-        //SetGameState(GameState.GS_ISLAND);
-        GoodLandingPopup();
+            var tree = Instantiate(treeToAdd, pos, new Quaternion(0, 0, 0, 0));
+            treesOnIsland.Add(tree);
+
+            OnGoodLandingPopup();
+        }
+        else
+        {
+            OnBadLandingPopup();
+        }
 
         return true;
     }
 
 
-    public void GoodLandingPopup()
+    public void OnGoodLandingPopup()
     {
         selectCanvas.SetActive(false);
         mainCanvas.SetActive(false);
@@ -93,13 +110,14 @@ public class GameManager : MonoBehaviour {
         worldCamera.enabled = true;
         seedCamera.enabled = false;
         selectCamera.enabled = false;
+        currentGameState = GameState.GS_ISLAND;
         seed.SetActive(false);
 
         popupCanvas.GetComponent<PopupController>().BadLandingPopupOff();
         popupCanvas.GetComponent<PopupController>().GoodLandingPopupOn();
     }
 
-    public void BadLandingPopup()
+    public void OnBadLandingPopup()
     {
         selectCanvas.SetActive(false);
         mainCanvas.SetActive(false);
@@ -129,9 +147,13 @@ public class GameManager : MonoBehaviour {
             startCanvas.SetActive(false);
 
             worldCamera.enabled = true;
-            seedCamera.enabled = false;
             selectCamera.enabled = false;
-            seed.SetActive(false);
+            if (seed != null)
+            {
+                seedCamera.enabled = false;
+                seed.SetActive(false);
+            }
+            Time.timeScale = 1;
         }
         else if (currentGameState == GameState.GS_SEED)
         {
@@ -140,10 +162,14 @@ public class GameManager : MonoBehaviour {
             popupCanvas.SetActive(true);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
-            seed.SetActive(true);
             worldCamera.enabled = false;
-            seedCamera.enabled = true;
+            if (seed != null)
+            {
+                seed.SetActive(true);
+                seedCamera.enabled = true;
+            }
             selectCamera.enabled = false;
+            Time.timeScale = 1;
             
         }
         
@@ -156,9 +182,13 @@ public class GameManager : MonoBehaviour {
             startCanvas.SetActive(false);
 
             worldCamera.enabled = false;
-            seedCamera.enabled = false;
+            if (seed != null)
+            {
+                seed.SetActive(false);
+                seedCamera.enabled = false;
+            }
             selectCamera.enabled = true;
-            seed.SetActive(false);
+            Time.timeScale = 1;
         }
         else if (currentGameState == GameState.GS_START_MENU)
         {
@@ -169,9 +199,13 @@ public class GameManager : MonoBehaviour {
             startCanvas.SetActive(true);
 
             worldCamera.enabled = true;
-            seedCamera.enabled = false;
+            if (seed != null)
+            {
+                seed.SetActive(false);
+                seedCamera.enabled = false;
+            }
             selectCamera.enabled = false;
-            seed.SetActive(false);
+            Time.timeScale = 0;
         }
         else if (currentGameState == GameState.GS_SELECT_TREEKIND)
         {
@@ -182,9 +216,13 @@ public class GameManager : MonoBehaviour {
             startCanvas.SetActive(false);
 
             worldCamera.enabled = true;
-            seedCamera.enabled = false;
             selectCamera.enabled = false;
-            seed.SetActive(false);
+            if (seed != null)
+            {
+                seedCamera.enabled = false;
+                seed.SetActive(false);
+            }
+            Time.timeScale = 0;
         }
         //CameraChange();
     }
@@ -199,29 +237,31 @@ public class GameManager : MonoBehaviour {
         if (newGameState == "island")
         {
             currentGameState = GameState.GS_ISLAND;
-            
+            Time.timeScale = 1;
             
         }
         else if (newGameState == "seed")
         {
             currentGameState = GameState.GS_SEED;
-            
+            Time.timeScale = 1;
 
         }
         else if (newGameState == "select")
         {
             currentGameState = GameState.GS_SELECTING;
+            Time.timeScale = 1;
             //selectingMode = true;
         }
         else if (newGameState == "startMenu")
         {
             currentGameState = GameState.GS_START_MENU;
-        
+            Time.timeScale = 0;
+
         }
         else if (newGameState == "selectTree")
         {
             currentGameState = GameState.GS_SELECT_TREEKIND;
-            
+            Time.timeScale = 0;
         }
         
         
@@ -232,7 +272,9 @@ public class GameManager : MonoBehaviour {
     {
 
         currentGameState = GameState.GS_ISLAND;
+
         CameraChange();
+        Time.timeScale = 1;
     }
 
     

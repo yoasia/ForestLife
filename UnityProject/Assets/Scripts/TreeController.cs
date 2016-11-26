@@ -30,7 +30,13 @@ public class TreeController : MonoBehaviour
     public float sunFactor = 1F;
 
     public bool selected = false;
-    
+
+    public float growthThreshold = 2F;
+
+    public Mesh grownTreeMesh;
+    public Mesh deadSmallMesh;
+    public Mesh deadMesh;
+
     Renderer rend;
 
     Ray ray;
@@ -62,6 +68,10 @@ public class TreeController : MonoBehaviour
         if (Time.time - lastGrowth > timeBetweenGrowth)
             Grow();
 
+        if (size > growthThreshold)
+            ChangeModel(grownTreeMesh);
+
+        transform.localScale = new Vector3(size, size, size);
 
         if (selected)
         {
@@ -76,7 +86,10 @@ public class TreeController : MonoBehaviour
             Kill();
     }
 
-
+    void ChangeModel(Mesh newMesh)
+    {
+        GetComponent<MeshFilter>().mesh = newMesh;
+    }
 
     public void SelectTree()
     {
@@ -127,7 +140,10 @@ public class TreeController : MonoBehaviour
 
     public void Kill()
     {
-        Destroy(gameObject);
+        if (size < growthThreshold)
+            ChangeModel(deadSmallMesh);
+        else
+            ChangeModel(deadMesh);
         //TO DO: może dodać lepszą śmierć drzewa
     }
 
@@ -138,10 +154,15 @@ public class TreeController : MonoBehaviour
 
     private void Grow()
     {
+        float x = transform.position.x;
+        float z = transform.position.z;
         //TO DO pobieranie jakości gleby, wody i nasłonecznienia z terenu
-        float soil = 5; // 0 - 10
-        float sun = 1;  // 0 - 1
-        float water = 5;    // 0 - 10
+        //float soil = 5; // 0 - 10
+        //float sun = 1;  // 0 - 1
+        //float water = 5;    // 0 - 10
+        float soil = GameManager.instance.terrainManager.GetTexture(x, z); // 0 - 10
+        float sun = GameManager.instance.terrainManager.GetLight(x, z)/10;  // 0 - 1
+        float water = GameManager.instance.terrainManager.GetIrrigation(x, z);    // 0 - 10
         //
 
         float growth;// = 1F;
@@ -149,6 +170,8 @@ public class TreeController : MonoBehaviour
             growth = soilMid - badTerrainFactor * (soilMid - soil);
         else
             growth = soilMid + goodTerrainFactor * (soil - soilMid);
+
+        growth *= 1 + rootsStrength/10;
 
         sun *= sunFactor;
         if (sun > 1)
@@ -172,7 +195,7 @@ public class TreeController : MonoBehaviour
         if (growth > maxGrowth)
             growth = maxGrowth;
 
-        growth *= growthRatePerSecond;
+        growth *= growthRatePerSecond * growthRate;
 
         if (growth > 0)
         {
@@ -184,6 +207,8 @@ public class TreeController : MonoBehaviour
         }
 
         healthPoints += growth;
+        if (healthPoints > baseMaxHealthPoints + barkStrength * 10)
+            healthPoints = baseMaxHealthPoints + barkStrength * 10;
 
         lastGrowth = Time.time;
 

@@ -48,6 +48,9 @@ public class MainCanvasController : MonoBehaviour {
 
         if (GameManager.instance.currentGameState == GameManager.GameState.GS_ISLAND)
         {
+            SetTreeAmountText(GameManager.instance.treesOnIsland.Count);
+            int t = (int)Time.time;
+            SetDateText(t.ToString());
             PointSelect();
             if (selectedTrees.Count != 0)
             {
@@ -153,7 +156,8 @@ public class MainCanvasController : MonoBehaviour {
         koraSlider.value = activeTree.GetComponent<TreeController>().barkStrength;
         liscieSlider.value = activeTree.GetComponent<TreeController>().leavesStrength;
         korzenSlider.value = activeTree.GetComponent<TreeController>().rootsStrength;
-        livePointsText.text = activeTree.GetComponent<TreeController>().upgradePoints.ToString();
+        int p = (int)activeTree.GetComponent<TreeController>().upgradePoints;
+        livePointsText.text = p.ToString();
     }
 
     public void ChangeActive(Button directionButton)
@@ -275,6 +279,13 @@ public class MainCanvasController : MonoBehaviour {
         }
     }
 
-
+    public void DeselectAllTrees()
+    {
+        foreach (GameObject t in selectedTrees)
+        {
+            activeTree.GetComponent<TreeController>().ReturnDefaultColour();
+            activeTree.GetComponent<TreeController>().DeselectTree();
+        }
+    }
 
 }
