@@ -27,8 +27,15 @@ public class GameManager : MonoBehaviour {
 
     public List <GameObject> selectedTrees = new List<GameObject>();
 
+    public float maxWind = 5F;
 
-    
+    public int maxTimeBetweenWindChange = 60;
+    public int minTimeBetweenWindChange = 30;
+    public Vector2 Wind { private set; get; }
+
+    private float timeToWindChange;
+    private float transitionTimeLeft;
+    private Vector2 windChangePerSecond;
 
     public static GameManager instance;
 
@@ -56,6 +63,9 @@ public class GameManager : MonoBehaviour {
     
     void Start () {
 
+        Wind = Random.insideUnitCircle * maxWind;
+        timeToWindChange = Random.Range(minTimeBetweenWindChange, maxTimeBetweenWindChange + 1);
+
         terrainManager = terrain.GetComponent<TerrainManager>();
 
         Time.timeScale = 0;
@@ -71,9 +81,17 @@ public class GameManager : MonoBehaviour {
 	
 	void Update () {
 
-        //CameraChange();
+        if(transitionTimeLeft > 0)
+        {
+            transitionTimeLeft -= Time.deltaTime;
+            Wind += windChangePerSecond * Time.deltaTime;
+        }
 
+        timeToWindChange -= Time.deltaTime;
+        if (timeToWindChange < 0)
+            WindChange();
 
+        //Debug.LogFormat("Wind: {0}", Wind);
     }
 
 
@@ -277,7 +295,13 @@ public class GameManager : MonoBehaviour {
         Time.timeScale = 1;
     }
 
-    
-  
+    private void WindChange()
+    {
+        transitionTimeLeft = Random.Range(5, 11);
+        var newWind = Random.insideUnitCircle * maxWind;
+        var windChange = newWind - Wind;
+        windChangePerSecond = windChange / transitionTimeLeft;
+        timeToWindChange = Random.Range(minTimeBetweenWindChange, maxTimeBetweenWindChange + 1);
+    }
 
 }
