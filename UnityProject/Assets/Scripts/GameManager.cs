@@ -89,7 +89,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-
         if (transitionTimeLeft > 0)
         {
             transitionTimeLeft -= Time.deltaTime;
@@ -97,6 +96,7 @@ public class GameManager : MonoBehaviour
         }
 
         timeToWindChange -= Time.deltaTime;
+
         if (timeToWindChange < 0)
             WindChange();
 
@@ -142,8 +142,7 @@ public class GameManager : MonoBehaviour
 
             var tree = (GameObject)Instantiate(treeToAdd, pos, new Quaternion(0, 0, 0, 0));
             treesOnIsland.Add(tree);
-
-
+            
             if (automatic == false)
             {
                 timeToNextSeed = timeBetweenSeeds;
@@ -199,9 +198,7 @@ public class GameManager : MonoBehaviour
 
     public void CameraChange()
     {
-
         if (currentGameState == GameState.GS_ISLAND)
-
         {
             selectCanvas.SetActive(false);
             mainCanvas.SetActive(true);
@@ -211,6 +208,7 @@ public class GameManager : MonoBehaviour
 
             worldCamera.enabled = true;
             selectCamera.enabled = false;
+
             if (seed != null)
             {
                 seedCamera.enabled = false;
@@ -225,15 +223,15 @@ public class GameManager : MonoBehaviour
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
             worldCamera.enabled = false;
+
             if (seed != null)
             {
                 seed.SetActive(true);
                 seedCamera.enabled = true;
             }
+
             selectCamera.enabled = false;
-
         }
-
         else if (currentGameState == GameState.GS_SELECTING)
         {
             selectCanvas.SetActive(true);
@@ -243,11 +241,13 @@ public class GameManager : MonoBehaviour
             startCanvas.SetActive(false);
 
             worldCamera.enabled = false;
+
             if (seed != null)
             {
                 seed.SetActive(false);
                 seedCamera.enabled = false;
             }
+
             selectCamera.enabled = true;
         }
         else if (currentGameState == GameState.GS_START_MENU)
@@ -259,11 +259,13 @@ public class GameManager : MonoBehaviour
             startCanvas.SetActive(true);
 
             worldCamera.enabled = true;
+
             if (seed != null)
             {
                 seed.SetActive(false);
                 seedCamera.enabled = false;
             }
+
             selectCamera.enabled = false;
         }
         else if (currentGameState == GameState.GS_SELECT_TREEKIND)
@@ -276,6 +278,7 @@ public class GameManager : MonoBehaviour
 
             worldCamera.enabled = true;
             selectCamera.enabled = false;
+
             if (seed != null)
             {
                 seedCamera.enabled = false;
@@ -283,20 +286,20 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     public void SetGameState(GameState newGameState)
     {
         popupCanvas.GetComponent<PopupController>().BadLandingPopupOff();
         popupCanvas.GetComponent<PopupController>().GoodLandingPopupOff();
         currentGameState = newGameState;
+
         if (newGameState == GameState.GS_ISLAND)
         {
             Time.timeScale = 1;
-
         }
         else if (newGameState == GameState.GS_SEED)
         {
             Time.timeScale = 1;
-
         }
         else if (newGameState == GameState.GS_SELECTING)
         {
@@ -306,7 +309,6 @@ public class GameManager : MonoBehaviour
         else if (newGameState == GameState.GS_START_MENU)
         {
             Time.timeScale = 0;
-
         }
         else if (newGameState == GameState.GS_SELECT_TREEKIND)
         {
@@ -314,8 +316,8 @@ public class GameManager : MonoBehaviour
         }
 
         CameraChange();
-
     }
+
     public void SetGameState(string newGameState)
     {
         if (newGameState.ToLower() == "island")
@@ -342,9 +344,9 @@ public class GameManager : MonoBehaviour
 
         CameraChange();
     }
+
     public void ReturnIslandView()
     {
-
         currentGameState = GameState.GS_ISLAND;
 
         CameraChange();

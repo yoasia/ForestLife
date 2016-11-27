@@ -59,6 +59,7 @@ public class TreeController : MonoBehaviour
     public float Age { get { return Time.time - startTime; } }
 
     private Color defaultColour;
+
     // Use this for initialization
     void Start()
     {
@@ -84,13 +85,13 @@ public class TreeController : MonoBehaviour
 
             if (selected)
             {
-
                 if (rend != null)
                 {
                     rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
                 }
 
             }
+
             if (healthPoints <= 0)
                 Kill();
         }
@@ -104,22 +105,21 @@ public class TreeController : MonoBehaviour
     public void SelectTree()
     {
         selected = true;
+
         if (rend != null)
         {
             rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-
         }
-
     }
+
     public void DeselectTree()
     {
         selected = false;
+
         if (rend != null)
         {
             rend.material.shader = Shader.Find("Standard");
         }
-
-
     }
 
     public void ReturnDefaultColour()
@@ -131,12 +131,14 @@ public class TreeController : MonoBehaviour
     {
         if (GetUpgradesCost(rootsUpgrade, leavesUpgrade, barkUpgrade) <= upgradePoints)
             return true;
+
         return false;
     }
 
     public bool Upgrade(int rootsUpgrade, int leavesUpgrade, int barkUpgrade)
     {
         float cost = GetUpgradesCost(rootsUpgrade, leavesUpgrade, barkUpgrade);
+
         if (cost > upgradePoints)
             return false;
 
@@ -173,8 +175,7 @@ public class TreeController : MonoBehaviour
         float soil = GameManager.instance.terrainManager.GetFertility(x, z); // 0 - 10
         float sun = GameManager.instance.terrainManager.GetLight(x, z) / 10;  // 0 - 1
         float water = GameManager.instance.terrainManager.GetIrrigation(x, z);    // 0 - 10
-        //
-
+        
         //Debug.LogFormat("Soil: {0}; Sun: {1}; Water: {2}", soil, sun, water);
 
         float growth;// = 1F;
