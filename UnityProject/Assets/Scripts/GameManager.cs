@@ -57,16 +57,14 @@ public class GameManager : MonoBehaviour
         GS_SELECTING
     }
 
-
     public GameState currentGameState = GameState.GS_START_MENU;
-
+    
 
     public void Awake()
     {
         instance = this;
     }
-
-
+    
     void Start()
     {
         seedDefaultRotation = seed.transform.rotation;
@@ -85,8 +83,7 @@ public class GameManager : MonoBehaviour
 
         CameraChange();
     }
-
-
+    
     void Update()
     {
         if (transitionTimeLeft > 0)
@@ -108,6 +105,7 @@ public class GameManager : MonoBehaviour
         }
         //Debug.LogFormat("Wind: {0}", Wind);
     }
+
 
     public void ResetSeed()
     {
@@ -383,5 +381,48 @@ public class GameManager : MonoBehaviour
     float Pythagoras(float x, float y)
     {
         return Mathf.Sqrt(x * x + y * y);
+    }
+
+
+    void BehaviouralData(String game_event)
+    {
+        DeviceOrientation orientation = Input.deviceOrientation;
+        Vector3 acceleration = Input.acceleration;
+        Compass compass = Input.compass;
+        Touch first_touch = Input.GetTouch(0);
+        Touch second_touch = Input.GetTouch(1);
+
+        List<String> data_list = new List<String>();
+
+        data_list.Add(orientation.ToString());
+        data_list.Add(acceleration.x.ToString());
+        data_list.Add(acceleration.y.ToString());
+        data_list.Add(acceleration.z.ToString());
+        data_list.Add(compass.headingAccuracy.ToString());
+        data_list.Add(compass.magneticHeading.ToString());
+        data_list.Add(compass.trueHeading.ToString());
+        data_list.Add(Input.touchCount.ToString());
+        data_list.Add(first_touch.fingerId.ToString());
+        data_list.Add(first_touch.deltaTime.ToString());
+        data_list.Add(first_touch.type.ToString());
+        data_list.Add(first_touch.tapCount.ToString());
+        data_list.Add(first_touch.phase.ToString());
+        data_list.Add(first_touch.position.x.ToString());
+        data_list.Add(first_touch.position.y.ToString());
+        data_list.Add(first_touch.deltaPosition.x.ToString());
+        data_list.Add(first_touch.deltaPosition.y.ToString());
+        data_list.Add(first_touch.radius.ToString());
+        data_list.Add(second_touch.fingerId.ToString());
+        data_list.Add(second_touch.deltaTime.ToString());
+        data_list.Add(second_touch.type.ToString());
+        data_list.Add(second_touch.tapCount.ToString());
+        data_list.Add(second_touch.phase.ToString());
+        data_list.Add(second_touch.position.x.ToString());
+        data_list.Add(second_touch.position.y.ToString());
+        data_list.Add(second_touch.deltaPosition.x.ToString());
+        data_list.Add(second_touch.deltaPosition.y.ToString());
+        data_list.Add(second_touch.radius.ToString());
+        data_list.Add(currentGameState.ToString());
+        data_list.Add(game_event);
     }
 }
