@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class TerrainManager : MonoBehaviour
 {
+    public static TerrainManager instance;
+
     public GameObject water;
     public GameObject sun;
     public int map_size_factor = 5;
@@ -485,7 +487,15 @@ public class TerrainManager : MonoBehaviour
             {
                 return 0.0f;
             }
-            else if (main_texture_name.Contains("grass"))
+            else if (main_texture_name.Contains("grass1"))
+            {
+                return 7.0f;
+            }
+            else if (main_texture_name.Contains("grass2"))
+            {
+                return 8.5f;
+            }
+            else if (main_texture_name.Contains("grass3"))
             {
                 return 10.0f;
             }
@@ -518,6 +528,8 @@ public class TerrainManager : MonoBehaviour
 
     void Start()
     {
+        instance = this;
+
         terrain = gameObject.GetComponent<Terrain>();
         Vector3 size = terrain.terrainData.size;
 
