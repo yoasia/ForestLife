@@ -138,7 +138,7 @@ public class GameManager : MonoBehaviour
             var pos = new Vector3(x, 0, z);
             pos.y = terrain.SampleHeight(pos);
 
-            var rotation = Random.Range(0, 360);
+            var rotation = UnityEngine.Random.Range(0, 360);
             var tree = (GameObject)Instantiate(treeToAdd, pos, Quaternion.Euler(0, rotation, 0));
             treesOnIsland.Add(tree);
             

@@ -191,6 +191,7 @@ public class TreeController : MonoBehaviour
             sun = 1;
         sun *= 1 + leavesStrength / 10;
         growth *= sun;
+        growth *= GetShadeFactor();
 
         if (water < minWaterLevel)
             growth *= water / minWaterLevel;
@@ -228,6 +229,23 @@ public class TreeController : MonoBehaviour
         Debug.LogFormat("Size: {0}; Health: {1}; Upgrade Points: {2}", size, healthPoints, upgradePoints);
     }
 
+    private float GetShadeFactor()
+    {
+        float shadeFactor = 1;
+        for(int i = 0; i < GameManager.instance.treesOnIsland.Count; i++)
+        {
+            var other = GameManager.instance.treesOnIsland[i];
+            var otherSize = other.GetComponent<TreeController>().size;
+            if (otherSize > size)
+            {
+                var tempFactor = DistanceTo(other) / (otherSize - size);
+                if (tempFactor < 1)
+                    shadeFactor *= tempFactor;
+            }
+        }
+        return shadeFactor;
+    }
+
     void Sow()
     {
         System.Random random = new System.Random();
@@ -249,5 +267,10 @@ public class TreeController : MonoBehaviour
                 GameManager.instance.seedLanding(new_x, new_z, species, true);
             }
         }
+    }
+
+    public float DistanceTo(GameObject other)
+    {
+        return Mathf.Sqrt(Mathf.Pow(transform.position.x - other.transform.position.x, 2) + Mathf.Pow(transform.position.z - other.transform.position.z, 2));
     }
 }
