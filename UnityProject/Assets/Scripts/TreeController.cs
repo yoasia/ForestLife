@@ -29,6 +29,11 @@ public class TreeController : MonoBehaviour
     public float maxTerrainGradient = 60F;
     public float sunFactor = 1F;
 
+    public int minSeeds = 5;
+    public int maxSeeds = 20;
+    public float maxSowDistance = 10f;
+    public float minTreeDistance = 1f;
+
     public bool selected = false;
 
     public float growthThreshold = 2F;
@@ -102,7 +107,7 @@ public class TreeController : MonoBehaviour
         if (rend != null)
         {
             rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-            
+
         }
 
     }
@@ -114,7 +119,7 @@ public class TreeController : MonoBehaviour
             rend.material.shader = Shader.Find("Standard");
         }
 
-        
+
     }
 
     public void ReturnDefaultColour()
@@ -166,7 +171,7 @@ public class TreeController : MonoBehaviour
         //float sun = 1;  // 0 - 1
         //float water = 5;    // 0 - 10
         float soil = GameManager.instance.terrainManager.GetFertility(x, z); // 0 - 10
-        float sun = GameManager.instance.terrainManager.GetLight(x, z)/10;  // 0 - 1
+        float sun = GameManager.instance.terrainManager.GetLight(x, z) / 10;  // 0 - 1
         float water = GameManager.instance.terrainManager.GetIrrigation(x, z);    // 0 - 10
         //
 
@@ -178,7 +183,7 @@ public class TreeController : MonoBehaviour
         else
             growth = soilMid + goodTerrainFactor * (soil - soilMid);
 
-        growth *= 1 + rootsStrength/10;
+        growth *= 1 + rootsStrength / 10;
 
         sun *= sunFactor;
         if (sun > 1)
@@ -222,4 +227,26 @@ public class TreeController : MonoBehaviour
         Debug.LogFormat("Size: {0}; Health: {1}; Upgrade Points: {2}", size, healthPoints, upgradePoints);
     }
 
+    void Sow()
+    {
+        System.Random random = new System.Random();
+        int seeds = random.Next(minSeeds, maxSeeds + 1);
+
+        for (int i = 0; i < seeds; i++)
+        {
+            float distance = minTreeDistance + (maxSowDistance - minTreeDistance) * (float)random.NextDouble();
+            double rad_angle = 2 * Math.PI * random.NextDouble();
+
+            float new_x;
+            float new_z;
+
+            new_x = distance * (float)Math.Cos(rad_angle) + gameObject.transform.position.x + GameManager.instance.Wind.x;
+            new_z = distance * (float)Math.Sin(rad_angle) + gameObject.transform.position.z + GameManager.instance.Wind.y;
+
+            if (GameManager.instance.TreeDistance(new_x, new_z) >= minTreeDistance)
+            {
+                GameManager.instance.seedLanding(new_x, new_z, species, true);
+            }
+        }
+    }
 }
