@@ -18,15 +18,16 @@ public class GameManager : MonoBehaviour {
     public GameObject startCanvas;
 
     public GameObject seed;
-
+    public float periodOfCreatingCloud = 180.0f;
+    public GameObject cloud;
 
     public Terrain terrain;
     public List<TreeController> treesSpecies;
 
     public List <GameObject> selectedTrees = new List<GameObject>();
+    static public Vector2 Wind { private set; get; }
 
-
-    
+    public float maxWind = 5F;
 
     public static GameManager instance;
 
@@ -53,14 +54,15 @@ public class GameManager : MonoBehaviour {
     void Start () {
 
         //currentGameState = GameState.GS_SEED;
-
+        Wind = UnityEngine.Random.insideUnitCircle * maxWind;
+        StartCoroutine(createCloudByTime(periodOfCreatingCloud));
 
 
         //CameraChange();
     }
-	
-	
-	void Update () {
+
+
+    void Update () {
 
         CameraChange();
 
@@ -235,7 +237,16 @@ public class GameManager : MonoBehaviour {
         CameraChange();
     }
 
-    
-  
+    IEnumerator createCloudByTime(float time)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(time);
+            Instantiate(cloud);    
+        }
+    }
+
+
+
 
 }
