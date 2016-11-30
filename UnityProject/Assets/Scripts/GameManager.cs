@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public GameObject popupCanvas;
     public GameObject treeChooserCanvas;
     public GameObject startCanvas;
+    public GameObject newSeedCanvas;
 
     public GameObject seed;
     public GameObject seedPrefab;
@@ -112,10 +113,26 @@ public class GameManager : MonoBehaviour
         seed.GetComponent<SeedController>().Reset();
     }
 
-    private void NewSeedPopup()
+    public void NewSeedPopup()
     {
         //Do implementacji - wybieranie drzewa znad którego start nowego nasiona i wywołanie metody NewSeed przekazując wybrane drzewo jako parametr
         //NewSeed(treesOnIsland.First());
+        selectCanvas.SetActive(false);
+        mainCanvas.SetActive(false);
+        popupCanvas.SetActive(false);
+        treeChooserCanvas.SetActive(false);
+        startCanvas.SetActive(false);
+        newSeedCanvas.SetActive(true);
+
+        worldCamera.enabled = true;
+        seedCamera.enabled = false;
+        selectCamera.enabled = false;
+        currentGameState = GameState.GS_ISLAND;
+        seed.SetActive(false);
+
+
+
+
     }
 
     public void NewSeed(GameObject selectedTree)
@@ -125,6 +142,7 @@ public class GameManager : MonoBehaviour
         var position = selectedTree.transform.position;
         position.y += 15;
         seed = (GameObject)Instantiate(seedPrefab, position, seedDefaultRotation);
+        seed.GetComponent<SeedController>().species = species;
         seedCamera = seed.GetComponentInChildren<Camera>();
         SetGameState(GameState.GS_SEED);
         //Debug.LogFormat(species);
@@ -167,6 +185,7 @@ public class GameManager : MonoBehaviour
         popupCanvas.SetActive(true);
         treeChooserCanvas.SetActive(false);
         startCanvas.SetActive(false);
+        newSeedCanvas.SetActive(false);
 
         worldCamera.enabled = true;
         seedCamera.enabled = false;
@@ -185,6 +204,7 @@ public class GameManager : MonoBehaviour
         popupCanvas.SetActive(true);
         treeChooserCanvas.SetActive(false);
         startCanvas.SetActive(false);
+        newSeedCanvas.SetActive(false);
 
         worldCamera.enabled = true;
         seedCamera.enabled = false;
@@ -204,6 +224,7 @@ public class GameManager : MonoBehaviour
             popupCanvas.SetActive(false);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
+            newSeedCanvas.SetActive(false);
 
             worldCamera.enabled = true;
             selectCamera.enabled = false;
@@ -222,6 +243,7 @@ public class GameManager : MonoBehaviour
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
             worldCamera.enabled = false;
+            newSeedCanvas.SetActive(false);
 
             if (seed != null)
             {
@@ -238,6 +260,7 @@ public class GameManager : MonoBehaviour
             popupCanvas.SetActive(false);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
+            newSeedCanvas.SetActive(false);
 
             worldCamera.enabled = false;
 
@@ -256,6 +279,7 @@ public class GameManager : MonoBehaviour
             popupCanvas.SetActive(false);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(true);
+            newSeedCanvas.SetActive(false);
 
             worldCamera.enabled = true;
 
@@ -274,6 +298,7 @@ public class GameManager : MonoBehaviour
             popupCanvas.SetActive(false);
             treeChooserCanvas.SetActive(true);
             startCanvas.SetActive(false);
+            newSeedCanvas.SetActive(false);
 
             worldCamera.enabled = true;
             selectCamera.enabled = false;
