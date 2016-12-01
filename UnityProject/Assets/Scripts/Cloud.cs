@@ -19,8 +19,6 @@ public class Cloud : MonoBehaviour {
     bool ifScale = true;
     bool canBeDestroyed = false;
 
-
-
     //Accelerator variable
     static float accelerometerUpdateInterval = 1.0f / 60.0f;
     // The greater the value of LowPassKernelWidthInSeconds, the slower the filtered value will converge towards current input sample (and vice versa).
@@ -227,7 +225,7 @@ public class Cloud : MonoBehaviour {
         scalingTime = timer + scalingTime;
         //destroy rain after 5 s
         StartCoroutine(DestroyParticleAfterTime(scalingTime - 3));
-
+        
         //set cloud invisible 
         setInvisible(true);
         //destroy cloud object
@@ -255,7 +253,7 @@ public class Cloud : MonoBehaviour {
     {
         yield return new WaitForSeconds(time);
         //unchild the particle system from object
-        rain.transform.parent = null;
+        //rain.transform.parent = null;
 
         DestroyObject(rain);
     }
@@ -284,5 +282,7 @@ public class Cloud : MonoBehaviour {
             }
         }
     }
+
+   
 
 }

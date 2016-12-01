@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.IO;
 
 public class GameManager : MonoBehaviour {
 
@@ -19,7 +21,9 @@ public class GameManager : MonoBehaviour {
 
     public GameObject seed;
     public float periodOfCreatingCloud = 180.0f;
+    public float questionPeriod = 180.0f;
     public GameObject cloud;
+    public GameObject emotionalQuestions;
 
     public Terrain terrain;
     public List<TreeController> treesSpecies;
@@ -56,6 +60,7 @@ public class GameManager : MonoBehaviour {
         //currentGameState = GameState.GS_SEED;
         Wind = UnityEngine.Random.insideUnitCircle * maxWind;
         StartCoroutine(createCloudByTime(periodOfCreatingCloud));
+        StartCoroutine(askAboutEmotions(questionPeriod));
 
 
         //CameraChange();
@@ -190,12 +195,14 @@ public class GameManager : MonoBehaviour {
         }
         //CameraChange();
     }
+
     public void SetGameState(GameState newGameState)
     {
         currentGameState = newGameState;
         CameraChange();
 
     }
+
     public void SetGameState(string newGameState)
     {
         if (newGameState == "island")
@@ -230,6 +237,7 @@ public class GameManager : MonoBehaviour {
         CameraChange();
 
     }
+
     public void ReturnIslendView()
     {
 
@@ -246,6 +254,40 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    IEnumerator askAboutEmotions(float time)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(time);
+
+            showEmotionsQuestion();
+        }
+    }
+
+    public void showEmotionsQuestion()
+    {
+        GameObject cloneQuestionPanel = GameObject.FindWithTag("Clone");
+        if(cloneQuestionPanel == null)
+            Instantiate(emotionalQuestions);
+    }
+
+
+    public bool saveEmotionalState()
+    {
+        string delimiter = ",";  
+
+
+        return true;
+    }
+
+    static public void addRowToFile(string filePath, string data)
+    { 
+ 	    StringBuilder sb = new StringBuilder();
+
+ 	    sb.AppendLine(data);
+
+        File.AppendAllText(filePath, sb.ToString()); 
+    }
 
 
 
