@@ -23,6 +23,10 @@ public class MyNotifications : MonoBehaviour {
     public static MainCanvasController UIMainCanvas;
     public static Transform canvasTransform;
 
+   
+	
+
+
 	void Awake(){
 		//audioSource = ourSound;
 		startingPosition = startinPos;
@@ -33,6 +37,9 @@ public class MyNotifications : MonoBehaviour {
 		textStyle = myStyle;
         UIMainCanvas = uiMainCanvas.GetComponent<MainCanvasController>();
         canvasTransform = uiMainCanvas.GetComponent<Transform>();
+
+
+        
 	}
 	private  static bool pushNotification(string _message,float _duration){
 		if(timer <= 0){
@@ -48,6 +55,7 @@ public class MyNotifications : MonoBehaviour {
 		
 			//GUI.DrawTexture(new Rect(currentPos.x,currentPos.y,notificationSize.x,notificationSize.y),texture);
 			//GUI.Box(new Rect(currentPos.x,currentPos.y,notificationSize.x,notificationSize.y),_message.ToString(),textStyle);
+            
             if (GUI.Button(new Rect(currentPos.x, currentPos.y, notificationSize.x, notificationSize.y), _message.ToString()))
             {
                 UIMainCanvas.ShowTriviaPanel();
