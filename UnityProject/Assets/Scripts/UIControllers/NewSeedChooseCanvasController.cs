@@ -102,7 +102,9 @@ public class NewSeedChooseCanvasController : MonoBehaviour {
             choosingTreePanel.SetActive(false);
             selectedTree.GetComponent<TreeController>().ReturnDefaultColour();
             choosingMode = false;
+
             GameManager.instance.NewSeed(selectedTree);
+            selectedTree = null;
         }
         
     }

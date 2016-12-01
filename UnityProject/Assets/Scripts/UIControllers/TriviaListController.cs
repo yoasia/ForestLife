@@ -40,14 +40,15 @@ public class TriviaListController : MonoBehaviour {
 
     public void LoadNewTrivia()
     {
-        if (JsonDataManager.instance.currentTriviaNumber < JsonDataManager.instance.triviaNumber)
+        if (!JsonDataManager.instance.allTriviaDisplayed)
         {
+
             Trivia newTrivia = new Trivia();
             newTrivia.id = JsonDataManager.instance.currentTriviaNumber;
             newTrivia.title = JsonDataManager.instance.triviaData["data"][JsonDataManager.instance.currentTriviaNumber]["title"].ToString();
             newTrivia.content = JsonDataManager.instance.triviaData["data"][JsonDataManager.instance.currentTriviaNumber]["content"].ToString();
 
-            JsonDataManager.instance.currentTriviaNumber++;
+            JsonDataManager.instance.SetNextTriviaNumber();
             AddTrivia(newTrivia);
         }
 

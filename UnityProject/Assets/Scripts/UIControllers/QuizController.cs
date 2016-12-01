@@ -7,48 +7,56 @@ public class QuizController : MonoBehaviour {
 
 
     public Text questionText;
-    public int questionNumber = 0;
+    //public int questionNumber = 0;
     public GameObject answerPrefab;
     public GameObject answersContainer;
     public GameObject resultPopUp;
     public Text popupHeaderText, correctText, allText, bonusText; 
 
     private bool displayNextQuestion = true;
-    private string filePath;
-    private string jsonString;
-    private JsonData questionData;
+    
     private bool clickedAnswer;
-    private int maxRoundQuestions = 3, thisRoundQuestion=0;
+    private int maxRoundQuestions = 1, thisRoundQuestion=0;
     private int correctAnswers = 0, wrongAnswers = 0;
-
+    bool newQuiz = true;
 	// Use this for initialization
 	void Start () {
-        LoadQuestions("Questions1");
-        DisplayQuestion();
+        
+        
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-        if (displayNextQuestion)
-        {
-            if (Input.GetMouseButtonDown(0))
+        
+            
+            if (displayNextQuestion)
             {
-                endQuiz();
-                DisplayQuestion();
+                if (newQuiz)
+                {
+                    DisplayQuestion();
+                    newQuiz = false;
+                }
+                else
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        if (!endQuiz())
+                        {
+                            DisplayQuestion();
+                        }
+
+
+                    }
+                }
+                
             }
-        }
+        
+        
 
 	}
 
 
-    public void LoadQuestions(string fileName)
-    {
-        filePath = System.IO.Path.Combine(Application.streamingAssetsPath, "QuizQuestions\\"+ fileName +".json");
-        jsonString = System.IO.File.ReadAllText(filePath);
-        questionData = JsonMapper.ToObject(jsonString);
-
-    }
+    
 
     public void DisplayQuestion()
     {
@@ -62,13 +70,13 @@ public class QuizController : MonoBehaviour {
                     DestroyImmediate(buttonsDestroy[x]);
                 }
             }
+            JsonDataManager.instance.NewQuestionNumber();
+            questionText.text = JsonDataManager.instance.quizData["data"][JsonDataManager.instance.currentQuestionNumber]["question"].ToString();
 
-            questionText.text = questionData["data"][questionNumber]["question"].ToString();
-
-            for (int i = 0; i < questionData["data"][questionNumber]["answers"].Count; i++)
+            for (int i = 0; i < JsonDataManager.instance.quizData["data"][JsonDataManager.instance.currentQuestionNumber]["answers"].Count; i++)
             {
                 GameObject answer = Instantiate(answerPrefab);
-                answer.GetComponentInChildren<Text>().text = questionData["data"][questionNumber]["answers"][i].ToString();
+                answer.GetComponentInChildren<Text>().text = JsonDataManager.instance.quizData["data"][JsonDataManager.instance.currentQuestionNumber]["answers"][i].ToString();
                 answer.transform.SetParent(answersContainer.transform);
 
                 string x = i.ToString();
@@ -86,7 +94,6 @@ public class QuizController : MonoBehaviour {
                 answer.transform.SetSiblingIndex(Random.Range(0, 3));
             }
             displayNextQuestion = false;
-            questionNumber++;
             thisRoundQuestion++;
             clickedAnswer = false;
         }
@@ -106,6 +113,7 @@ public class QuizController : MonoBehaviour {
             else
             {
                 GameObject.Find("wrongAnswer" + x).GetComponent<Button>().image.color = Color.red;
+                GameObject.Find("correctAnswer").GetComponent<Button>().image.color = Color.green;
                 wrongAnswers++;
             }
             displayNextQuestion = true;
@@ -117,7 +125,7 @@ public class QuizController : MonoBehaviour {
     }
 
 
-    public void endQuiz()
+    public bool endQuiz()
     {
         if (clickedAnswer)
         {
@@ -131,7 +139,7 @@ public class QuizController : MonoBehaviour {
                     correctText.text = correctAnswers.ToString();
                     allText.text = maxRoundQuestions.ToString();
                     bonusText.text = "Twoje drzewa otrzymują +10 do punktów rozwoju";
-
+                    return true;
                 }
                 else
                 {
@@ -139,13 +147,31 @@ public class QuizController : MonoBehaviour {
                     correctText.text = correctAnswers.ToString();
                     allText.text = maxRoundQuestions.ToString();
                     bonusText.text = "Tym razem nie otrzymujesz bonusu";
-
+                    return true;
                 }
-
+               
+            }
+        }
+        return false;
+    }
+   
+    public  void ResetQuiz () 
+    {
+        newQuiz = true;
+        resultPopUp.SetActive(false);
+        thisRoundQuestion = 0;
+        correctAnswers = 0;
+        wrongAnswers = 0;
+        displayNextQuestion = true;
+        clickedAnswer = false;
+        GameObject[] buttonsDestroy = GameObject.FindGameObjectsWithTag("Answer");
+        if (buttonsDestroy != null)
+        {
+            for (int x = 0; x < buttonsDestroy.Length; x++)
+            {
+                DestroyImmediate(buttonsDestroy[x]);
             }
         }
     }
-   
-
 
 }

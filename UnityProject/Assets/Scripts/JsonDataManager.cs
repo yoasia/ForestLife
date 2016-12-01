@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using LitJson;
+using System.Collections.Generic;
 
 public class JsonDataManager : MonoBehaviour {
 
@@ -16,8 +17,12 @@ public class JsonDataManager : MonoBehaviour {
 
     public bool questionsLoaded = false;
     public bool triviaLoaded = false;
+    public bool allTriviaDisplayed = false;
+    public bool allQuestionsDisplayed = false;
 
     public string treeSpecies;
+
+    private List<int> notUsedQuestions = new List<int>();
     
     private string tFilePath;
     private string triviaJsonString;
@@ -82,6 +87,38 @@ public class JsonDataManager : MonoBehaviour {
         
 
     }
+
+    public void SetNextTriviaNumber()
+    {
+        if (currentTriviaNumber < triviaNumber)
+        {
+            notUsedQuestions.Add(currentTriviaNumber);
+            currentTriviaNumber++;
+            if (currentTriviaNumber >= triviaNumber)
+            {
+                allTriviaDisplayed = true;
+            }
+            if (notUsedQuestions.Count > 0)
+            {
+                allQuestionsDisplayed = false;
+            }
+        }
+        
+        
+    }
+
+    public void NewQuestionNumber()
+    {
+        int index = Random.Range(0, (notUsedQuestions.Count - 1));
+        currentQuestionNumber = notUsedQuestions[index];
+        notUsedQuestions.RemoveAt(index);
+
+        if (notUsedQuestions.Count <= 0)
+        {
+            allQuestionsDisplayed = true;
+        }
+    }
+
 
 
 }

@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     private Quaternion seedDefaultRotation;
 
     private float timeToNextSeed;
-
+    public int lastQiuz = 0;
     public static GameManager instance;
 
     public enum GameState
@@ -89,11 +89,20 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1;
         //currentGameState = GameState.GS_SEED;
 
+        
         CameraChange();
     }
     
     void Update()
     {
+        if (JsonDataManager.instance.triviaLoaded)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
+            }
+
+        }
         if (transitionTimeLeft > 0)
         {
             transitionTimeLeft -= Time.deltaTime;
@@ -105,19 +114,36 @@ public class GameManager : MonoBehaviour
         if (timeToWindChange < 0)
             WindChange();
 
-        if (currentGameState != GameState.GS_SEED)
+        //if (currentGameState != GameState.GS_SEED && currentGameState != GameState.GS_QUIZ)
+        //{
+        //    timeToNextSeed -= Time.deltaTime;
+        //    if (timeToNextSeed < 0)
+        //    {
+        //        NewSeedPopup();
+                
+        //    }
+                
+        //}
+
+        if (currentGameState == GameState.GS_ISLAND && lastQiuz > 1000 )
         {
-            timeToNextSeed -= Time.deltaTime;
-            if (timeToNextSeed < 0)
-                NewSeedPopup();
+            int ttt = (int)Time.deltaTime;
+            //if (ttt%10 == 2)
+            //{
+                
+                if (!JsonDataManager.instance.allQuestionsDisplayed)
+                {
+                    lastQiuz = 0;
+                    SetGameState(GameState.GS_QUIZ);
+                }
+
+            //}
+
         }
         //Debug.LogFormat("Wind: {0}", Wind);
 
         // ładowanie z pliku nowej ciekawostki, trzeba pomyśleć w jakim odstepie czasowym to może się dziać ( pewnie na przemian z quizami) 
-        if (JsonDataManager.instance.triviaLoaded)
-        {
-            triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
-        }
+        lastQiuz++;
 
     }
 
@@ -374,6 +400,9 @@ public class GameManager : MonoBehaviour
                 seedCamera.enabled = false;
                 seed.SetActive(false);
             }
+
+
+            
         }
     }
 
@@ -404,6 +433,10 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 0;
         }
+        else if (newGameState == GameState.GS_QUIZ)
+        {
+            Time.timeScale = 0;
+        }
 
         CameraChange();
     }
@@ -431,8 +464,12 @@ public class GameManager : MonoBehaviour
         {
             SetGameState(GameState.GS_SELECT_TREEKIND);
         }
+        else if (newGameState.ToLower() == "quiz")
+        {
+            SetGameState(GameState.GS_QUIZ);
+        }
 
-        CameraChange();
+        //CameraChange();
     }
 
     public void ReturnIslandView()
