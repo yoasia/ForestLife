@@ -77,7 +77,7 @@ public class QuizController : MonoBehaviour {
             {
                 GameObject answer = Instantiate(answerPrefab);
                 answer.GetComponentInChildren<Text>().text = JsonDataManager.instance.quizData["data"][JsonDataManager.instance.currentQuestionNumber]["answers"][i].ToString();
-                answer.transform.SetParent(answersContainer.transform);
+                answer.transform.SetParent(answersContainer.transform, false);
 
                 string x = i.ToString();
 

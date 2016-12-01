@@ -140,6 +140,11 @@ public class GameManager : MonoBehaviour
             //}
 
         }
+
+        if (currentGameState == GameState.GS_ISLAND)
+        {
+            MyNotifications.CallNotification("nowa ciekawostka", 3.0f);
+        }
         //Debug.LogFormat("Wind: {0}", Wind);
 
         // ładowanie z pliku nowej ciekawostki, trzeba pomyśleć w jakim odstepie czasowym to może się dziać ( pewnie na przemian z quizami) 

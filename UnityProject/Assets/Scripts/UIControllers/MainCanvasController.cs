@@ -302,7 +302,11 @@ public class MainCanvasController : MonoBehaviour {
         triviaPanel.alpha = 1;
         triviaPanel.interactable = true;
         triviaPanel.blocksRaycasts = true;
-        LeftMenuOnOff();
+        if (leftMenuVisable)
+        {
+            leftMenuVisable = false;
+            animatorLeftMenu.Play("LeftMenuSlideOut");
+        }
         Time.timeScale = 0;
         SelectionModeButton.gameObject.SetActive(false);
         LeftMenuButton.gameObject.SetActive(false);
