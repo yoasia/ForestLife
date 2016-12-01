@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+guid: 190769231e8a519438809f33313bd21b
+folderAsset: yes
+timeCreated: 1479900824
+=======
 guid: ed431cbf9e6faf74e94370e6ad4b6fa2
 folderAsset: yes
 timeCreated: 1479929526
+>>>>>>> feature/ui_ponowne_latanie_etc
 licenseType: Free
 DefaultImporter:
   userData: 

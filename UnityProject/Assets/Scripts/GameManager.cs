@@ -19,6 +19,12 @@ public class GameManager : MonoBehaviour
     public GameObject treeChooserCanvas;
     public GameObject startCanvas;
 
+    public GameObject quizCanvas;
+
+    public GameObject newSeedCanvas;
+    public GameObject triviaCanvas;
+
+
     public GameObject seed;
     public float periodOfCreatingCloud = 180.0f;
     public float questionPeriod = 180.0f;
@@ -56,7 +62,7 @@ public class GameManager : MonoBehaviour
 
     private float timeToNextDataSave = 0;
     private float timeToNextSeed;
-
+    public int lastQiuz = 0;
     public static GameManager instance;
 
     public enum GameState
@@ -65,7 +71,9 @@ public class GameManager : MonoBehaviour
         GS_ISLAND,
         GS_START_MENU,
         GS_SELECT_TREEKIND,
-        GS_SELECTING
+        GS_SELECTING,
+        GS_QUIZ
+
     }
 
     public GameState currentGameState = GameState.GS_START_MENU;
@@ -95,11 +103,20 @@ public class GameManager : MonoBehaviour
         StartCoroutine(createCloudByTime(periodOfCreatingCloud));
         StartCoroutine(askAboutEmotions(questionPeriod));
 
+        
         CameraChange();
     }
     
     void Update()
     {
+        if (JsonDataManager.instance.triviaLoaded)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
+            }
+
+        }
         if (transitionTimeLeft > 0)
         {
             transitionTimeLeft -= Time.deltaTime;
@@ -112,6 +129,7 @@ public class GameManager : MonoBehaviour
         if (timeToWindChange < 0)
             WindChange();
 
+
         timeToNextDataSave -= Time.deltaTime;
 
         if (timeToNextDataSave < 0)
@@ -120,12 +138,42 @@ public class GameManager : MonoBehaviour
             timeToNextDataSave = timeBetweenSavingData;
         }
 
-        if (currentGameState != GameState.GS_SEED)
+
+        //if (currentGameState != GameState.GS_SEED && currentGameState != GameState.GS_QUIZ)
+        //{
+        //    timeToNextSeed -= Time.deltaTime;
+        //    if (timeToNextSeed < 0)
+        //    {
+        //        NewSeedPopup();
+                
+        //    }
+                
+        //}
+
+        if (currentGameState == GameState.GS_ISLAND && lastQiuz > 1000 )
+
         {
-            timeToNextSeed -= Time.deltaTime;
-            if (timeToNextSeed < 0)
-                NewSeedPopup();
+            
+                
+                if (!JsonDataManager.instance.allQuestionsDisplayed)
+                {
+                    lastQiuz = 0;
+                    SetGameState(GameState.GS_QUIZ);
+                }
+
+            
+
+        }
+
+        if (currentGameState == GameState.GS_ISLAND)
+        {
+            MyNotifications.CallNotification("nowa ciekawostka", 3.0f);
+        }
         //Debug.LogFormat("Wind: {0}", Wind);
+
+        // ładowanie z pliku nowej ciekawostki, trzeba pomyśleć w jakim odstepie czasowym to może się dziać ( pewnie na przemian z quizami) 
+        lastQiuz++;
+
     }
 
 
@@ -134,10 +182,29 @@ public class GameManager : MonoBehaviour
         seed.GetComponent<SeedController>().Reset();
     }
 
-    private void NewSeedPopup()
+    public void NewSeedPopup()
     {
-        //Do implementacji - wybieranie drzewa znad którego start nowego nasiona i wywołanie metody NewSeed przekazując wybrane drzewo jako parametr
-        //NewSeed(treesOnIsland.First());
+        
+        selectCanvas.SetActive(false);
+        mainCanvas.SetActive(false);
+        popupCanvas.SetActive(false);
+        treeChooserCanvas.SetActive(false);
+        startCanvas.SetActive(false);
+        newSeedCanvas.SetActive(true);
+
+        worldCamera.enabled = true;
+        
+        selectCamera.enabled = false;
+        currentGameState = GameState.GS_ISLAND;
+        if (seed != null)
+        {
+            seedCamera.enabled = false;
+            seed.SetActive(false);
+        }
+
+
+
+
     }
 
     public void NewSeed(GameObject selectedTree)
@@ -147,6 +214,7 @@ public class GameManager : MonoBehaviour
         var position = selectedTree.transform.position;
         position.y += 15;
         seed = (GameObject)Instantiate(seedPrefab, position, seedDefaultRotation);
+        seed.GetComponent<SeedController>().species = species;
         seedCamera = seed.GetComponentInChildren<Camera>();
         SetGameState(GameState.GS_SEED);
         BehaviouralData("Start of new seed stage");
@@ -193,11 +261,20 @@ public class GameManager : MonoBehaviour
         treeChooserCanvas.SetActive(false);
         startCanvas.SetActive(false);
 
+        quizCanvas.SetActive(false);
+
+        newSeedCanvas.SetActive(false);
+
+
         worldCamera.enabled = true;
-        seedCamera.enabled = false;
+        
         selectCamera.enabled = false;
         currentGameState = GameState.GS_ISLAND;
-        seed.SetActive(false);
+        if (seed != null)
+        {
+            seedCamera.enabled = false;
+            seed.SetActive(false);
+        }
 
         popupCanvas.GetComponent<PopupController>().BadLandingPopupOff();
         popupCanvas.GetComponent<PopupController>().GoodLandingPopupOn();
@@ -211,10 +288,20 @@ public class GameManager : MonoBehaviour
         treeChooserCanvas.SetActive(false);
         startCanvas.SetActive(false);
 
+        quizCanvas.SetActive(false);
+
+        newSeedCanvas.SetActive(false);
+
+
         worldCamera.enabled = true;
-        seedCamera.enabled = false;
+        
         selectCamera.enabled = false;
-        seed.SetActive(false);
+        
+        if (seed != null)
+        {
+            seedCamera.enabled = false;
+            seed.SetActive(false);
+        }
 
         popupCanvas.GetComponent<PopupController>().GoodLandingPopupOff();
         popupCanvas.GetComponent<PopupController>().BadLandingPopupOn();
@@ -229,6 +316,11 @@ public class GameManager : MonoBehaviour
             popupCanvas.SetActive(false);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
+
+            quizCanvas.SetActive(false);
+
+            newSeedCanvas.SetActive(false);
+
 
             worldCamera.enabled = true;
             selectCamera.enabled = false;
@@ -246,7 +338,13 @@ public class GameManager : MonoBehaviour
             popupCanvas.SetActive(true);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
+
+            quizCanvas.SetActive(false);
+
+            seed.SetActive(true);
+
             worldCamera.enabled = false;
+            newSeedCanvas.SetActive(false);
 
             if (seed != null)
             {
@@ -263,6 +361,10 @@ public class GameManager : MonoBehaviour
             popupCanvas.SetActive(false);
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(false);
+
+            quizCanvas.SetActive(false);
+
+            newSeedCanvas.SetActive(false);
 
             worldCamera.enabled = false;
 
@@ -282,6 +384,10 @@ public class GameManager : MonoBehaviour
             treeChooserCanvas.SetActive(false);
             startCanvas.SetActive(true);
 
+            quizCanvas.SetActive(false);
+
+            newSeedCanvas.SetActive(false);
+
             worldCamera.enabled = true;
 
             if (seed != null)
@@ -300,6 +406,24 @@ public class GameManager : MonoBehaviour
             treeChooserCanvas.SetActive(true);
             startCanvas.SetActive(false);
 
+            quizCanvas.SetActive(false);
+
+            worldCamera.enabled = true;
+            seedCamera.enabled = false;
+            selectCamera.enabled = false;
+            seed.SetActive(false);
+        }
+        else if (currentGameState == GameState.GS_QUIZ)
+        {
+            selectCanvas.SetActive(false);
+            mainCanvas.SetActive(false);
+            popupCanvas.SetActive(false);
+            treeChooserCanvas.SetActive(false);
+            startCanvas.SetActive(false);
+            quizCanvas.SetActive(true);
+
+            newSeedCanvas.SetActive(false);
+
             worldCamera.enabled = true;
             selectCamera.enabled = false;
 
@@ -308,6 +432,9 @@ public class GameManager : MonoBehaviour
                 seedCamera.enabled = false;
                 seed.SetActive(false);
             }
+
+
+            
         }
     }
 
@@ -335,6 +462,10 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 0;
         }
         else if (newGameState == GameState.GS_SELECT_TREEKIND)
+        {
+            Time.timeScale = 0;
+        }
+        else if (newGameState == GameState.GS_QUIZ)
         {
             Time.timeScale = 0;
         }
@@ -366,8 +497,12 @@ public class GameManager : MonoBehaviour
         {
             SetGameState(GameState.GS_SELECT_TREEKIND);
         }
+        else if (newGameState.ToLower() == "quiz")
+        {
+            SetGameState(GameState.GS_QUIZ);
+        }
 
-        CameraChange();
+        //CameraChange();
     }
 
 
