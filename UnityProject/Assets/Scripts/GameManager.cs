@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     public GameObject treeChooserCanvas;
     public GameObject startCanvas;
     public GameObject newSeedCanvas;
+    public GameObject triviaCanvas;
 
     public GameObject seed;
     public GameObject seedPrefab;
@@ -105,6 +106,13 @@ public class GameManager : MonoBehaviour
                 NewSeedPopup();
         }
         //Debug.LogFormat("Wind: {0}", Wind);
+
+        // ładowanie z pliku nowej ciekawostki, trzeba pomyśleć w jakim odstepie czasowym to może się dziać ( pewnie na przemian z quizami) 
+        if (JsonDataManager.instance.triviaLoaded)
+        {
+            triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
+        }
+
     }
 
 
@@ -115,8 +123,7 @@ public class GameManager : MonoBehaviour
 
     public void NewSeedPopup()
     {
-        //Do implementacji - wybieranie drzewa znad którego start nowego nasiona i wywołanie metody NewSeed przekazując wybrane drzewo jako parametr
-        //NewSeed(treesOnIsland.First());
+        
         selectCanvas.SetActive(false);
         mainCanvas.SetActive(false);
         popupCanvas.SetActive(false);
@@ -125,10 +132,14 @@ public class GameManager : MonoBehaviour
         newSeedCanvas.SetActive(true);
 
         worldCamera.enabled = true;
-        seedCamera.enabled = false;
+        
         selectCamera.enabled = false;
         currentGameState = GameState.GS_ISLAND;
-        seed.SetActive(false);
+        if (seed != null)
+        {
+            seedCamera.enabled = false;
+            seed.SetActive(false);
+        }
 
 
 
@@ -188,10 +199,14 @@ public class GameManager : MonoBehaviour
         newSeedCanvas.SetActive(false);
 
         worldCamera.enabled = true;
-        seedCamera.enabled = false;
+        
         selectCamera.enabled = false;
         currentGameState = GameState.GS_ISLAND;
-        seed.SetActive(false);
+        if (seed != null)
+        {
+            seedCamera.enabled = false;
+            seed.SetActive(false);
+        }
 
         popupCanvas.GetComponent<PopupController>().BadLandingPopupOff();
         popupCanvas.GetComponent<PopupController>().GoodLandingPopupOn();
@@ -207,9 +222,14 @@ public class GameManager : MonoBehaviour
         newSeedCanvas.SetActive(false);
 
         worldCamera.enabled = true;
-        seedCamera.enabled = false;
+        
         selectCamera.enabled = false;
-        seed.SetActive(false);
+        
+        if (seed != null)
+        {
+            seedCamera.enabled = false;
+            seed.SetActive(false);
+        }
 
         popupCanvas.GetComponent<PopupController>().GoodLandingPopupOff();
         popupCanvas.GetComponent<PopupController>().BadLandingPopupOn();

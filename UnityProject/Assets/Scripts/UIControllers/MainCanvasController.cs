@@ -25,6 +25,10 @@ public class MainCanvasController : MonoBehaviour {
 
     public GameObject activeTree;
 
+    public CanvasGroup triviaPanel;
+
+
+
     private Animator animatorLeftMenu;
     private bool leftMenuVisable = false;
 
@@ -32,7 +36,7 @@ public class MainCanvasController : MonoBehaviour {
     private bool rightMenuVisable = false;
     Ray ray;
     RaycastHit hit;
-
+    private bool IsScreenPopup = false; 
 	
 	void Start () {
 
@@ -48,19 +52,23 @@ public class MainCanvasController : MonoBehaviour {
 
         if (GameManager.instance.currentGameState == GameManager.GameState.GS_ISLAND)
         {
-            SetTreeAmountText(GameManager.instance.treesOnIsland.Count);
-            int t = (int)Time.time;
-            SetDateText(t.ToString());
-            PointSelect();
-            if (selectedTrees.Count != 0)
+            if (!IsScreenPopup)
             {
-                UpdateActiveTreeInfo();
-                RightMenuOnOff(true);
+                SetTreeAmountText(GameManager.instance.treesOnIsland.Count);
+                int t = (int)Time.time;
+                SetDateText(t.ToString());
+                PointSelect();
+                if (selectedTrees.Count != 0)
+                {
+                    UpdateActiveTreeInfo();
+                    RightMenuOnOff(true);
+                }
+                else
+                {
+                    RightMenuOnOff(false);
+                }
             }
-            else
-            {
-                RightMenuOnOff(false);
-            }
+            
             
         }
 	}
@@ -286,6 +294,30 @@ public class MainCanvasController : MonoBehaviour {
             activeTree.GetComponent<TreeController>().ReturnDefaultColour();
             activeTree.GetComponent<TreeController>().DeselectTree();
         }
+    }
+
+    public void ShowTriviaPanel()
+    {
+        
+        triviaPanel.alpha = 1;
+        triviaPanel.interactable = true;
+        triviaPanel.blocksRaycasts = true;
+        LeftMenuOnOff();
+        Time.timeScale = 0;
+        SelectionModeButton.gameObject.SetActive(false);
+        LeftMenuButton.gameObject.SetActive(false);
+        IsScreenPopup = true;
+    }
+
+    public void HideTriviaPanel()
+    {
+        Time.timeScale = 1;
+        triviaPanel.alpha = 0;
+        triviaPanel.interactable = false;
+        triviaPanel.blocksRaycasts = false;
+        SelectionModeButton.gameObject.SetActive(true);
+        LeftMenuButton.gameObject.SetActive(true);
+        IsScreenPopup = false;
     }
 
 }
