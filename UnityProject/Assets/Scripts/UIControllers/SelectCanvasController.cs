@@ -18,7 +18,7 @@ public class SelectCanvasController : MonoBehaviour {
     
     public EventSystem eventSystem;
     public Text koraAddText, korzenAddText, liscieAddText;
-
+    public Text infoText;
     public List<GameObject> selectedTrees = new List<GameObject>();
 
 
@@ -55,6 +55,7 @@ public class SelectCanvasController : MonoBehaviour {
             //t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
             t.GetComponent<TreeController>().ReturnDefaultColour();
         }
+        infoText.text = "";
         ClearValues();
         DisableSubButtons();
         if (rightMenuVisable)
@@ -143,6 +144,7 @@ public class SelectCanvasController : MonoBehaviour {
 
     public void setValuesToUpgradeTrees(Button b)
     {
+        infoText.text = "";
         foreach (GameObject t in selectedTrees)
         {
             
@@ -209,14 +211,25 @@ public class SelectCanvasController : MonoBehaviour {
 
     public void UpgradeTrees()
     {
+        bool ulep = false;
         foreach (GameObject t in selectedTrees)
         {
             if (t.GetComponent<TreeController>().CanBeUpgraded(addRoots, addLeaves, addBark))
             {
+                
                 t.GetComponent<TreeController>().Upgrade(addRoots, addLeaves, addBark);
+                ulep = true;
             }
 
         }
+        if (ulep) 
+        {
+            if (addRoots != 0 && addLeaves != 0 && addBark != 0 )
+                infoText.text = "Zaznaczone drzewa zostały ulepszone";
+            
+        }
+        
+       
     }
 
     public void DisableSubButtons()
