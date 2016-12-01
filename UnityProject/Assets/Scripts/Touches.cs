@@ -15,8 +15,11 @@ public class Touches : MonoBehaviour
     private Vector3 terrainDimensions;
     private Vector3 angleRotation = new Vector3(0, 1, 0);
 
+    private bool dontMove;
+
     void Start()
     {
+        Time.timeScale = 1;
         startZ = projectile.position.z;
 
         terrainCentrum = new Vector3(0, 0, 0);
@@ -40,33 +43,6 @@ public class Touches : MonoBehaviour
         // You can Change the values for your requirements.
         //Here the camera will move with in your required portion on the screen.
 
-        if (projectile.position.z >= terrainCentrum.z + 400)
-        {
-            transform.position = transform.position + new Vector3(0.0f, 0.0f, -10.0f);
-        }
-        else if (projectile.position.z <= terrainCentrum.z - terrainDimensions.z)
-        {
-            transform.position = transform.position + new Vector3(0.0f, 0.0f, 10.0f);
-        }
-
-        if (projectile.position.y >= terrainCentrum.y +500)
-        {
-            transform.position = transform.position + new Vector3(0.0f, -10.0f, 0.0f);
-        }
-        else if (projectile.position.y <= terrainCentrum.y)
-        {
-            transform.position = transform.position + new Vector3(0.0f, 10.0f, 0.0f);
-        }
-
-        if (projectile.position.x >= terrainCentrum.x + terrainDimensions.x)
-        {
-            transform.position = transform.position + new Vector3(-5.0f, 0.0f, 0.0f);
-        }
-        else if (projectile.position.x <= terrainCentrum.z - terrainDimensions.z)
-        {
-            transform.position = transform.position + new Vector3(5.0f, 0.0f, 0.0f);
-        }
-
         // This Section For to move camera according to your swipe on screen.       
         if (Input.touchCount == 1)
         {
@@ -83,11 +59,12 @@ public class Touches : MonoBehaviour
                     pos.z = startZ;
                     projectile.position = Camera.main.ScreenToWorldPoint(touch.position);
                     //here i gave condition to move camera with in required position
-                    if (projectile.position.z >= terrainCentrum.z - terrainDimensions.z - 200  && projectile.position.z <= terrainCentrum.z + terrainDimensions.z + 200)
+                    moveVec = -(touch.position - dragStartPos) * speed;
+                    moveVec *= Time.deltaTime;
+                    if (ifCanBeMoved(moveVec))
                     {
-                        moveVec = -(touch.position - dragStartPos) * speed;
-                        projectile.Translate(moveVec * Time.deltaTime);
-                        Vector3 val = moveVec * Time.deltaTime;
+                        projectile.Translate(moveVec);
+                        Vector3 val = moveVec;
                         dragStartPos = touch.position;
                     }
                     break;
@@ -105,24 +82,29 @@ public class Touches : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
             Touch touch1 = Input.GetTouch(1);
-            //dragStartPos = touch.position;
+
             if (touch.phase == TouchPhase.Began || touch.phase == TouchPhase.Ended) {
                 dragStartPos = touch.position;
                 moveVec = Vector2.zero;
             }
+
             if (touch.phase == TouchPhase.Moved && touch1.phase == TouchPhase.Moved)
             {
                 //obrót
                 moveVec = -(touch.position - dragStartPos);
-                transform.RotateAround(transform.position, terrainCentrum.y * Vector3.up, -moveVec.x * speed * Time.deltaTime);
+                if (ifCanBeMoved(moveVec* speed * Time.deltaTime))
+                    transform.RotateAround(transform.position, terrainCentrum.y * Vector3.up, -moveVec.x * speed * Time.deltaTime);
                 dragStartPos = touch.position;
                         
-                       
+                //przybliżenie   
                 Vector2 curDist = touch.position - touch1.position;
                 Vector2 prevDist = (touch.position - touch.deltaPosition) - (touch1.position - touch1.deltaPosition);
                 float delta = curDist.magnitude - prevDist.magnitude;
                 if (Mathf.Abs(delta) > 10)
-                    Camera.main.transform.Translate(0, 0, delta * .5f);
+                {
+                    if (ifCanBeMoved(new Vector3(0, 0, delta * .5f)))
+                        Camera.main.transform.Translate(0, 0, delta * .5f);
+                }
 
 
             }
@@ -131,36 +113,56 @@ public class Touches : MonoBehaviour
 
     }
 
-    //public Vector3 RotateAroundPoint(Vector3 point, Vector3 pivot, Quaternion angle)
-    //{
-    //    return angle* ( point - pivot) + pivot;
-    //}
-    //public Vector3 RotatePointAroundPivot(Vector3 currentPosition, Vector3 angles) {
-    //    Vector3 dir = currentPosition - terrainCentrum; // get point direction relative to pivot
-    //    dir = Quaternion.Euler(angles) * dir; // rotate it
-    //    currentPosition = dir + terrainCentrum; // calculate rotated point
-    //    return currentPosition; // return it
-    //}
+    public bool ifCanBeMoved(Vector3 movement)
+    {
+        if ((projectile.position.z + movement.z >= terrainCentrum.z  + 400) ||
+            (projectile.position.z + movement.z <= terrainCentrum.z  - terrainDimensions.z) ||
+            (projectile.position.y + movement.y >= terrainCentrum.y  + 500) ||
+            (projectile.position.y + movement.y <= terrainCentrum.y  + 10) ||
+            (projectile.position.x + movement.x >= terrainCentrum.x + terrainDimensions.x) ||
+            (projectile.position.x + movement.x <= terrainCentrum.z - terrainDimensions.z))
+            return false;
+        else if (Physics.Raycast(transform.position, movement, 10))
+            return false;
+        else
+            return true;
+    }
 
+
+    public void OnControllerColliderHit(Collision col)
+    {
+        print("OnControllerColliderHit");
+    }
+
+    public void OnCollisionEnter(Collision col)
+    {
+        print("OnCollsion");
+    }
+
+    public void OnCollisionStay(Collision col)
+    {
+        print("OnCollsionStay");
+    }
+
+    public void OnTriggerEnter(Collision col)
+    {
+        print("OnTriggerEnter");
+    }
 
     //Returns the rotated Vector3 using a Quaterion
-    public Vector3 RotateAroundPivot(this Vector3 Point, Vector3 Pivot, Quaternion Angle)
-    {
+    public Vector3 RotateAroundPivot(Vector3 Point, Vector3 Pivot, Quaternion Angle){
         return Angle * (Point - Pivot) + Pivot;
     }
     //Returns the rotated Vector3 using Euler
-    public Vector3 RotateAroundPivot(this Vector3 Point, Vector3 Pivot, Vector3 Euler)
-    {
+    public Vector3 RotateAroundPivot( Vector3 Point, Vector3 Pivot, Vector3 Euler) {
         return RotateAroundPivot(Point, Pivot, Quaternion.Euler(Euler));
     }
     //Rotates the Transform's position using a Quaterion
-    public void RotateAroundPivot( Vector3 Pivot, Quaternion Angle)
-    {
+    public void RotateAroundPivot( Vector3 Pivot, Quaternion Angle) {
         Camera.main.transform.position = RotateAroundPivot(Camera.main.transform.position, Pivot, Angle);
     }
     //Rotates the Transform's position using Euler
-    public void RotateAroundPivot( Vector3 Pivot, Vector3 Euler)
-    {
+    public void RotateAroundPivot( Vector3 Pivot, Vector3 Euler){
         Camera.main.transform.position = RotateAroundPivot(Camera.main.transform.position, Pivot, Quaternion.Euler(Euler));
     }
 }

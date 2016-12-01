@@ -6,9 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     public Camera seedCamera;
     public Camera worldCamera;
     public Camera selectCamera;
@@ -29,7 +32,6 @@ public class GameManager : MonoBehaviour
     public Terrain terrain;
     public TerrainManager terrainManager;
 
-    public List <GameObject> selectedTrees = new List<GameObject>();
     static public Vector2 Wind { private set; get; }
     public List<GameObject> treesSpecies;
 
@@ -38,11 +40,8 @@ public class GameManager : MonoBehaviour
 
     public List<GameObject> selectedTrees = new List<GameObject>();
 
-    public float maxWind = 5F;
-
     public int maxTimeBetweenWindChange = 60;
     public int minTimeBetweenWindChange = 30;
-    public Vector2 Wind { private set; get; }
 
     public int timeBetweenSeeds = 180;
 
@@ -57,7 +56,6 @@ public class GameManager : MonoBehaviour
     private float timeToNextDataSave = 0;
     private float timeToNextSeed;
 
-    public static GameManager instance;
 
     public enum GameState
     {
@@ -97,7 +95,7 @@ public class GameManager : MonoBehaviour
 
         CameraChange();
     }
-    
+
     void Update()
     {
         if (transitionTimeLeft > 0)
@@ -125,7 +123,8 @@ public class GameManager : MonoBehaviour
             timeToNextSeed -= Time.deltaTime;
             if (timeToNextSeed < 0)
                 NewSeedPopup();
-        //Debug.LogFormat("Wind: {0}", Wind);
+            //Debug.LogFormat("Wind: {0}", Wind);
+        }
     }
 
 
@@ -459,43 +458,46 @@ public class GameManager : MonoBehaviour
 
     void BehaviouralData(String game_event)
     {
-        DeviceOrientation orientation = Input.deviceOrientation;
-        Vector3 acceleration = Input.acceleration;
-        Compass compass = Input.compass;
-        Touch first_touch = Input.GetTouch(0);
-        Touch second_touch = Input.GetTouch(1);
+        if (Input.touchCount > 1)
+        {
+            DeviceOrientation orientation = Input.deviceOrientation;
+            Vector3 acceleration = Input.acceleration;
+            Compass compass = Input.compass;
+            Touch first_touch = Input.GetTouch(0);
+            Touch second_touch = Input.GetTouch(1);
+            
+            List<String> data_list = new List<String>();
 
-        List<String> data_list = new List<String>();
-
-        data_list.Add(orientation.ToString());
-        data_list.Add(acceleration.x.ToString());
-        data_list.Add(acceleration.y.ToString());
-        data_list.Add(acceleration.z.ToString());
-        data_list.Add(compass.headingAccuracy.ToString());
-        data_list.Add(compass.magneticHeading.ToString());
-        data_list.Add(compass.trueHeading.ToString());
-        data_list.Add(Input.touchCount.ToString());
-        data_list.Add(first_touch.fingerId.ToString());
-        data_list.Add(first_touch.deltaTime.ToString());
-        data_list.Add(first_touch.type.ToString());
-        data_list.Add(first_touch.tapCount.ToString());
-        data_list.Add(first_touch.phase.ToString());
-        data_list.Add(first_touch.position.x.ToString());
-        data_list.Add(first_touch.position.y.ToString());
-        data_list.Add(first_touch.deltaPosition.x.ToString());
-        data_list.Add(first_touch.deltaPosition.y.ToString());
-        data_list.Add(first_touch.radius.ToString());
-        data_list.Add(second_touch.fingerId.ToString());
-        data_list.Add(second_touch.deltaTime.ToString());
-        data_list.Add(second_touch.type.ToString());
-        data_list.Add(second_touch.tapCount.ToString());
-        data_list.Add(second_touch.phase.ToString());
-        data_list.Add(second_touch.position.x.ToString());
-        data_list.Add(second_touch.position.y.ToString());
-        data_list.Add(second_touch.deltaPosition.x.ToString());
-        data_list.Add(second_touch.deltaPosition.y.ToString());
-        data_list.Add(second_touch.radius.ToString());
-        data_list.Add(currentGameState.ToString());
-        data_list.Add(game_event);
+            data_list.Add(orientation.ToString());
+            data_list.Add(acceleration.x.ToString());
+            data_list.Add(acceleration.y.ToString());
+            data_list.Add(acceleration.z.ToString());
+            data_list.Add(compass.headingAccuracy.ToString());
+            data_list.Add(compass.magneticHeading.ToString());
+            data_list.Add(compass.trueHeading.ToString());
+            data_list.Add(Input.touchCount.ToString());
+            data_list.Add(first_touch.fingerId.ToString());
+            data_list.Add(first_touch.deltaTime.ToString());
+            data_list.Add(first_touch.type.ToString());
+            data_list.Add(first_touch.tapCount.ToString());
+            data_list.Add(first_touch.phase.ToString());
+            data_list.Add(first_touch.position.x.ToString());
+            data_list.Add(first_touch.position.y.ToString());
+            data_list.Add(first_touch.deltaPosition.x.ToString());
+            data_list.Add(first_touch.deltaPosition.y.ToString());
+            data_list.Add(first_touch.radius.ToString());
+            data_list.Add(second_touch.fingerId.ToString());
+            data_list.Add(second_touch.deltaTime.ToString());
+            data_list.Add(second_touch.type.ToString());
+            data_list.Add(second_touch.tapCount.ToString());
+            data_list.Add(second_touch.phase.ToString());
+            data_list.Add(second_touch.position.x.ToString());
+            data_list.Add(second_touch.position.y.ToString());
+            data_list.Add(second_touch.deltaPosition.x.ToString());
+            data_list.Add(second_touch.deltaPosition.y.ToString());
+            data_list.Add(second_touch.radius.ToString());
+            data_list.Add(currentGameState.ToString());
+            data_list.Add(game_event);
+        }
     }
 }
