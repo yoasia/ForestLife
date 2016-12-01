@@ -62,7 +62,6 @@ public class GameManager : MonoBehaviour
     private float timeToNextDataSave = 0;
     private float timeToNextSeed;
     public int lastQiuz = 0;
-    public static GameManager instance;
 
     public enum GameState
     {
