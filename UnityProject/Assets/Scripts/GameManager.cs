@@ -4,7 +4,8 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Linq;
-using System;
+using System.Text;
+using System.IO;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,13 +20,20 @@ public class GameManager : MonoBehaviour
     public GameObject startCanvas;
 
     public GameObject seed;
+    public float periodOfCreatingCloud = 180.0f;
+    public float questionPeriod = 180.0f;
+    public GameObject cloud;
+    public GameObject emotionalQuestions;
     public GameObject seedPrefab;
 
     public Terrain terrain;
     public TerrainManager terrainManager;
 
+    public List <GameObject> selectedTrees = new List<GameObject>();
+    static public Vector2 Wind { private set; get; }
     public List<GameObject> treesSpecies;
 
+    public float maxWind = 5F;
     public List<GameObject> treesOnIsland;
 
     public List<GameObject> selectedTrees = new List<GameObject>();
@@ -83,6 +91,9 @@ public class GameManager : MonoBehaviour
         if (currentGameState == GameState.GS_SEED)
             Time.timeScale = 1;
         //currentGameState = GameState.GS_SEED;
+        Wind = UnityEngine.Random.insideUnitCircle * maxWind;
+        StartCoroutine(createCloudByTime(periodOfCreatingCloud));
+        StartCoroutine(askAboutEmotions(questionPeriod));
 
         CameraChange();
     }
@@ -95,6 +106,7 @@ public class GameManager : MonoBehaviour
             Wind += windChangePerSecond * Time.deltaTime;
         }
 
+        //CameraChange();
         timeToWindChange -= Time.deltaTime;
 
         if (timeToWindChange < 0)
@@ -113,7 +125,6 @@ public class GameManager : MonoBehaviour
             timeToNextSeed -= Time.deltaTime;
             if (timeToNextSeed < 0)
                 NewSeedPopup();
-        }
         //Debug.LogFormat("Wind: {0}", Wind);
     }
 
@@ -331,6 +342,7 @@ public class GameManager : MonoBehaviour
         CameraChange();
     }
 
+
     public void SetGameState(string newGameState)
     {
         if (newGameState.ToLower() == "island")
@@ -358,7 +370,8 @@ public class GameManager : MonoBehaviour
         CameraChange();
     }
 
-    public void ReturnIslandView()
+
+    public void ReturnIslendView()
     {
         currentGameState = GameState.GS_ISLAND;
 
@@ -366,6 +379,14 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    IEnumerator createCloudByTime(float time)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(time);
+            Instantiate(cloud);    
+        }
+    }
     private void WindChange()
     {
         transitionTimeLeft = UnityEngine.Random.Range(5, 11);
@@ -374,6 +395,43 @@ public class GameManager : MonoBehaviour
         windChangePerSecond = windChange / transitionTimeLeft;
         timeToWindChange = UnityEngine.Random.Range(minTimeBetweenWindChange, maxTimeBetweenWindChange + 1);
     }
+
+    IEnumerator askAboutEmotions(float time)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(time);
+
+            showEmotionsQuestion();
+        }
+    }
+
+    public void showEmotionsQuestion()
+    {
+        GameObject cloneQuestionPanel = GameObject.FindWithTag("Clone");
+        if(cloneQuestionPanel == null)
+            Instantiate(emotionalQuestions);
+    }
+
+
+    public bool saveEmotionalState()
+    {
+        string delimiter = ",";  
+
+
+        return true;
+    }
+
+    static public void addRowToFile(string filePath, string data)
+    { 
+ 	    StringBuilder sb = new StringBuilder();
+
+ 	    sb.AppendLine(data);
+
+        File.AppendAllText(filePath, sb.ToString()); 
+    }
+
+
 
 
     public float TreeDistance(float x, float z)
