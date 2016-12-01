@@ -44,6 +44,9 @@ public class GameManager : MonoBehaviour
 
     private Quaternion seedDefaultRotation;
 
+    public float timeBetweenSavingData = 0.1F;
+
+    private float timeToNextDataSave = 0;
     private float timeToNextSeed;
 
     public static GameManager instance;
@@ -97,6 +100,14 @@ public class GameManager : MonoBehaviour
         if (timeToWindChange < 0)
             WindChange();
 
+        timeToNextDataSave -= Time.deltaTime;
+
+        if (timeToNextDataSave < 0)
+        {
+            BehaviouralData("");
+            timeToNextDataSave = timeBetweenSavingData;
+        }
+
         if (currentGameState != GameState.GS_SEED)
         {
             timeToNextSeed -= Time.deltaTime;
@@ -127,6 +138,7 @@ public class GameManager : MonoBehaviour
         seed = (GameObject)Instantiate(seedPrefab, position, seedDefaultRotation);
         seedCamera = seed.GetComponentInChildren<Camera>();
         SetGameState(GameState.GS_SEED);
+        BehaviouralData("Start of new seed stage");
         //Debug.LogFormat(species);
     }
 
@@ -145,6 +157,7 @@ public class GameManager : MonoBehaviour
             if (automatic == false)
             {
                 timeToNextSeed = timeBetweenSeeds;
+                BehaviouralData("Good seed landing");
                 OnGoodLandingPopup();
             }
         }
@@ -153,6 +166,7 @@ public class GameManager : MonoBehaviour
             if (automatic == false)
             {
                 OnBadLandingPopup();
+                BehaviouralData("Bad seed landing");
             }
         }
 
