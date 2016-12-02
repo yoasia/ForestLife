@@ -228,7 +228,7 @@ public class TreeController : MonoBehaviour
 
         if (growth > 0)
         {
-            upgradePoints += growth;
+            upgradePoints += growth*20;
             if (upgradePoints > maxUpgradePoints)
                 upgradePoints = maxUpgradePoints;
 

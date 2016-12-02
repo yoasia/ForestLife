@@ -61,7 +61,12 @@ public class GameManager : MonoBehaviour
 
     private float timeToNextDataSave = 0;
     private float timeToNextSeed;
-    public int lastQiuz = 0;
+
+    public float timeBetweenTrivia = 15F;
+    public float lastTrivia = 0;
+    public float timeBetweenQuiz = 20F;
+    public float lastQuiz = 0;
+    public int triviasBeforeQuiz = 2;
 
     public enum GameState
     {
@@ -107,24 +112,31 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         //załadowanie nowej ciekawostki
-        //if (JsonDataManager.instance.triviaLoaded)
-        //{
-        //    triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
-        //    MyNotifications.CallNotification("nowa ciekawostka", 2.0f);
-        //}
+        if (lastTrivia > timeBetweenTrivia)
+        {
+            if (JsonDataManager.instance.triviaLoaded)
+            {
+                triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
+                MyNotifications.CallNotification("nowa ciekawostka", 2.0f);
+                triviasBeforeQuiz--;
+                lastTrivia = 0;
+            }
+        }
+        lastTrivia += Time.deltaTime;
 
         //wywołanie nowego quizu
-        //if (currentGameState == GameState.GS_ISLAND && lastQiuz > 1000)
-        //{
+        if (currentGameState == GameState.GS_ISLAND && lastQuiz > timeBetweenQuiz)
+        {
 
-        //    if (!JsonDataManager.instance.allQuestionsDisplayed)
-        //    {
-        //        lastQiuz = 0;
-        //        SetGameState(GameState.GS_QUIZ);
-        //    }
+            if (!JsonDataManager.instance.allQuestionsDisplayed)
+            {
+                lastQuiz = 0;
+                SetGameState(GameState.GS_QUIZ);
+            }
 
-        //}
-        //lastQiuz++;
+        }
+        if(triviasBeforeQuiz <= 0)
+            lastQuiz += Time.deltaTime;
 
         if (transitionTimeLeft > 0)
         {
@@ -180,6 +192,7 @@ public class GameManager : MonoBehaviour
             seedCamera.enabled = false;
             seed.SetActive(false);
         }
+        Time.timeScale = 0;
     }
 
     public void NewSeed(GameObject selectedTree)
