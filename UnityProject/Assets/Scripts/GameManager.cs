@@ -75,13 +75,13 @@ public class GameManager : MonoBehaviour
     }
 
     public GameState currentGameState = GameState.GS_START_MENU;
-    
+
 
     public void Awake()
     {
         instance = this;
     }
-    
+
     void Start()
     {
         seedDefaultRotation = seed.transform.rotation;
@@ -101,7 +101,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(createCloudByTime(periodOfCreatingCloud));
         StartCoroutine(askAboutEmotions(questionPeriod));
 
-        
         CameraChange();
     }
 
@@ -113,12 +112,10 @@ public class GameManager : MonoBehaviour
         //    triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
         //    MyNotifications.CallNotification("nowa ciekawostka", 2.0f);
         //}
-        
 
         //wywołanie nowego quizu
         //if (currentGameState == GameState.GS_ISLAND && lastQiuz > 1000)
         //{
-
 
         //    if (!JsonDataManager.instance.allQuestionsDisplayed)
         //    {
@@ -126,12 +123,8 @@ public class GameManager : MonoBehaviour
         //        SetGameState(GameState.GS_QUIZ);
         //    }
 
-
-
         //}
         //lastQiuz++;
-
-        
 
         if (transitionTimeLeft > 0)
         {
@@ -144,7 +137,6 @@ public class GameManager : MonoBehaviour
         if (timeToWindChange < 0)
             WindChange();
 
-
         timeToNextDataSave -= Time.deltaTime;
 
         if (timeToNextDataSave < 0)
@@ -153,21 +145,14 @@ public class GameManager : MonoBehaviour
             timeToNextDataSave = timeBetweenSavingData;
         }
 
-
         if (currentGameState != GameState.GS_SEED && currentGameState != GameState.GS_QUIZ)
         {
             timeToNextSeed -= Time.deltaTime;
             if (timeToNextSeed < 0)
             {
                 NewSeedPopup();
-
             }
-
         }
-
-
-
-
     }
 
 
@@ -178,7 +163,6 @@ public class GameManager : MonoBehaviour
 
     public void NewSeedPopup()
     {
-        
         selectCanvas.SetActive(false);
         mainCanvas.SetActive(false);
         popupCanvas.SetActive(false);
@@ -187,18 +171,15 @@ public class GameManager : MonoBehaviour
         newSeedCanvas.SetActive(true);
 
         worldCamera.enabled = true;
-        
+
         selectCamera.enabled = false;
         currentGameState = GameState.GS_ISLAND;
+
         if (seed != null)
         {
             seedCamera.enabled = false;
             seed.SetActive(false);
         }
-
-
-
-
     }
 
     public void NewSeed(GameObject selectedTree)
@@ -226,7 +207,7 @@ public class GameManager : MonoBehaviour
             var rotation = UnityEngine.Random.Range(0, 360);
             var tree = (GameObject)Instantiate(treeToAdd, pos, Quaternion.Euler(0, rotation, 0));
             treesOnIsland.Add(tree);
-            
+
             if (automatic == false)
             {
                 timeToNextSeed = timeBetweenSeeds;
@@ -259,11 +240,11 @@ public class GameManager : MonoBehaviour
 
         newSeedCanvas.SetActive(false);
 
-
         worldCamera.enabled = true;
-        
+
         selectCamera.enabled = false;
         currentGameState = GameState.GS_ISLAND;
+
         if (seed != null)
         {
             seedCamera.enabled = false;
@@ -286,11 +267,10 @@ public class GameManager : MonoBehaviour
 
         newSeedCanvas.SetActive(false);
 
-
         worldCamera.enabled = true;
-        
+
         selectCamera.enabled = false;
-        
+
         if (seed != null)
         {
             seedCamera.enabled = false;
@@ -314,7 +294,6 @@ public class GameManager : MonoBehaviour
             quizCanvas.SetActive(false);
 
             newSeedCanvas.SetActive(false);
-
 
             worldCamera.enabled = true;
             selectCamera.enabled = false;
@@ -426,9 +405,6 @@ public class GameManager : MonoBehaviour
                 seedCamera.enabled = false;
                 seed.SetActive(false);
             }
-
-
-            
         }
     }
 
@@ -466,7 +442,6 @@ public class GameManager : MonoBehaviour
 
         CameraChange();
     }
-
 
     public void SetGameState(string newGameState)
     {
@@ -513,9 +488,10 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(time);
-            Instantiate(cloud);    
+            Instantiate(cloud);
         }
     }
+
     private void WindChange()
     {
         transitionTimeLeft = UnityEngine.Random.Range(5, 11);
@@ -538,30 +514,27 @@ public class GameManager : MonoBehaviour
     public void showEmotionsQuestion()
     {
         GameObject cloneQuestionPanel = GameObject.FindWithTag("Clone");
-        if(cloneQuestionPanel == null)
+
+        if (cloneQuestionPanel == null)
             Instantiate(emotionalQuestions);
     }
 
 
     public bool saveEmotionalState()
     {
-        string delimiter = ",";  
-
+        string delimiter = ",";
 
         return true;
     }
 
     static public void addRowToFile(string filePath, string data)
-    { 
- 	    StringBuilder sb = new StringBuilder();
+    {
+        StringBuilder sb = new StringBuilder();
 
- 	    sb.AppendLine(data);
+        sb.AppendLine(data);
 
-        File.AppendAllText(filePath, sb.ToString()); 
+        File.AppendAllText(filePath, sb.ToString());
     }
-
-
-
 
     public float TreeDistance(float x, float z)
     {
@@ -592,40 +565,97 @@ public class GameManager : MonoBehaviour
         {
             DeviceOrientation orientation = Input.deviceOrientation;
             Vector3 acceleration = Input.acceleration;
-            Compass compass = Input.compass;
-            Touch first_touch = Input.GetTouch(0);
-            Touch second_touch = Input.GetTouch(1);
-            
+            //Compass compass = Input.compass;
+            Touch first_touch;
+            bool is_first_touch = false;
+            Touch second_touch;
+            bool is_second_touch = false;
+
+            try
+            {
+                first_touch = Input.GetTouch(0);
+                is_first_touch = true;
+            }
+            catch (Exception e)
+            {
+                is_first_touch = false;
+            }
+
+            try
+            {
+                second_touch = Input.GetTouch(1);
+                is_second_touch = true;
+            }
+            catch (Exception e)
+            {
+                is_second_touch = false;
+            }
+
             List<String> data_list = new List<String>();
 
             data_list.Add(orientation.ToString());
             data_list.Add(acceleration.x.ToString());
             data_list.Add(acceleration.y.ToString());
             data_list.Add(acceleration.z.ToString());
-            data_list.Add(compass.headingAccuracy.ToString());
-            data_list.Add(compass.magneticHeading.ToString());
-            data_list.Add(compass.trueHeading.ToString());
+            //data_list.Add(compass.headingAccuracy.ToString());
+            //data_list.Add(compass.magneticHeading.ToString());
+            //data_list.Add(compass.trueHeading.ToString());
             data_list.Add(Input.touchCount.ToString());
-            data_list.Add(first_touch.fingerId.ToString());
-            data_list.Add(first_touch.deltaTime.ToString());
-            data_list.Add(first_touch.type.ToString());
-            data_list.Add(first_touch.tapCount.ToString());
-            data_list.Add(first_touch.phase.ToString());
-            data_list.Add(first_touch.position.x.ToString());
-            data_list.Add(first_touch.position.y.ToString());
-            data_list.Add(first_touch.deltaPosition.x.ToString());
-            data_list.Add(first_touch.deltaPosition.y.ToString());
-            data_list.Add(first_touch.radius.ToString());
-            data_list.Add(second_touch.fingerId.ToString());
-            data_list.Add(second_touch.deltaTime.ToString());
-            data_list.Add(second_touch.type.ToString());
-            data_list.Add(second_touch.tapCount.ToString());
-            data_list.Add(second_touch.phase.ToString());
-            data_list.Add(second_touch.position.x.ToString());
-            data_list.Add(second_touch.position.y.ToString());
-            data_list.Add(second_touch.deltaPosition.x.ToString());
-            data_list.Add(second_touch.deltaPosition.y.ToString());
-            data_list.Add(second_touch.radius.ToString());
+
+            if (is_first_touch == true)
+            {
+                data_list.Add(first_touch.fingerId.ToString());
+                data_list.Add(first_touch.deltaTime.ToString());
+                //data_list.Add(first_touch.type.ToString());
+                data_list.Add(first_touch.tapCount.ToString());
+                data_list.Add(first_touch.phase.ToString());
+                data_list.Add(first_touch.position.x.ToString());
+                data_list.Add(first_touch.position.y.ToString());
+                //data_list.Add(first_touch.deltaPosition.x.ToString());
+                //data_list.Add(first_touch.deltaPosition.y.ToString());
+                //data_list.Add(first_touch.radius.ToString());
+            }
+            else
+            {
+                data_list.Add("");
+                data_list.Add("");
+                //data_list.Add("");
+                data_list.Add("");
+                data_list.Add("");
+                data_list.Add("");
+                data_list.Add("");
+                //data_list.Add("");
+                //data_list.Add("");
+                //data_list.Add("");
+            }
+
+            if (is_second_touch == true)
+            {
+                data_list.Add(second_touch.fingerId.ToString());
+                data_list.Add(second_touch.deltaTime.ToString());
+                //data_list.Add(second_touch.type.ToString());
+                data_list.Add(second_touch.tapCount.ToString());
+                data_list.Add(second_touch.phase.ToString());
+                data_list.Add(second_touch.position.x.ToString());
+                data_list.Add(second_touch.position.y.ToString());
+                //data_list.Add(second_touch.deltaPosition.x.ToString());
+                //data_list.Add(second_touch.deltaPosition.y.ToString());
+                //data_list.Add(second_touch.radius.ToString());
+            }
+            else
+            {
+                data_list.Add("");
+                data_list.Add("");
+                //data_list.Add("");
+                data_list.Add("");
+                data_list.Add("");
+                data_list.Add("");
+                data_list.Add("");
+                //data_list.Add("");
+                //data_list.Add("");
+                //data_list.Add("");
+            }
+
             data_list.Add(currentGameState.ToString());
             data_list.Add(game_event);
         }
