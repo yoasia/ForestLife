@@ -53,39 +53,71 @@ public class JsonDataManager : MonoBehaviour {
         if (treeSpecies != null)
         {
 
-            tFilePath = System.IO.Path.Combine(Application.streamingAssetsPath, "Trivia\\" + treeSpecies + ".json");
-            if (System.IO.File.Exists(tFilePath))
-            {
-                triviaJsonString = System.IO.File.ReadAllText(tFilePath);
-                triviaData = JsonMapper.ToObject(triviaJsonString);
-                currentTriviaNumber = 0;
-                JsonData td = triviaData["data"];
-                triviaNumber = td.Count; 
-                triviaLoaded = true;
-            }
+            tFilePath = System.IO.Path.Combine(Application.streamingAssetsPath, treeSpecies + ".json");
+            //if (System.IO.File.Exists(tFilePath))
+            //{
+            StartCoroutine("Jsont");
+            //triviaJsonString = System.IO.File.ReadAllText(tFilePath);
+            triviaData = JsonMapper.ToObject(triviaJsonString);
+            currentTriviaNumber = 0;
+            JsonData td = triviaData["data"];
+            triviaNumber = td.Count;
+            triviaLoaded = true;
+            //}
         }
-        
-        
+
+
 
     }
+
+    IEnumerator Jsont()
+    {
+        if (tFilePath.Contains("://"))
+        {
+            WWW www = new WWW(tFilePath);
+            yield return www;
+            triviaJsonString = www.text;
+        }
+        else
+        {
+            triviaJsonString = System.IO.File.ReadAllText(tFilePath);
+        }
+
+    }
+
 
     public void LoadQuizData()
     {
         if (treeSpecies != null)
         {
-            qFilePath = System.IO.Path.Combine(Application.streamingAssetsPath, "QuizQuestions\\" + treeSpecies + ".json");
-            if (System.IO.File.Exists(qFilePath))
-            {
-                quizJsonString = System.IO.File.ReadAllText(qFilePath);
-                quizData = JsonMapper.ToObject(quizJsonString);
-                currentQuestionNumber = 0;
-                JsonData td = quizData["data"];
-                questionNumber = td.Count; 
-                questionsLoaded = true;
-            }
+            qFilePath = System.IO.Path.Combine(Application.streamingAssetsPath, treeSpecies + "_q.json");
+            //if (System.IO.File.Exists(qFilePath))
+            //{
+            StartCoroutine("Jsonq");
+            //quizJsonString = System.IO.File.ReadAllText(qFilePath);
+            quizData = JsonMapper.ToObject(quizJsonString);
+            currentQuestionNumber = 0;
+            JsonData td = quizData["data"];
+            questionNumber = td.Count;
+            questionsLoaded = true;
         }
-        
+        //}
 
+
+    }
+
+    IEnumerator Jsonq()
+    {
+        if (qFilePath.Contains("://"))
+        {
+            WWW www = new WWW(qFilePath);
+            yield return www;
+            quizJsonString = www.text;
+        }
+        else
+        {
+            quizJsonString = System.IO.File.ReadAllText(qFilePath);
+        }
     }
 
     public void SetNextTriviaNumber()

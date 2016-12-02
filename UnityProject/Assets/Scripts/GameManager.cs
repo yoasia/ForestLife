@@ -180,6 +180,7 @@ public class GameManager : MonoBehaviour
         popupCanvas.SetActive(false);
         treeChooserCanvas.SetActive(false);
         startCanvas.SetActive(false);
+        mainCanvas.GetComponent<MainCanvasController>().DeselectAllTrees();
         newSeedCanvas.SetActive(true);
 
         worldCamera.enabled = true;

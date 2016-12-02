@@ -294,6 +294,7 @@ public class MainCanvasController : MonoBehaviour {
             activeTree.GetComponent<TreeController>().ReturnDefaultColour();
             activeTree.GetComponent<TreeController>().DeselectTree();
         }
+        selectedTrees.Clear();
     }
 
     public void ShowTriviaPanel()
