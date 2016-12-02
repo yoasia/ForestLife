@@ -144,7 +144,7 @@ public class Touches : MonoBehaviour
         print("OnCollsionStay");
     }
 
-    public void OnTriggerEnter(Collision col)
+    public void OnTriggerEnter()
     {
         print("OnTriggerEnter");
     }
