@@ -1,0 +1,94 @@
+{
+	"data":[
+		{
+			"id":"1",
+			"question":"Ile jest znanych gatunków drzew i krzewów z rodziny magnoliowatych?",
+			"answers":[
+				"250",
+				"100",
+				"300",
+				"450"
+			]			
+		},
+		{
+			"id":"2",
+			"question":"Na którym kontynencie magnolia nie występuje dziko?",
+			"answers":[
+				"Europa",
+				"Azja",
+				"Ameryka Północna",
+				"Ameryka Południowa"
+			]			
+		},
+		{
+			"id":"3",
+			"question":"Jak wysoko rozgałęziają się magnolie?",
+			"answers":[
+				"nisko nad ziemią",
+				"wysoko, przy samym czubku",
+				"nie rozgałęziają się",
+				"w połowie wysokości"
+			]			
+		},
+		{
+			"id":"4",
+			"question":"Jakiego koloru są kwiaty magnolii?",
+			"answers":[
+				"odcienie różu",
+				"odcienie zieleni",
+				"odcienie niebieskiego",
+				"odcienie beżowego"
+			]			
+		},
+		{
+			"id":"5",
+			"question":"Ile gatunków magnolii zagrożonych jest w jakimś stopniu wyginięciem?",
+			"answers":[
+				"51",
+				"15",
+				"81",
+				"18"
+			]			
+		},
+		{
+			"id":"6",
+			"question":"Dlaczego magnolie źle znoszą przesadzanie?",
+			"answers":[
+				"kruche korzenie",
+				"wrażliwość na mrozy",
+				"ogromne korony",
+				"cienki pień"
+			]			
+		},
+		{
+			"id":"7",
+			"question":"Jakie właściwości mają kora i pączki niektórych gatunków magnolii?",
+			"answers":[
+				"lecznicze",
+				"pobudzające",
+				"uspokajające",
+				"uzależniające"
+			]			
+		},
+		{
+			"id":"8",
+			"question":"Do przyprawiania czego wykorzystywane są marynowane płatki magnolii?",
+			"answers":[
+				"ryż",
+				"makaron",
+				"ziemniaki",
+				"kasza"
+			]			
+		},
+		{
+			"id":"9",
+			"question":"Symbolem czego są w Chinach kwiaty magnolii?",
+			"answers":[
+				"szczerości",
+				"piękna",
+				"szczęścia",
+				"miłości"
+			]			
+		}
+	]
+}
