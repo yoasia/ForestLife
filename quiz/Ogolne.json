@@ -1,0 +1,49 @@
+{
+	"data":[
+		{
+			"id":"1",
+			"title":"Czy wiesz, że...",
+			"content": "...do drzew zaliczają się największe rośliny lądowe?"
+		},
+		{
+			"id":"2",
+			"title":"Czy wiesz, że...",
+			"content": "...dział botaniki zajmujący się drzewami to dendrologia?"
+		},
+		{
+			"id":"3",
+			"title":"Czy wiesz, że...",
+			"content": "...na świecie rośnie obecnie około 3 bilionów 40 miliardów drzew?"
+		},
+		{
+			"id":"4",
+			"title":"Czy wiesz, że...",
+			"content": "...obecnie wyróżnianych jest około 80 000 gatunków drzew?"
+		},
+		{
+			"id":"5",
+			"title":"Czy wiesz, że...",
+			"content": "...w leśnictwie  stosuje się podział na drzewa iglaste i liściaste?"
+		},
+		{
+			"id":"6",
+			"title":"Czy wiesz, że...",
+			"content": "...najstarszy znany gatunek drzewa, Eospermatopteris, rósł około 385 milionów lat temu?"
+		},
+		{
+			"id":"7",
+			"title":"Czy wiesz, że...",
+			"content": "...Archaeopteris, gatunek rosnący około 370 milionów lat temu, spowodował pojawienie się sporych ilości tlenu, co pomogło w kolonizacji planety innym organizmom?"
+		},
+		{
+			"id":"8",
+			"title":"Czy wiesz, że...",
+			"content": "...najwyższe drzewo na świecie, sekwoja wiecznie zielona, rośnie w Parku Narodowym Redwood w Kalifornii i mierzy 115.6 metrów?"
+		},
+		{
+			"id":"9",
+			"title":"Czy wiesz, że...",
+			"content": "...najstarsze drzewo na świecie, świerk, rośnie w szwedzkim regionie Dalarna i liczy 9550 lat?"
+		}
+	]
+}
