@@ -488,6 +488,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(time);
+
             Instantiate(cloud);
         }
     }

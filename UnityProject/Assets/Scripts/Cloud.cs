@@ -6,17 +6,14 @@ public class Cloud : MonoBehaviour {
 
     public bool staticCloud = false;
 
-
-   
-
     public ParticleSystem rain;
     public float speed = 5.0f;
     public float maxLifeTime = 60.0f;
     public Vector3 maxScale = new Vector3(6000, 3000, 6000);
     
 
-    Vector3 scale = new Vector3(2F, 1F, 2F);
-    Vector3 startScale = new Vector3(2F, 1F, 2F);
+    Vector3 scale = new Vector3(20F, 10F, 20F);
+    Vector3 startScale = new Vector3(20F, 10F, 20F);
     bool ifItRains = false;
     bool stopRain = false;
     bool ifScale = true;
@@ -44,8 +41,8 @@ public class Cloud : MonoBehaviour {
     {
         rain.Stop();
         StartCoroutine(ChangeScaleAfterTime(maxLifeTime / 3.0f));
-        if (staticCloud)
-            StartCoroutine(StartRainAfterTime(maxLifeTime / 3.0f));
+        //if (staticCloud)
+        //    StartCoroutine(StartRainAfterTime(maxLifeTime / 3.0f));
         StartCoroutine(DestroyAfterTime(maxLifeTime));
 
         shakeDetectionThreshold *= shakeDetectionThreshold;
@@ -124,7 +121,7 @@ public class Cloud : MonoBehaviour {
 
     void Scale()
     {
-        transform.localScale += scale;
+        transform.localScale += scale * Time.deltaTime;
 
         //odmierzamy ile czasu minęło od rozpoczęcia skalowania
         scalingTimer += Time.deltaTime;
@@ -142,11 +139,13 @@ public class Cloud : MonoBehaviour {
     {
         ifItRains = true;
         rain.Play();
+        GameManager.instance.mainCanvas.GetComponent<MainCanvasController>().SetWeatherIcon("rain");
         StartCoroutine(StartIrrigating(1, 3));
     }
     void StopRain()
     {
         ifItRains = false;
+        GameManager.instance.mainCanvas.GetComponent<MainCanvasController>().SetWeatherIcon("claud");
         rain.Stop();
     }
 
@@ -216,6 +215,7 @@ public class Cloud : MonoBehaviour {
     {
         yield return new WaitForSeconds(time);
         DestroyObject(gameObject);
+        GameManager.instance.mainCanvas.GetComponent<MainCanvasController>().SetWeatherIcon("sun");
     }
     IEnumerator StartIrrigating(int strength, float time)
     {

@@ -43,6 +43,19 @@ public class Touches : MonoBehaviour
         // You can Change the values for your requirements.
         //Here the camera will move with in your required portion on the screen.
 
+        if (projectile.position.z >= terrainCentrum.z + 400)
+            projectile.Translate(new Vector3(0, 0, -1), Space.World);
+        if (projectile.position.z <= terrainCentrum.z - terrainDimensions.z)
+            projectile.Translate(new Vector3(0, 0, +1), Space.World);
+        if (projectile.position.y >= terrainCentrum.y + 500)
+            projectile.Translate(new Vector3(0, -1, 0), Space.World);
+        if (projectile.position.y <= terrainCentrum.y + 10)
+            projectile.Translate(new Vector3(0, +1, 0), Space.World);
+        if (projectile.position.x >= terrainCentrum.x + terrainDimensions.x)
+            projectile.Translate(new Vector3(-1, 0, 0), Space.World);
+        if (projectile.position.x <= terrainCentrum.x - terrainDimensions.x)
+            projectile.Translate(new Vector3(1, 0, 0), Space.World);
+
         // This Section For to move camera according to your swipe on screen.       
         if (Input.touchCount == 1)
         {
@@ -93,7 +106,7 @@ public class Touches : MonoBehaviour
                 //obrót
                 moveVec = -(touch.position - dragStartPos);
                 if (ifCanBeMoved(moveVec* speed * Time.deltaTime))
-                    transform.RotateAround(transform.position, terrainCentrum.y * Vector3.up, -moveVec.x * speed * Time.deltaTime);
+                    transform.RotateAround(transform.position, Vector3.up, -moveVec.x * speed * Time.deltaTime);
                 dragStartPos = touch.position;
                         
                 //przybliżenie   
@@ -120,7 +133,7 @@ public class Touches : MonoBehaviour
             (projectile.position.y + movement.y >= terrainCentrum.y  + 500) ||
             (projectile.position.y + movement.y <= terrainCentrum.y  + 10) ||
             (projectile.position.x + movement.x >= terrainCentrum.x + terrainDimensions.x) ||
-            (projectile.position.x + movement.x <= terrainCentrum.z - terrainDimensions.z))
+            (projectile.position.x + movement.x <= terrainCentrum.x - terrainDimensions.x))
             return false;
         else if (Physics.Raycast(transform.position, movement, 10))
             return false;
