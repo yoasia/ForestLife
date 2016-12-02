@@ -192,6 +192,7 @@ public class GameManager : MonoBehaviour
             seedCamera.enabled = false;
             seed.SetActive(false);
         }
+        Time.timeScale = 0;
     }
 
     public void NewSeed(GameObject selectedTree)
