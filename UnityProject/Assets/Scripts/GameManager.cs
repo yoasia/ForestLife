@@ -107,21 +107,38 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (JsonDataManager.instance.triviaLoaded)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
-            }
+        //załadowanie nowej ciekawostki
+        //if (JsonDataManager.instance.triviaLoaded)
+        //{
+        //    triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
+        //    MyNotifications.CallNotification("nowa ciekawostka", 2.0f);
+        //}
+        
 
-        }
+        //wywołanie nowego quizu
+        //if (currentGameState == GameState.GS_ISLAND && lastQiuz > 1000)
+        //{
+
+
+        //    if (!JsonDataManager.instance.allQuestionsDisplayed)
+        //    {
+        //        lastQiuz = 0;
+        //        SetGameState(GameState.GS_QUIZ);
+        //    }
+
+
+
+        //}
+        //lastQiuz++;
+
+        
+
         if (transitionTimeLeft > 0)
         {
             transitionTimeLeft -= Time.deltaTime;
             Wind += windChangePerSecond * Time.deltaTime;
         }
 
-        //CameraChange();
         timeToWindChange -= Time.deltaTime;
 
         if (timeToWindChange < 0)
@@ -137,40 +154,19 @@ public class GameManager : MonoBehaviour
         }
 
 
-        //if (currentGameState != GameState.GS_SEED && currentGameState != GameState.GS_QUIZ)
-        //{
-        //    timeToNextSeed -= Time.deltaTime;
-        //    if (timeToNextSeed < 0)
-        //    {
-        //        NewSeedPopup();
-                
-        //    }
-                
-        //}
-
-        if (currentGameState == GameState.GS_ISLAND && lastQiuz > 1000 )
-
+        if (currentGameState != GameState.GS_SEED && currentGameState != GameState.GS_QUIZ)
         {
-            
-                
-                if (!JsonDataManager.instance.allQuestionsDisplayed)
-                {
-                    lastQiuz = 0;
-                    SetGameState(GameState.GS_QUIZ);
-                }
+            timeToNextSeed -= Time.deltaTime;
+            if (timeToNextSeed < 0)
+            {
+                NewSeedPopup();
 
-            
+            }
 
         }
 
-        if (currentGameState == GameState.GS_ISLAND)
-        {
-            MyNotifications.CallNotification("nowa ciekawostka", 3.0f);
-        }
-        //Debug.LogFormat("Wind: {0}", Wind);
 
-        // ładowanie z pliku nowej ciekawostki, trzeba pomyśleć w jakim odstepie czasowym to może się dziać ( pewnie na przemian z quizami) 
-        lastQiuz++;
+
 
     }
 
