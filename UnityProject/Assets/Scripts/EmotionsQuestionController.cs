@@ -29,6 +29,7 @@ public class EmotionsQuestionController : MonoBehaviour {
         panelQuestions1.enabled = true;
         panelQuestions2.enabled = false;
         panelQuestions3.enabled = false;
+        Time.timeScale = 0;
     }
 	
 	// Update is called once per frame
@@ -63,6 +64,7 @@ public class EmotionsQuestionController : MonoBehaviour {
 
     void Destroy()
     {
+        Time.timeScale = 1;
         DestroyObject(gameObject);
     }
 }
