@@ -26,13 +26,15 @@ public class TreeController : MonoBehaviour
 
     public float minWaterLevel = 6F;
     public float maxWaterLevel = 8F;
-    public float maxTerrainGradient = 60F;
     public float sunFactor = 1F;
 
-    public int minSeeds = 5;
-    public int maxSeeds = 20;
+    public int minSeeds = 2;
+    public int maxSeeds = 6;
     public float maxSowDistance = 10f;
     public float minTreeDistance = 1f;
+
+    public float timeBetweenSow = 120F;
+    public int sowsLeft = 4;
 
     public bool selected = false;
 
@@ -42,6 +44,11 @@ public class TreeController : MonoBehaviour
     public Mesh deadSmallMesh;
     public Mesh deadMesh;
 
+    public float sun;
+    public float soil;
+    public float water;
+    public float growth;
+
     Renderer rend;
 
     Ray ray;
@@ -49,12 +56,14 @@ public class TreeController : MonoBehaviour
 
     private float startTime;
     private float lastGrowth;
+    private float lastSow;
+    private float timeToSow;
     private float timeBetweenGrowth = 1;
     private float growthRatePerSecond = 1F / 100;
 
     private float soilMid = 5;
 
-    private bool isAlive = true;
+    public bool isAlive = true;
 
     public float Age { get { return Time.time - startTime; } }
 
@@ -65,6 +74,8 @@ public class TreeController : MonoBehaviour
     {
         startTime = Time.time;
         lastGrowth = startTime;
+        lastSow = Age;
+        timeToSow = timeBetweenSow * UnityEngine.Random.Range(0.75F, 1.25F);
         rend = GetComponent<Renderer>();
         rend.material.shader = Shader.Find("Standard");
         defaultColour = rend.material.color;
@@ -91,6 +102,9 @@ public class TreeController : MonoBehaviour
                 }
 
             }
+
+            if(sowsLeft > 1 && Age - lastSow > timeToSow)
+                Sow();
 
             if (healthPoints <= 0)
                 Kill();
@@ -172,13 +186,14 @@ public class TreeController : MonoBehaviour
         //float soil = 5; // 0 - 10
         //float sun = 1;  // 0 - 1
         //float water = 5;    // 0 - 10
-        float soil = GameManager.instance.terrainManager.GetFertility(x, z); // 0 - 10
-        float sun = GameManager.instance.terrainManager.GetLight(x, z) / 10;  // 0 - 1
-        float water = GameManager.instance.terrainManager.GetIrrigation(x, z);    // 0 - 10
+        soil = GameManager.instance.terrainManager.GetFertility(x, z); // 0 - 10
+        sun = 1F;
+        //sun = GameManager.instance.terrainManager.GetLight(x, z) / 10;  // 0 - 1
+        water = 10 - GameManager.instance.terrainManager.GetIrrigation(x, z);    // 0 - 10
         
         //Debug.LogFormat("Soil: {0}; Sun: {1}; Water: {2}", soil, sun, water);
 
-        float growth;// = 1F;
+        //growth;// = 1F;
         if (soil < soilMid)
             growth = soilMid - badTerrainFactor * (soilMid - soil);
         else
@@ -200,11 +215,11 @@ public class TreeController : MonoBehaviour
 
         growth *= (Time.time - lastGrowth);
 
-        float growthDemand = baseGrowthDemand + baseGrowthDemand * (size - 1) / 5;
+        float growthDemand = baseGrowthDemand + baseGrowthDemand * Mathf.Pow((size - 1),2) / 3;
 
         growth = growth - growthDemand;
 
-        Debug.LogFormat("Growth: {0}, Demand: {1}", growth, growthDemand);
+        //Debug.LogFormat("Growth: {0}, Demand: {1}", growth, growthDemand);
 
         if (growth > maxGrowth)
             growth = maxGrowth;
@@ -220,13 +235,14 @@ public class TreeController : MonoBehaviour
             size += growth;
         }
 
-        healthPoints += growth;
+        //if(growth > 0 && growth < - 0.3F)
+        healthPoints += (growth)*10;
         if (healthPoints > baseMaxHealthPoints + barkStrength * 10)
             healthPoints = baseMaxHealthPoints + barkStrength * 10;
 
         lastGrowth = Time.time;
 
-        Debug.LogFormat("Size: {0}; Health: {1}; Upgrade Points: {2}", size, healthPoints, upgradePoints);
+        //Debug.LogFormat("Size: {0}; Health: {1}; Upgrade Points: {2}", size, healthPoints, upgradePoints);
     }
 
     private float GetShadeFactor()
@@ -235,10 +251,10 @@ public class TreeController : MonoBehaviour
         for(int i = 0; i < GameManager.instance.treesOnIsland.Count; i++)
         {
             var other = GameManager.instance.treesOnIsland[i];
-            var otherSize = other.GetComponent<TreeController>().size;
-            if (otherSize > size)
+            var otherTree = other.GetComponent<TreeController>();
+            if (otherTree.isAlive && otherTree.size > size)
             {
-                var tempFactor = DistanceTo(other) / (otherSize - size);
+                var tempFactor = DistanceTo(other) / (otherTree.size*4);
                 if (tempFactor < 1)
                     shadeFactor *= tempFactor;
             }
@@ -267,6 +283,9 @@ public class TreeController : MonoBehaviour
                 GameManager.instance.seedLanding(new_x, new_z, species, true);
             }
         }
+        lastSow = Age;
+        sowsLeft--;
+        timeToSow = timeBetweenSow * UnityEngine.Random.Range(0.75F, 1.25F);
     }
 
     public float DistanceTo(GameObject other)
