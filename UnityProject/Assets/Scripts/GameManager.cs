@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
             if (JsonDataManager.instance.triviaLoaded)
             {
                 triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
-                MyNotifications.CallNotification("nowa ciekawostka", 2.0f);
+                MyNotifications.CallNotification("nowa ciekawostka", 3.0f);
                 triviasBeforeQuiz--;
                 lastTrivia = 0;
             }
@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour
             timeToNextDataSave = timeBetweenSavingData;
         }
 
-        if (currentGameState != GameState.GS_SEED && currentGameState != GameState.GS_QUIZ)
+        if (currentGameState != GameState.GS_SEED && currentGameState != GameState.GS_QUIZ && currentGameState == GameState.GS_ISLAND)
         {
             timeToNextSeed -= Time.deltaTime;
             if (timeToNextSeed < 0)
@@ -193,7 +193,7 @@ public class GameManager : MonoBehaviour
             seedCamera.enabled = false;
             seed.SetActive(false);
         }
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
     }
 
     public void NewSeed(GameObject selectedTree)

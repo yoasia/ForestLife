@@ -36,7 +36,7 @@ public class MainCanvasController : MonoBehaviour {
     private bool rightMenuVisable = false;
     Ray ray;
     RaycastHit hit;
-    private bool IsScreenPopup = false; 
+    public bool IsScreenPopup = false; 
 	
 	void Start () {
 

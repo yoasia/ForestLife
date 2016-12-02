@@ -34,7 +34,7 @@ public class SelectionCameraController : MonoBehaviour {
         if (GameManager.instance.currentGameState == GameManager.GameState.GS_SELECTING)
         {
             ZoomCamera();
-            //MoveCamera();
+            MoveCamera();
 
             
         }
