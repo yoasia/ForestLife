@@ -507,16 +507,17 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(time);
 
-            showEmotionsQuestion();
+            
+                showEmotionsQuestion();
         }
     }
 
     public void showEmotionsQuestion()
     {
         GameObject cloneQuestionPanel = GameObject.FindWithTag("Clone");
-
-        if (cloneQuestionPanel == null)
-            Instantiate(emotionalQuestions);
+        if (currentGameState == GameState.GS_ISLAND)
+            if (cloneQuestionPanel == null)
+                Instantiate(emotionalQuestions);
     }
 
 
