@@ -1,0 +1,94 @@
+{
+	"data":[
+		{
+			"id":"1",
+			"question":"Jakie rośliny lądowe zaliczają się do drzew?",
+			"answers":[
+				"nawiększe",
+				"najmniejsze",
+				"średnie",
+				"żadne"
+			]			
+		},
+		{
+			"id":"2",
+			"question":"Jak się nazywa dział botaniki zajmujący się drzewami?",
+			"answers":[
+				"dendrologia",
+				"palinologia",
+				"karpologia",
+				"rodologia"
+			]			
+		},
+		{
+			"id":"3",
+			"question":"Ile drzew, w przybliżeniu, rośnie na świecie?",
+			"answers":[
+				"3 biliony 40 miliardów",
+				"4 biliony 60 miliardów",
+				"2 biliony 80 miliardów",
+				"2 biliony 20 miliardów"
+			]			
+		},
+		{
+			"id":"4",
+			"question":"Ile gatunków drzew jest obecnie wyróżnianych?",
+			"answers":[
+				"80 000",
+				"100 000",
+				"20 000",
+				"40 000"
+			]			
+		},
+		{
+			"id":"5",
+			"question":"Jaki podział drzew stosuje się w leśnictwie?",
+			"answers":[
+				"liściaste i iglaste",
+				"wysokie i niskie",
+				"z koroną okrągłą i z koroną stożkowatą",
+				"z korzeniami głębokimi i płytkimi"
+			]			
+		},
+		{
+			"id":"6",
+			"question":"Jak dawno rósł najstarszy znany gatunek drzewa?",
+			"answers":[
+				"385 milionów lat temu",
+				"370 milionów lat temu",
+				"400 milionów lat temu",
+				"355 milionów lat temu"
+			]			
+		},
+		{
+			"id":"7",
+			"question":"Co spowodował gatunek Archaeopteris, rosnący około 370 milionów lat temu?",
+			"answers":[
+				"pojawienie się sporych ilości tlenu",
+				"użyźnienie gleby",
+				"zdominowanie innych gatunków roślin",
+				"zatrucie gleby"
+			]			
+		},
+		{
+			"id":"8",
+			"question":"Jak wysokie jest najwyższe drzewo na świecie?",
+			"answers":[
+				"115.6 metra",
+				"40.1 metra",
+				"84.9 metra",
+				"211.3 metra"
+			]			
+		},
+		{
+			"id":"9",
+			"question":"Ile lat liczy najstarsze drzewo na świecie?",
+			"answers":[
+				"9550 lat",
+				"4070 lat",
+				"1000 lat",
+				"840 lat"
+			]			
+		}
+	]
+}

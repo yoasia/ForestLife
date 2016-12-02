@@ -1,0 +1,49 @@
+{
+	"data":[
+		{
+			"id":"1",
+			"title":"Czy wiesz, że...",
+			"content": "...spośród 30-60 znanych gatunków brzozy, w Polsce rośnie ich 8-10?"
+		},
+		{
+			"id":"2",
+			"title":"Czy wiesz, że...",
+			"content": "...ilość gatunków brzozy jest trudna do określenia z uwagi na łatwe krzyżowanie się drzewa pomiędzy gatunkami?"
+		},
+		{
+			"id":"3",
+			"title":"Czy wiesz, że...",
+			"content": "...brzoza produkuje ogromne ilości nasion (około 50 milionów/hektar), dzięki czemu szybko się rozprzestrzenia?"
+		},
+		{
+			"id":"4",
+			"title":"Czy wiesz, że...",
+			"content": "...w przemyśle wykorzystuje się drewno, korę, łyko i liście brzozy? Sama brzoza często pełni również funkcję ozdobną."
+		},
+		{
+			"id":"5",
+			"title":"Czy wiesz, że...",
+			"content": "...według wierzeń Słowian brzoza zasadzona przy grobie miała chronić przed duchami?"
+		},
+		{
+			"id":"6",
+			"title":"Czy wiesz, że...",
+			"content": "...brzoza symbolizuje miłość, małżeństwo, wesele, rodzinę i czystość?"
+		},
+		{
+			"id":"7",
+			"title":"Czy wiesz, że...",
+			"content": "...największy i najstarszy odnotowany egzemplarz brzozy brodawkowatej rośnie w Gdańsku-Oliwie, ma 171 lat, 26 metrów wysokości i obwód 321 centymetrów?"
+		},
+		{
+			"id":"8",
+			"title":"Czy wiesz, że...",
+			"content": "...biała barwa kory brzóz jest wynikiem wytwarzania betuliny?"
+		},
+		{
+			"id":"9",
+			"title":"Czy wiesz, że...",
+			"content": "...drewno brzozowe jest elastyczne, mocne i kaloryczne? Potrafi się palić nawet, gdy jest wilgotne."
+		}
+	]
+}

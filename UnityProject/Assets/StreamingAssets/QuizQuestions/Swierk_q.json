@@ -1,0 +1,94 @@
+{
+	"data":[
+		{
+			"id":"1",
+			"question":"Jak długo szpilki świerku utrzymują się na gałązkach?",
+			"answers":[
+				"5-7 lat",
+				"8-10 lat",
+				"2-4 lata",
+				"6-9 lat"
+			]			
+		},
+		{
+			"id":"2",
+			"question":"Jaką witaminę zawiera igliwie świerku?",
+			"answers":[
+				"witaminę C",
+				"witaminę D",
+				"witaminę E",
+				"witaminę B"
+			]			
+		},
+		{
+			"id":"3",
+			"question":"Ile jest znanych gatunków świerku?",
+			"answers":[
+				"35",
+				"70",
+				"55",
+				"25"
+			]			
+		},
+		{
+			"id":"4",
+			"question":"Na co świerk jest wrażliwy?",
+			"answers":[
+				"zanieczyszczenia powietrza",
+				"słońce",
+				"deszcze",
+				"mróz"
+			]			
+		},
+		{
+			"id":"5",
+			"question":"Jaką wysokość może osiągnąć świerk w korzystnych warunkach?",
+			"answers":[
+				"60 m",
+				"40 m",
+				"20 m",
+				"80 m"
+			]			
+		},
+		{
+			"id":"6",
+			"question":"Jak długo szyszki utrzymują się na świerku?",
+			"answers":[
+				"całą zimę",
+				"całą jesień",
+				"dwa miesiące",
+				"pół roku"
+			]			
+		},
+		{
+			"id":"7",
+			"question":"Jaki system korzeni charakteryzuje świerk?",
+			"answers":[
+				"płytki",
+				"głęboki",
+				"wąski",
+				"szeroki"
+			]			
+		},
+		{
+			"id":"8",
+			"question":"Gdzie sadzi się świerk w celach ozdobnych?",
+			"answers":[
+				"w parkach i ogrodach",
+				"w lasach",
+				"na plaży",
+				"na boiskach"
+			]			
+		},
+		{
+			"id":"9",
+			"question":"Jakie właściwości nie odnoszą się do drewna świerkowego?",
+			"answers":[
+				"twarde",
+				"miękkie",
+				"elastyczne",
+				"jasne"
+			]			
+		}
+	]
+}
