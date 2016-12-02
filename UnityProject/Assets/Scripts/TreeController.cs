@@ -275,8 +275,8 @@ public class TreeController : MonoBehaviour
             float new_x;
             float new_z;
 
-            new_x = distance * (float)Math.Cos(rad_angle) + gameObject.transform.position.x + GameManager.instance.Wind.x;
-            new_z = distance * (float)Math.Sin(rad_angle) + gameObject.transform.position.z + GameManager.instance.Wind.y;
+            new_x = distance * (float)Math.Cos(rad_angle) + gameObject.transform.position.x + GameManager.Wind.x;
+            new_z = distance * (float)Math.Sin(rad_angle) + gameObject.transform.position.z + GameManager.Wind.y;
 
             if (GameManager.instance.TreeDistance(new_x, new_z) >= minTreeDistance)
             {

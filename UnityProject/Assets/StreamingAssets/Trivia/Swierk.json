@@ -1,0 +1,49 @@
+{
+	"data":[
+		{
+			"id":"1",
+			"title":"Czy wiesz, że...",
+			"content": "...szpilki świerku są osadzone spiralnie i utrzymują się na gałązkach 5-7 lat? Osiągają długość około 2 centymetrów."
+		},
+		{
+			"id":"2",
+			"title":"Czy wiesz, że...",
+			"content": "...pod korą świerku właściwą znajduje się pożywna i jadalna miazga, a z igliwia, zawierającego witaminę C, można przygotować gorący napój zalewając go wrzątkiem?"
+		},
+		{
+			"id":"3",
+			"title":"Czy wiesz, że...",
+			"content": "...znanych jest około 35 gatunków świerku?"
+		},
+		{
+			"id":"4",
+			"title":"Czy wiesz, że...",
+			"content": "...świerk jest wrażliwy na zanieczyszczenia powietrza i suszę?"
+		},
+		{
+			"id":"5",
+			"title":"Czy wiesz, że...",
+			"content": "...w sprzyjających warunkach może osiągnąć ponad 60 metrów wysokości, normalnie jednak rzadko przekracza 40 metrów?"
+		},
+		{
+			"id":"6",
+			"title":"Czy wiesz, że...",
+			"content": "...zwisające szyszki utrzymują się na świerku całą zimę? Osiągają do 15 centymetrów długości i 4 centymetrów średnicy."
+		},
+		{
+			"id":"7",
+			"title":"Czy wiesz, że...",
+			"content": "...świerki posiadają bardzo płytki system korzeni?"
+		},
+		{
+			"id":"8",
+			"title":"Czy wiesz, że...",
+			"content": "...świerk to popularne drzewo ozdobne, sadzone w parkach i ogrodach, oraz stosowane w roli świątecznej choinki?"
+		},
+		{
+			"id":"9",
+			"title":"Czy wiesz, że...",
+			"content": "...drewno świerku jest bardzo jasne, miękkie i elastyczne?. Bardzo dobrze nadaje się do wytwarzania instrumentów muzycznych."
+		}
+	]
+}

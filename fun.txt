@@ -1,0 +1,8 @@
+public void addRowToFile(string filePath, string data)
+    { 
+ 	    StringBuilder sb = new StringBuilder();
+
+ 	    sb.AppendLine(data);
+
+        File.AppendAllText(filePath, sb.ToString()); 
+    }

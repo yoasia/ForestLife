@@ -1,0 +1,94 @@
+{
+	"data":[
+		{
+			"id":"1",
+			"question":"Ile gatunków brzozy rośnie w Polsce?",
+			"answers":[
+				"8-10",
+				"30-60",
+				"15-30",
+				"100-110"
+			]			
+		},
+		{
+			"id":"2",
+			"question":"Co utrudnia określenie ilości gatunków brzozy?",
+			"answers":[
+				"łatwe krzyżowanie się drzewa pomiędzy gatunkami",
+				"brak odpowiednich danych",
+				"podobieństwo gatunków",
+				"zbyt szybkie wymieranie gatunków"
+			]			
+		},
+		{
+			"id":"3",
+			"question":"Ile nasion produkuje brzoza?",
+			"answers":[
+				"50 mln/ha",
+				"100 mln/ha",
+				"1 mln/ha",
+				"40 mln/ha"
+			]			
+		},
+		{
+			"id":"4",
+			"question":"Czego nie wykorzystuje się z brzozy w przemyśle?",
+			"answers":[
+				"korzeni",
+				"drewna",
+				"łyka",
+				"liści"
+			]			
+		},
+		{
+			"id":"5",
+			"question":"Przed czym, według wierzeń Słowian, miała chronić brzoza zasadzona przy grobie?",
+			"answers":[
+				"przed duchami",
+				"przed chorobami",
+				"przed nieszczęściem",
+				"przed złem"
+			]			
+		},
+		{
+			"id":"6",
+			"question":"Czego nie symbolizuje brzoza?",
+			"answers":[
+				"płodność",
+				"miłość",
+				"rodzinę",
+				"wesele"
+			]			
+		},
+		{
+			"id":"7",
+			"question":"Ile lat ma największy i najstarszy egzemplarz brzozy brodawkowatej, rosnący w Gdańsku-Oliwie?",
+			"answers":[
+				"171 lat",
+				"1701 lat",
+				"71 lat",
+				"17 lat"
+			]			
+		},
+		{
+			"id":"8",
+			"question":"Jaki efekt ma wytwarzanie betuliny przez brzozę?",
+			"answers":[
+				"biała kora",
+				"kształt liści",
+				"kolor kwiatów",
+				"ilość nasion"
+			]			
+		},
+		{
+			"id":"9",
+			"question":"Czym się cechuje drewno brzozy?",
+			"answers":[
+				"elastycznością",
+				"twardością",
+				"słabą kalorycznością",
+				"kruchością"
+			]			
+		}
+	]
+}

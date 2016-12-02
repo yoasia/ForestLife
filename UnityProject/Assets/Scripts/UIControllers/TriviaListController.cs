@@ -61,7 +61,7 @@ public class TriviaListController : MonoBehaviour {
     {
         triviaList.Add(newTrivia);
         GameObject newButton = (GameObject)GameObject.Instantiate(triviaButtonPrefab);
-        newButton.transform.SetParent(triviaListPanel);
+        newButton.transform.SetParent(triviaListPanel, false);
         newButton.GetComponent<TriviaButtonController>().Setup(newTrivia, this);
 
     }
