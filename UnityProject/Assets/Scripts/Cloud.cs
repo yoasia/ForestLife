@@ -4,16 +4,19 @@ using System;
 
 public class Cloud : MonoBehaviour {
 
+    public bool staticCloud = false;
+
+
+   
+
     public ParticleSystem rain;
     public float speed = 5.0f;
     public float maxLifeTime = 60.0f;
-    public Vector3 maxScale = new Vector3(70, 35, 70);
-    //float startRainTime = 5.0f;
-    //float endRainTime = 29.0f;
-    //float scaleTime = 5.0f;
+    public Vector3 maxScale = new Vector3(6000, 3000, 6000);
+    
 
-    Vector3 scale = new Vector3(0.1F, 0.05F, 0.1F);
-    Vector3 startScale = new Vector3(0.1F, 0.05F, 0.1F);
+    Vector3 scale = new Vector3(2F, 1F, 2F);
+    Vector3 startScale = new Vector3(2F, 1F, 2F);
     bool ifItRains = false;
     bool stopRain = false;
     bool ifScale = true;
@@ -34,108 +37,59 @@ public class Cloud : MonoBehaviour {
     private Vector3 lowPassValue = Vector3.zero;
     private Vector3 acceleration;
     private Vector3 deltaAcceleration;
+    private Vector3 staticStartPosition = new Vector3(240, 81, -110);
+    private Vector3 staticWind = new Vector3(0, 0, 3);
 
-
-    void Start() {
+    void Start()
+    {
         rain.Stop();
         StartCoroutine(ChangeScaleAfterTime(maxLifeTime / 3.0f));
+        if (staticCloud)
+            StartCoroutine(StartRainAfterTime(maxLifeTime / 3.0f));
         StartCoroutine(DestroyAfterTime(maxLifeTime));
 
         shakeDetectionThreshold *= shakeDetectionThreshold;
         lowPassValue = Input.acceleration;
 
-        //obrót wg kierunku wiatru
-        Vector3 relativePos = new Vector3(GameManager.Wind.x, 0, GameManager.Wind.y);
-        Quaternion rotation = Quaternion.LookRotation(relativePos);
-        //rotation = new Quaternion(0, rotation.y, 0, rotation.w);
-        transform.rotation = rotation;
-        transform.Rotate(0, -90, 0);
+        if (!staticCloud) { 
+            //obrót wg kierunku wiatru
+            Vector3 relativePos = new Vector3(GameManager.Wind.x, 0, GameManager.Wind.y);
+            Quaternion rotation = Quaternion.LookRotation(relativePos);
+            //rotation = new Quaternion(0, rotation.y, 0, rotation.w);
+            transform.rotation = rotation;
+            transform.Rotate(0, -90, 0);
 
 
-        //obliczanie początkowej pozycji chmóry w zależności od kierunku wiatru
-        //(Chmurka zawsze musi przelecieć nad wyspą)
-        float terrainPositionx = Terrain.activeTerrain.transform.position.x;
-        float terrainPositiony = Terrain.activeTerrain.transform.position.z;
+            //obliczanie początkowej pozycji chmóry w zależności od kierunku wiatru
+            //(Chmurka zawsze musi przelecieć nad wyspą)
+            float terrainPositionx = Terrain.activeTerrain.transform.position.x;
+            float terrainPositiony = Terrain.activeTerrain.transform.position.z;
 
-        Vector3 terrainDimension = Terrain.activeTerrain.terrainData.size;
-
-
-        //środek terenu
-        float terrainCentrumX = terrainPositionx + terrainDimension.x / 2.0f;
-        float terrainCentrumY = terrainPositiony + terrainDimension.z / 2.0f;
-
-        //wysokość pozostawiamy taką samą
-        startPosition.y = transform.position.y;
-
-        //parametry równania kwadratowego
-        //float a, b, c;
-        //a = 1 + terrainCentrumY * terrainCentrumY;
-        //b = -2 * (terrainCentrumX + terrainCentrumY * (terrainCentrumY / terrainCentrumX));
-        //c = terrainCentrumX * terrainCentrumX + terrainCentrumY * terrainCentrumY - 500 * 500;
+            Vector3 terrainDimension = Terrain.activeTerrain.terrainData.size;
 
 
-        //float delta = b * b - 4 * a * c;
-        ////obliczanie punktów wspólnych prostej wiatru i okręgu (wyspy)
+            //środek terenu
+            float terrainCentrumX = terrainPositionx + terrainDimension.x / 2.0f;
+            float terrainCentrumY = terrainPositiony + terrainDimension.z / 2.0f;
 
-        //double x1 = (-b + Math.Pow(delta, 0.5)) / (2 * c);
-        //double x2 = (-b - Math.Pow(delta, 0.5)) / (2 * c);
+            //wysokość pozostawiamy taką samą
+            startPosition.y = transform.position.y;
 
-        //double xBigger, xSmaller, yBigger, ySmaller;
+            setInvisible(false);
 
-        //if (x1 > x2) {
-        //    xBigger = x1;
-        //    xSmaller = x2;
-
-        //    yBigger = (terrainCentrumY / terrainCentrumX) * xBigger;
-        //    ySmaller = (terrainCentrumY / terrainCentrumX) * xSmaller;
-
-        //}
-        //else {
-        //    xBigger = x2;
-        //    xSmaller = x1;
-
-        //    yBigger = (terrainCentrumY / terrainCentrumX) * xBigger;
-        //    ySmaller = (terrainCentrumY / terrainCentrumX) * xSmaller;
-        //}
-
-
-
-        //if (GameManager.Wind.x > 0)
-        //    startPosition.x = (float)xSmaller;
-        //else
-        //    startPosition.x = (float)xBigger;
-
-        //if (GameManager.Wind.y > 0)
-        //    startPosition.y = (float)ySmaller;
-        //else
-        //    startPosition.y = (float)yBigger;
-
-
-        //    //przemieszczenie chmury tak by przelatywała nad wyspą
-        //double x = Math.Pow((500.0 * 500.0) / (1 + Math.Pow((double)GameManager.Wind.y / GameManager.Wind.x, 2)), 0.5);
-        //double y = Math.Pow((500.0 * 500.0) - x * x, 0.5);
-
-        //if (GameManager.Wind.x > 0 )
-        //    startPosition.x = -(float)x;
-        //else
-        //    startPosition.x = (float)x;
-
-        //if (GameManager.Wind.y > 0)
-        //    startPosition.z = -(float)y;
-        //else
-        //    startPosition.z = (float)y;
-        setInvisible(false);
-
-        //pozycja początkowa
-        startPosition.x = terrainCentrumX -( GameManager.Wind.x * 500);
-        startPosition.z = terrainCentrumY - (GameManager.Wind.y * 500);
-        transform.position = startPosition;
-        
+            //pozycja początkowa
+            startPosition.x = terrainCentrumX - (GameManager.Wind.x * 500);
+            startPosition.z = terrainCentrumY - (GameManager.Wind.y * 500);
+            transform.position = startPosition;
+        }
     }
 
     void Update () {
 
-        transform.Translate(new Vector3(GameManager.Wind.x, 0, GameManager.Wind.y) * speed * Time.deltaTime, Space.World);
+        if(!staticCloud)
+            transform.Translate(new Vector3(GameManager.Wind.x, 0, GameManager.Wind.y) * speed * Time.deltaTime, Space.World);
+        else
+            transform.Translate(staticWind * speed * Time.deltaTime, Space.World);
         timer += Time.deltaTime;
 
         //cloud scaling
@@ -222,7 +176,7 @@ public class Cloud : MonoBehaviour {
         yield return new WaitForSeconds(time);
         scale = -startScale;
         ifScale = true;
-        scalingTime = timer + scalingTime;
+        scalingTime = scalingTime;
         //destroy rain after 5 s
         StartCoroutine(DestroyParticleAfterTime(scalingTime - 3));
         
