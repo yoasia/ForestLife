@@ -51,6 +51,10 @@ public class GameManager : MonoBehaviour
 
     public int timeBetweenSeeds = 180;
 
+    public float quizFactor = 1F;
+    public float maxFactor = 1.5F;
+    public float minFactor = 0.5F;
+
     private float timeToWindChange;
     private float transitionTimeLeft;
     private Vector2 windChangePerSecond;
@@ -69,6 +73,8 @@ public class GameManager : MonoBehaviour
     public float timeBetweenQuiz = 20F;
     public float lastQuiz = 0;
     public int triviasBeforeQuiz = 2;
+
+    public float score = 0;
 
     public enum GameState
     {
@@ -167,6 +173,8 @@ public class GameManager : MonoBehaviour
                 NewSeedPopup();
             }
         }
+
+        score = GetScore();
     }
 
 
@@ -513,6 +521,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void GoodQuizAnswer()
+    {
+        quizFactor += 0.1F;
+        if (quizFactor > maxFactor)
+            quizFactor = maxFactor;
+    }
+
+    public void BadQuizAnswer()
+    {
+        quizFactor -= 0.1F;
+        if (quizFactor < minFactor)
+            quizFactor = minFactor;
+    }
+
     private void WindChange()
     {
         transitionTimeLeft = UnityEngine.Random.Range(5, 11);
@@ -723,5 +745,17 @@ public class GameManager : MonoBehaviour
         data_list+=game_event;
         
         addRowToFile(behaviouralDataFile, data_list);
+    }
+
+    private float GetScore()
+    {
+        float newScore = 0;
+        for (int i = 0; i < treesOnIsland.Count; i++)
+        {
+            var tree = treesOnIsland[i].GetComponent<TreeController>();
+            if (tree.isAlive)
+                newScore += tree.healthPoints * tree.size;
+        }
+        return newScore;
     }
 }
