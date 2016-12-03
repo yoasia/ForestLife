@@ -430,6 +430,7 @@ public class GameManager : MonoBehaviour
         if (newGameState == GameState.GS_ISLAND)
         {
             Time.timeScale = 1;
+            MovableCamera.instance.canBeMove();
         }
         else if (newGameState == GameState.GS_SEED)
         {
@@ -437,12 +438,14 @@ public class GameManager : MonoBehaviour
         }
         else if (newGameState == GameState.GS_SELECTING)
         {
+            MovableCamera.instance.canBeMove();
             Time.timeScale = 1;
             //selectingMode = true;
         }
         else if (newGameState == GameState.GS_START_MENU)
         {
             Time.timeScale = 0;
+            MovableCamera.instance.dontMove();
         }
         else if (newGameState == GameState.GS_SELECT_TREEKIND)
         {
@@ -451,6 +454,7 @@ public class GameManager : MonoBehaviour
         else if (newGameState == GameState.GS_QUIZ)
         {
             Time.timeScale = 0;
+            MovableCamera.instance.dontMove();
         }
 
         CameraChange();

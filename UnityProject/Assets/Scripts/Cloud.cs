@@ -24,7 +24,7 @@ public class Cloud : MonoBehaviour {
     // The greater the value of LowPassKernelWidthInSeconds, the slower the filtered value will converge towards current input sample (and vice versa).
     static float lowPassKernelWidthInSeconds = 1.0f;
     // This next parameter is initialized to 2.0 per Apple's recommendation, or at least according to Brady! ;)
-    float shakeDetectionThreshold = 2.0f;
+    float shakeDetectionThreshold = 1.0f;
 
     private Vector3 startPosition = new Vector3(0, 0, 0);
     private float scalingTime = 20.0f;
