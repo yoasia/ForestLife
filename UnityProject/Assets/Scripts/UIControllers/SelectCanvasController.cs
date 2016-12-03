@@ -98,14 +98,14 @@ public class SelectCanvasController : MonoBehaviour {
                     {
                         if (selectedTrees.Contains(hit.transform.gameObject) == false)
                         {
-                            hit.transform.gameObject.GetComponent<TreeController>().SelectTree();
+                            hit.transform.gameObject.GetComponent<TreeController>().SelectTree("normal");
                             selectedTrees.Add(hit.transform.gameObject);
                         }
 
                     }
                     else
                     {
-                        hit.transform.gameObject.GetComponent<TreeController>().DeselectTree();
+                        hit.transform.gameObject.GetComponent<TreeController>().UnselectTreeByType("normal");
                         selectedTrees.Remove(hit.transform.gameObject);
                     }
                 }
@@ -282,7 +282,7 @@ public class SelectCanvasController : MonoBehaviour {
     {
         foreach (GameObject t in selectedTrees)
         {
-            t.GetComponent<TreeController>().DeselectTree();
+            t.GetComponent<TreeController>().UnselectTreeByType("normal");
         }
 
         selectedTrees.Clear();

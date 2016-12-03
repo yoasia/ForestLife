@@ -5,7 +5,10 @@ using System;
 public class TreeController : MonoBehaviour
 {
     public string species;
-
+    public ParticleSystem normalSelectionEffect;
+    public ParticleSystem redSelectionEffect;
+    public ParticleSystem greenSelectionEffect;
+    public ParticleSystem PointsAddedEffect;
     public float rootsStrength = 1F;
     public float barkStrength = 1F;
     public float leavesStrength = 1F;
@@ -101,11 +104,12 @@ public class TreeController : MonoBehaviour
 
             if (selected)
             {
-                if (rend != null)
-                {
-                    rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-                }
+                SelectTree("normal");
 
+            }
+            else
+            {
+                UnselectTreeByType("normal");
             }
 
             if(sowsLeft > 1 && Age - lastSow > timeToSow)
@@ -121,24 +125,51 @@ public class TreeController : MonoBehaviour
         GetComponent<MeshFilter>().mesh = newMesh;
     }
 
-    public void SelectTree()
+    //selectionType może przybierać wartość : "normal", "red", "green"
+    //nie podanie rodzaju drzewa zaznaczy drzewo normalnie
+    public void SelectTree(string selectionType = "normal")
     {
         selected = true;
-
-        if (rend != null)
+        switch (selectionType)
         {
-            rend.material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+            case "normal":
+                normalSelectionEffect.Play();
+                break;
+            case "green":
+                greenSelectionEffect.Play();
+                break;
+            case "red":
+                redSelectionEffect.Play();
+                break;
         }
     }
 
-    public void DeselectTree()
+    //funkcja do wyłączenia konkretnego zaznaczenia
+    //selectionType może przybierać wartość : "normal", "red", "green"
+    public void UnselectTreeByType(string selectionType = "normal")
     {
         selected = false;
 
-        if (rend != null)
+        switch (selectionType)
         {
-            rend.material.shader = Shader.Find("Standard");
+            case "normal":
+                normalSelectionEffect.Stop();
+                break;
+            case "green":
+                greenSelectionEffect.Stop();
+                break;
+            case "red":
+                redSelectionEffect.Stop();
+                break;
         }
+    }
+
+    public void UnselectTree()
+    {
+        selected = false;
+        normalSelectionEffect.Stop();
+        greenSelectionEffect.Stop();
+        redSelectionEffect.Stop();
     }
 
     //funkcja przyjmuje wartość od 0 do 1
