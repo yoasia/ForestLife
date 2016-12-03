@@ -525,11 +525,14 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
-        instance = this;
-
+        
         terrain = gameObject.GetComponent<Terrain>();
         Vector3 size = terrain.terrainData.size;
 
