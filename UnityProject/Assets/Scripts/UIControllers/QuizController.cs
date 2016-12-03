@@ -138,7 +138,8 @@ public class QuizController : MonoBehaviour {
                     popupHeaderText.text = "Gratulacje!";
                     correctText.text = correctAnswers.ToString();
                     allText.text = maxRoundQuestions.ToString();
-                    bonusText.text = "Twoje drzewa otrzymują +10 do punktów rozwoju";
+                    GameManager.instance.GoodQuizAnswer();
+                    bonusText.text = "Twoje drzewa otrzymują bonus do wzrostu";
                     return true;
                 }
                 else
@@ -146,7 +147,8 @@ public class QuizController : MonoBehaviour {
                     popupHeaderText.text = "Niestety!";
                     correctText.text = correctAnswers.ToString();
                     allText.text = maxRoundQuestions.ToString();
-                    bonusText.text = "Tym razem nie otrzymujesz bonusu";
+                    GameManager.instance.BadQuizAnswer();
+                    bonusText.text = "Twoje drzewa otrzymują karę do wzrostu";
                     return true;
                 }
                

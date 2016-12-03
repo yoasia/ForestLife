@@ -51,6 +51,10 @@ public class GameManager : MonoBehaviour
 
     public int timeBetweenSeeds = 180;
 
+    public float quizFactor = 1F;
+    public float maxFactor = 1.5F;
+    public float minFactor = 0.5F;
+
     private float timeToWindChange;
     private float transitionTimeLeft;
     private Vector2 windChangePerSecond;
@@ -507,6 +511,20 @@ public class GameManager : MonoBehaviour
 
             Instantiate(cloud);
         }
+    }
+
+    public void GoodQuizAnswer()
+    {
+        quizFactor += 0.1F;
+        if (quizFactor > maxFactor)
+            quizFactor = maxFactor;
+    }
+
+    public void BadQuizAnswer()
+    {
+        quizFactor -= 0.1F;
+        if (quizFactor < minFactor)
+            quizFactor = minFactor;
     }
 
     private void WindChange()
