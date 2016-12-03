@@ -240,8 +240,8 @@ public class TreeController : MonoBehaviour
             size += growthTimeAdjusted;
         }
 
-        if(growth > 0 || growth < - 1F)
-        healthPoints += (growthTimeAdjusted) *10;
+        if(growth > 0 || (growth < - 1F && GameManager.instance.quizFactor < 1F) || (growth + growthDemand - baseGrowthDemand < 0))
+            healthPoints += (growthTimeAdjusted) *10;
         if (healthPoints > baseMaxHealthPoints + barkStrength/2)
             healthPoints = baseMaxHealthPoints + barkStrength/2;
 
