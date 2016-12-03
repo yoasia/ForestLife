@@ -36,7 +36,7 @@ public class MainCanvasController : MonoBehaviour {
     private bool rightMenuVisable = false;
     Ray ray;
     RaycastHit hit;
-    private bool IsScreenPopup = false; 
+    public bool IsScreenPopup = false; 
 	
 	void Start () {
 
@@ -294,6 +294,7 @@ public class MainCanvasController : MonoBehaviour {
             activeTree.GetComponent<TreeController>().ReturnDefaultColour();
             activeTree.GetComponent<TreeController>().DeselectTree();
         }
+        selectedTrees.Clear();
     }
 
     public void ShowTriviaPanel()

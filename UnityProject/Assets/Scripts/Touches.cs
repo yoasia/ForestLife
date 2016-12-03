@@ -14,7 +14,7 @@ public class Touches : MonoBehaviour
     private Vector3 terrainCentrum;
     private Vector3 terrainDimensions;
     private Vector3 angleRotation = new Vector3(0, 1, 0);
-
+    private float pseudoDelta = 0.3f;
     private bool dontMove;
 
     void Start()

@@ -58,6 +58,8 @@ public class GameManager : MonoBehaviour
     private Quaternion seedDefaultRotation;
 
     public float timeBetweenSavingData = 0.1F;
+    private bool firstSave = true;
+    private String behaviouralDataFile = "beh_data.csv";
 
     private float timeToNextDataSave = 0;
     private float timeToNextSeed;
@@ -117,7 +119,7 @@ public class GameManager : MonoBehaviour
             if (JsonDataManager.instance.triviaLoaded)
             {
                 triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
-                MyNotifications.CallNotification("nowa ciekawostka", 2.0f);
+                MyNotifications.CallNotification("nowa ciekawostka", 3.0f);
                 triviasBeforeQuiz--;
                 lastTrivia = 0;
             }
@@ -135,7 +137,7 @@ public class GameManager : MonoBehaviour
             }
 
         }
-        if(triviasBeforeQuiz <= 0)
+        if (triviasBeforeQuiz <= 0)
             lastQuiz += Time.deltaTime;
 
         if (transitionTimeLeft > 0)
@@ -157,7 +159,7 @@ public class GameManager : MonoBehaviour
             timeToNextDataSave = timeBetweenSavingData;
         }
 
-        if (currentGameState != GameState.GS_SEED && currentGameState != GameState.GS_QUIZ)
+        if (currentGameState != GameState.GS_SEED && currentGameState != GameState.GS_QUIZ && currentGameState == GameState.GS_ISLAND)
         {
             timeToNextSeed -= Time.deltaTime;
             if (timeToNextSeed < 0)
@@ -180,6 +182,7 @@ public class GameManager : MonoBehaviour
         popupCanvas.SetActive(false);
         treeChooserCanvas.SetActive(false);
         startCanvas.SetActive(false);
+        mainCanvas.GetComponent<MainCanvasController>().DeselectAllTrees();
         newSeedCanvas.SetActive(true);
 
         worldCamera.enabled = true;
@@ -192,7 +195,7 @@ public class GameManager : MonoBehaviour
             seedCamera.enabled = false;
             seed.SetActive(false);
         }
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
     }
 
     public void NewSeed(GameObject selectedTree)
@@ -525,8 +528,8 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(time);
 
-            
-                showEmotionsQuestion();
+
+            showEmotionsQuestion();
         }
     }
 
@@ -555,6 +558,7 @@ public class GameManager : MonoBehaviour
         File.AppendAllText(filePath, sb.ToString());
     }
 
+
     public float TreeDistance(float x, float z)
     {
         float min_dist = Pythagoras(terrain.terrainData.size.x, terrain.terrainData.size.z) + 1;
@@ -580,103 +584,144 @@ public class GameManager : MonoBehaviour
 
     void BehaviouralData(String game_event)
     {
-        if (Input.touchCount > 1)
+        DeviceOrientation orientation = Input.deviceOrientation;
+        Vector3 acceleration = Input.acceleration;
+        //Compass compass = Input.compass;
+        Touch first_touch;
+        bool is_first_touch = false;
+        Touch second_touch;
+        bool is_second_touch = false;
+
+        String data_list = "";
+
+        if (firstSave == true)
         {
-            DeviceOrientation orientation = Input.deviceOrientation;
-            Vector3 acceleration = Input.acceleration;
-            //Compass compass = Input.compass;
-            Touch first_touch;
-            bool is_first_touch = false;
-            Touch second_touch;
-            bool is_second_touch = false;
+            data_list+="orientation"+",";
+            data_list+="acceleration_x"+",";
+            data_list+="acceleration_y"+",";
+            data_list+="acceleration_z"+",";
+            //data_list+="compass_heading_accuracy"+",";
+            //data_list+="compass_magnetic_heading"+",";
+            //data_list+="compass_true_heading"+",";
+            data_list+="touch_count"+",";
 
-            try
-            {
-                first_touch = Input.GetTouch(0);
-                is_first_touch = true;
-            }
-            catch (Exception e)
-            {
-                is_first_touch = false;
-            }
+            data_list+="first_touch_finger_id"+",";
+            data_list+="first_touch_delta_time"+",";
+            //data_list+="first_touch_type"+",";
+            data_list+="first_touch_tap_count"+",";
+            data_list+="first_touch_phase"+",";
+            data_list+="first_touch_position_x"+",";
+            data_list+="first_touch_position_y"+",";
+            //data_list+="first_touch_delta_position_x"+",";
+            //data_list+="first_touch_delta_position_y"+",";
+            //data_list+="first_touch_radius"+",";
 
-            try
-            {
-                second_touch = Input.GetTouch(1);
-                is_second_touch = true;
-            }
-            catch (Exception e)
-            {
-                is_second_touch = false;
-            }
+            data_list+="second_touch_finger_id"+",";
+            data_list+="second_touch_delta_time"+",";
+            //data_list+="second_touch_type"+",";
+            data_list+="second_touch_tap_count"+",";
+            data_list+="second_touch_phase"+",";
+            data_list+="second_touch_position_x"+",";
+            data_list+="second_touch_position_y"+",";
+            //data_list+="second_touch_delta_position_x"+",";
+            //data_list+="second_touch_delta_position_y"+",";
+            //data_list+="second_touch_radius"+",";
 
-            List<String> data_list = new List<String>();
+            data_list+="current_game_state"+",";
+            data_list+="game_event";
 
-            data_list.Add(orientation.ToString());
-            data_list.Add(acceleration.x.ToString());
-            data_list.Add(acceleration.y.ToString());
-            data_list.Add(acceleration.z.ToString());
-            //data_list.Add(compass.headingAccuracy.ToString());
-            //data_list.Add(compass.magneticHeading.ToString());
-            //data_list.Add(compass.trueHeading.ToString());
-            data_list.Add(Input.touchCount.ToString());
+            addRowToFile(behaviouralDataFile, data_list);
+            data_list = "";
 
-            if (is_first_touch == true)
-            {
-                data_list.Add(first_touch.fingerId.ToString());
-                data_list.Add(first_touch.deltaTime.ToString());
-                //data_list.Add(first_touch.type.ToString());
-                data_list.Add(first_touch.tapCount.ToString());
-                data_list.Add(first_touch.phase.ToString());
-                data_list.Add(first_touch.position.x.ToString());
-                data_list.Add(first_touch.position.y.ToString());
-                //data_list.Add(first_touch.deltaPosition.x.ToString());
-                //data_list.Add(first_touch.deltaPosition.y.ToString());
-                //data_list.Add(first_touch.radius.ToString());
-            }
-            else
-            {
-                data_list.Add("");
-                data_list.Add("");
-                //data_list.Add("");
-                data_list.Add("");
-                data_list.Add("");
-                data_list.Add("");
-                data_list.Add("");
-                //data_list.Add("");
-                //data_list.Add("");
-                //data_list.Add("");
-            }
-
-            if (is_second_touch == true)
-            {
-                data_list.Add(second_touch.fingerId.ToString());
-                data_list.Add(second_touch.deltaTime.ToString());
-                //data_list.Add(second_touch.type.ToString());
-                data_list.Add(second_touch.tapCount.ToString());
-                data_list.Add(second_touch.phase.ToString());
-                data_list.Add(second_touch.position.x.ToString());
-                data_list.Add(second_touch.position.y.ToString());
-                //data_list.Add(second_touch.deltaPosition.x.ToString());
-                //data_list.Add(second_touch.deltaPosition.y.ToString());
-                //data_list.Add(second_touch.radius.ToString());
-            }
-            else
-            {
-                data_list.Add("");
-                data_list.Add("");
-                //data_list.Add("");
-                data_list.Add("");
-                data_list.Add("");
-                data_list.Add("");
-                data_list.Add("");
-                //data_list.Add("");
-                //data_list.Add("");
-                //data_list.Add("");
-            }
-
-            data_list.Add(currentGameState.ToString());
-            data_list.Add(game_event);
+            firstSave = false;
         }
+
+        try
+        {
+            first_touch = Input.GetTouch(0);
+            is_first_touch = true;
+        }
+        catch (Exception e)
+        {
+            is_first_touch = false;
+        }
+
+        try
+        {
+            second_touch = Input.GetTouch(1);
+            is_second_touch = true;
+        }
+        catch (Exception e)
+        {
+            is_second_touch = false;
+        }
+
+        data_list+=orientation.ToString()+",";
+        data_list+=acceleration.x.ToString()+",";
+        data_list+=acceleration.y.ToString()+",";
+        data_list+=acceleration.z.ToString()+",";
+        //data_list+=compass.headingAccuracy.ToString()+",";
+        //data_list+=compass.magneticHeading.ToString()+",";
+        //data_list+=compass.trueHeading.ToString()+",";
+        data_list+=Input.touchCount.ToString()+",";
+
+        if (is_first_touch == true)
+        {
+            data_list+=first_touch.fingerId.ToString()+",";
+            data_list+=first_touch.deltaTime.ToString()+",";
+            //data_list+=first_touch.type.ToString()+",";
+            data_list+=first_touch.tapCount.ToString()+",";
+            data_list+=first_touch.phase.ToString()+",";
+            data_list+=first_touch.position.x.ToString()+",";
+            data_list+=first_touch.position.y.ToString()+",";
+            //data_list+=first_touch.deltaPosition.x.ToString()+",";
+            //data_list+=first_touch.deltaPosition.y.ToString()+",";
+            //data_list+=first_touch.radius.ToString()+",";
+        }
+        else
+        {
+            data_list+=""+",";
+            data_list+=""+",";
+            //data_list+=""+",";
+            data_list+=""+",";
+            data_list+=""+",";
+            data_list+=""+",";
+            data_list+=""+",";
+            //data_list+=""+",";
+            //data_list+=""+",";
+            //data_list+=""+",";
+        }
+
+        if (is_second_touch == true)
+        {
+            data_list+=second_touch.fingerId.ToString()+",";
+            data_list+=second_touch.deltaTime.ToString()+",";
+            //data_list+=second_touch.type.ToString()+",";
+            data_list+=second_touch.tapCount.ToString()+",";
+            data_list+=second_touch.phase.ToString()+",";
+            data_list+=second_touch.position.x.ToString()+",";
+            data_list+=second_touch.position.y.ToString()+",";
+            //data_list+=second_touch.deltaPosition.x.ToString()+",";
+            //data_list+=second_touch.deltaPosition.y.ToString()+",";
+            //data_list+=second_touch.radius.ToString()+",";
+        }
+        else
+        {
+            data_list+=""+",";
+            data_list+=""+",";
+            //data_list+=""+",";
+            data_list+=""+",";
+            data_list+=""+",";
+            data_list+=""+",";
+            data_list+=""+",";
+            //data_list+=""+",";
+            //data_list+=""+",";
+            //data_list+=""+",";
+        }
+
+        data_list+=currentGameState.ToString()+",";
+        data_list+=game_event;
+        
+        addRowToFile(behaviouralDataFile, data_list);
     }
 }

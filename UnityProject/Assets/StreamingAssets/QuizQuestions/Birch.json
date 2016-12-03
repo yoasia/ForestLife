@@ -2,34 +2,19 @@
 "data":[
 {
 	"id":"1",
-	"question":"Czy drzewa są fajne?",
-	"answers":[
-		"tak",
-		"nie",
-		"nie",
-		"nie"
-	]
+	"title":"Ciekawostka 1",
+	"content": "Drzewa są fajne Drzewa są fajneDrzewa są fajneDrzewa są fajneDrzewa są fajneDrzewa są fajneDrzewa są fajneDrzewa są fajneDrzewa są fajneDrzewa są fajneDrzewa są fajneDrzewa są fajneDrzewa są fajneDrzewa są fajneDrzewa są fajne"
 	
 },
 {
 	"id":"2",
-	"question":"Czy lubisz drzewa?",
-	"answers":[
-		"tak",
-		"nie",
-		"nie",
-		"nie"
-	]
+	"title":"Ciekawostka 2",
+	"content": "Cos Cos Cos lala al ala. Cos Cos Cos lala al ala.Cos Cos Cos lala al ala.Cos Cos Cos lala al ala.Cos Cos Cos lala al ala.Cos Cos Cos lala al ala.Cos Cos Cos lala al ala.Cos Cos Cos lala al ala.Cos Cos Cos lala al ala.Cos Cos Cos lala al ala.Cos Cos Cos lala al ala."
 },
 {
 	"id":"3",
-	"question":"jak się masz?",
-	"answers":[
-		"tak",
-		"nie",
-		"nie",
-		"nie"
-	]
+	"title":"Ciekawostka 3",
+	"content": "Inne ienne oe we. Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we.Inne ienne oe we."
 }
 ]
 }

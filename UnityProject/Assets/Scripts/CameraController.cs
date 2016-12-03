@@ -10,9 +10,13 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         //if (GameManager.instance.selectingMode == false) {
-        RotateCamera();
-        ZoomCamera();
-        MoveCamera();
+        if (!GameManager.instance.mainCanvas.GetComponent<MainCanvasController>().IsScreenPopup && GameManager.instance.currentGameState == GameManager.GameState.GS_ISLAND)
+        {
+            RotateCamera();
+            ZoomCamera();
+            MoveCamera();
+        }
+        
         //}
     }
 
