@@ -14,7 +14,7 @@ public class TreeController : MonoBehaviour
     public float maxUpgradePoints = 100F;
     public float healthPoints = 10F;
     public float baseMaxHealthPoints = 100F;
-    public float baseGrowthDemand = 1F;
+    public float baseGrowthDemand = 5F;
 
     public float size;
 
@@ -25,7 +25,7 @@ public class TreeController : MonoBehaviour
     public float goodTerrainFactor = 1F;
 
     public float minWaterLevel = 6F;
-    public float maxWaterLevel = 8F;
+    //public float maxWaterLevel = 8F;
     public float sunFactor = 1F;
 
     public int minSeeds = 2;
@@ -48,6 +48,7 @@ public class TreeController : MonoBehaviour
     public float soil;
     public float water;
     public float growth;
+    public float growthTimeAdjusted;
 
     Renderer rend;
 
@@ -60,6 +61,8 @@ public class TreeController : MonoBehaviour
     private float timeToSow;
     private float timeBetweenGrowth = 1;
     private float growthRatePerSecond = 1F / 100;
+
+    private float maxUpgradedValue = 100F;
 
     private float soilMid = 5;
 
@@ -143,18 +146,25 @@ public class TreeController : MonoBehaviour
 
     public bool CanBeUpgraded(int rootsUpgrade, int leavesUpgrade, int barkUpgrade)
     {
-        if (GetUpgradesCost(rootsUpgrade, leavesUpgrade, barkUpgrade) <= upgradePoints)
-            return true;
+        if (GetUpgradesCost(rootsUpgrade, leavesUpgrade, barkUpgrade) > upgradePoints)
+            return false;
 
-        return false;
+        if (rootsStrength + rootsUpgrade > maxUpgradedValue)
+            return false;
+        if (barkStrength + barkUpgrade > maxUpgradedValue)
+            return false;
+        if (leavesStrength + leavesUpgrade > maxUpgradedValue)
+            return false;
+
+        return true;
     }
 
     public bool Upgrade(int rootsUpgrade, int leavesUpgrade, int barkUpgrade)
     {
-        float cost = GetUpgradesCost(rootsUpgrade, leavesUpgrade, barkUpgrade);
-
-        if (cost > upgradePoints)
+        if (!CanBeUpgraded(rootsUpgrade, leavesUpgrade, barkUpgrade))
             return false;
+
+        float cost = GetUpgradesCost(rootsUpgrade, leavesUpgrade, barkUpgrade);
 
         rootsStrength += rootsUpgrade;
         leavesStrength += leavesUpgrade;
@@ -195,52 +205,55 @@ public class TreeController : MonoBehaviour
 
         //growth;// = 1F;
         if (soil < soilMid)
-            growth = soilMid - badTerrainFactor * (soilMid - soil);
+            growth = soilMid - badTerrainFactor/2 * (soilMid - soil);
         else
-            growth = soilMid + goodTerrainFactor * (soil - soilMid);
+            growth = soilMid + goodTerrainFactor/2 * (soil - soilMid);
 
-        growth *= 1 + rootsStrength / 10;
+        growth *= 1 + rootsStrength / 200;
 
         sun *= sunFactor;
         if (sun > 1)
             sun = 1;
-        sun *= 1 + leavesStrength / 10;
+        sun *= 1 + leavesStrength / 200;
         growth *= sun;
         growth *= GetShadeFactor();
 
         if (water < minWaterLevel)
-            growth *= water / minWaterLevel;
-        if (water > maxWaterLevel)
-            growth /= water / maxWaterLevel;
+            growth *= water / (minWaterLevel*2);
 
-        growth *= (Time.time - lastGrowth);
+        float growthDemand = baseGrowthDemand + baseGrowthDemand * (size - 1);
 
-        float growthDemand = baseGrowthDemand + baseGrowthDemand * Mathf.Pow((size - 1),2) / 3;
+        growth *= GameManager.instance.quizFactor;
 
         growth = growth - growthDemand;
 
-        //Debug.LogFormat("Growth: {0}, Demand: {1}", growth, growthDemand);
+        Debug.LogFormat("Growth: {0}, Demand: {1}", growth, growthDemand);
 
-        if (growth > maxGrowth)
-            growth = maxGrowth;
-
-        growth *= growthRatePerSecond * growthRate;
+        growthTimeAdjusted = growth * (Time.time - lastGrowth) * growthRatePerSecond;
 
         if (growth > 0)
         {
-            upgradePoints += growth*20;
+            upgradePoints += growthTimeAdjusted * 20;
             if (upgradePoints > maxUpgradePoints)
                 upgradePoints = maxUpgradePoints;
 
-            size += growth;
+            size += growthTimeAdjusted;
         }
 
-        //if(growth > 0 && growth < - 0.3F)
-        healthPoints += (growth)*10;
-        if (healthPoints > baseMaxHealthPoints + barkStrength * 10)
-            healthPoints = baseMaxHealthPoints + barkStrength * 10;
+        if(growth > 0 || (growth < - 1F && GameManager.instance.quizFactor < 1F) || (growth + growthDemand - baseGrowthDemand < 0))
+            healthPoints += (growthTimeAdjusted) *10;
+        if (healthPoints > baseMaxHealthPoints + barkStrength/2)
+            healthPoints = baseMaxHealthPoints + barkStrength/2;
 
         lastGrowth = Time.time;
+
+        var treeCondition = healthPoints / baseMaxHealthPoints;
+        if (treeCondition > 1)
+            treeCondition = 1;
+        if (treeCondition < 0)
+            treeCondition = 0;
+
+        //ColorTreeBasedOnCondition(treeCondition); zastąpić wywoływaniem funkcji do zmiany koloru
 
         //Debug.LogFormat("Size: {0}; Health: {1}; Upgrade Points: {2}", size, healthPoints, upgradePoints);
     }
@@ -254,7 +267,7 @@ public class TreeController : MonoBehaviour
             var otherTree = other.GetComponent<TreeController>();
             if (otherTree.isAlive && otherTree.size > size)
             {
-                var tempFactor = DistanceTo(other) / (otherTree.size*4);
+                var tempFactor = DistanceTo(other) / (otherTree.size*2);
                 if (tempFactor < 1)
                     shadeFactor *= tempFactor;
             }
