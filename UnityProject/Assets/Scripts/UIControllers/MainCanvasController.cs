@@ -93,7 +93,7 @@ public class MainCanvasController : MonoBehaviour {
                             activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
                             activeTree.GetComponent<TreeController>().ReturnDefaultColour();
                         }
-                        hit.transform.gameObject.GetComponent<TreeController>().SelectTree();
+                        hit.transform.gameObject.GetComponent<TreeController>().SelectTree("normal");
                         activeTree = hit.transform.gameObject;
                         
                         //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
@@ -119,8 +119,8 @@ public class MainCanvasController : MonoBehaviour {
                                 
                             }
                         }
-                        hit.transform.gameObject.GetComponent<TreeController>().DeselectTree();
-                        hit.transform.gameObject.GetComponent<TreeController>().ReturnDefaultColour();
+                        hit.transform.gameObject.GetComponent<TreeController>().UnselectTreeByType("normal");
+                        //hit.transform.gameObject.GetComponent<TreeController>().ReturnDefaultColour();
                     }
                     
                 }
@@ -292,7 +292,7 @@ public class MainCanvasController : MonoBehaviour {
         foreach (GameObject t in selectedTrees)
         {
             activeTree.GetComponent<TreeController>().ReturnDefaultColour();
-            activeTree.GetComponent<TreeController>().DeselectTree();
+            activeTree.GetComponent<TreeController>().UnselectTreeByType("normal");
         }
         selectedTrees.Clear();
     }
