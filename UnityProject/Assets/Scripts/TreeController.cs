@@ -205,6 +205,11 @@ public class TreeController : MonoBehaviour
         return true;
     }
 
+    public void playAddedPoints()
+    {
+        PointsAddedEffect.Play();
+    }
+
     public void ReturnDefaultColour()
     {
         rend.material.color = currentColour;
@@ -236,6 +241,8 @@ public class TreeController : MonoBehaviour
         leavesStrength += leavesUpgrade;
         barkStrength += barkUpgrade;
         upgradePoints -= cost;
+
+        playAddedPoints();
 
         return true;
     }
