@@ -136,6 +136,37 @@ public class TreeController : MonoBehaviour
         }
     }
 
+    //funkcja przyjmuje wartość od 0 do 1
+    //0 - chore drzewo
+    //1 - zdrowe drzewo
+    public bool ChangeColor(float value)
+    {
+
+        if (value < 0 || value > 1)
+            return false;
+
+        Renderer rend = GetComponent<Renderer>();
+        rend.material.shader = Shader.Find("Standard");
+        Color newColor = defaultColour;
+
+        if (species == "Magnolia")
+        {
+            newColor.b = 1 * (1f-value);
+            rend.material.color = newColor;
+        }
+        else if (species == "Birch")
+        {
+            newColor.r = 1 * value;
+            rend.material.color = newColor;
+        }
+        else if (species == "Spruce")
+        {
+            newColor.r = 1 * value;
+            rend.material.color = newColor;
+        }
+        return true;
+    }
+
     public void ReturnDefaultColour()
     {
         rend.material.color = defaultColour;
