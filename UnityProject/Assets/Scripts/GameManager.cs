@@ -74,6 +74,8 @@ public class GameManager : MonoBehaviour
     public float lastQuiz = 0;
     public int triviasBeforeQuiz = 2;
 
+    public float score = 0;
+
     public enum GameState
     {
         GS_SEED,
@@ -171,6 +173,8 @@ public class GameManager : MonoBehaviour
                 NewSeedPopup();
             }
         }
+
+        score = GetScore();
     }
 
 
@@ -737,5 +741,17 @@ public class GameManager : MonoBehaviour
         data_list+=game_event;
         
         addRowToFile(behaviouralDataFile, data_list);
+    }
+
+    private float GetScore()
+    {
+        float newScore = 0;
+        for (int i = 0; i < treesOnIsland.Count; i++)
+        {
+            var tree = treesOnIsland[i].GetComponent<TreeController>();
+            if (tree.isAlive)
+                newScore += tree.healthPoints * tree.size;
+        }
+        return newScore;
     }
 }

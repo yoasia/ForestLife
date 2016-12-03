@@ -247,6 +247,14 @@ public class TreeController : MonoBehaviour
 
         lastGrowth = Time.time;
 
+        var treeCondition = healthPoints / baseMaxHealthPoints;
+        if (treeCondition > 1)
+            treeCondition = 1;
+        if (treeCondition < 0)
+            treeCondition = 0;
+
+        //ColorTreeBasedOnCondition(treeCondition); zastąpić wywoływaniem funkcji do zmiany koloru
+
         //Debug.LogFormat("Size: {0}; Health: {1}; Upgrade Points: {2}", size, healthPoints, upgradePoints);
     }
 
