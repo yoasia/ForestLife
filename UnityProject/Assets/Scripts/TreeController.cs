@@ -71,6 +71,7 @@ public class TreeController : MonoBehaviour
     public float Age { get { return Time.time - startTime; } }
 
     private Color defaultColour;
+    private Color currentColour;
 
     // Use this for initialization
     void Start()
@@ -82,6 +83,7 @@ public class TreeController : MonoBehaviour
         rend = GetComponent<Renderer>();
         rend.material.shader = Shader.Find("Standard");
         defaultColour = rend.material.color;
+        currentColour = defaultColour;
     }
 
     // Update is called once per frame
@@ -150,7 +152,7 @@ public class TreeController : MonoBehaviour
 
         Renderer rend = GetComponent<Renderer>();
         rend.material.shader = Shader.Find("Standard");
-        Color newColor = defaultColour;
+        Color newColor = currentColour;
 
         if (species == "Magnolia")
         {
@@ -167,12 +169,14 @@ public class TreeController : MonoBehaviour
             newColor.r = 1 * value;
             rend.material.color = newColor;
         }
+        currentColour = rend.material.color;
+
         return true;
     }
 
     public void ReturnDefaultColour()
     {
-        rend.material.color = defaultColour;
+        rend.material.color = currentColour;
     }
 
     public bool CanBeUpgraded(int rootsUpgrade, int leavesUpgrade, int barkUpgrade)
@@ -284,7 +288,7 @@ public class TreeController : MonoBehaviour
         if (treeCondition < 0)
             treeCondition = 0;
 
-        //ColorTreeBasedOnCondition(treeCondition); zastąpić wywoływaniem funkcji do zmiany koloru
+        ChangeColor(treeCondition);
 
         //Debug.LogFormat("Size: {0}; Health: {1}; Upgrade Points: {2}", size, healthPoints, upgradePoints);
     }
