@@ -221,23 +221,37 @@ public class SelectCanvasController : MonoBehaviour
     public void UpgradeTrees()
     {
         bool upgraded = false;
-        foreach (GameObject t in selectedTrees)
+        if (addRoots != 0 || addLeaves != 0 || addBark != 0)
         {
-            if (t.GetComponent<TreeController>().CanBeUpgraded(addRoots, addLeaves, addBark))
+            foreach (GameObject t in selectedTrees)
+            {
+                if (t.GetComponent<TreeController>().CanBeUpgraded(addRoots, addLeaves, addBark))
+                {
+
+                    t.GetComponent<TreeController>().Upgrade(addRoots, addLeaves, addBark);
+                    upgraded = true;
+                }
+
+            }
+            if (upgraded)
             {
 
-                t.GetComponent<TreeController>().Upgrade(addRoots, addLeaves, addBark);
-                upgraded = true;
-            }
-
-        }
-        if (upgraded)
-        {
-            if (addRoots != 0 && addLeaves != 0 && addBark != 0)
                 infoText.text = "Zaznaczone drzewa zostały ulepszone";
 
+            }
+            else
+            {
+                infoText.text = "Nie można wykonać ulepszenia";
+            }
+        }
+        else
+        {
+            infoText.text = "wybierz wartości ulepszenia";
         }
 
+        ClearValues();
+        DisableSubButtons();
+        DeleteRedSelection();
 
     }
 
@@ -295,6 +309,16 @@ public class SelectCanvasController : MonoBehaviour
         }
 
         selectedTrees.Clear();
+
+    }
+
+    public void DeleteRedSelection()
+    {
+        foreach (GameObject t in selectedTrees)
+        {
+            t.GetComponent<TreeController>().SelectTree("green");
+        }
+
 
     }
 
