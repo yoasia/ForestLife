@@ -4,11 +4,11 @@ using System.Collections;
 public class MovableCamera : MonoBehaviour
 {
     public static MovableCamera instance;
+    public GameObject water;
     public float minDistFromTerrain = 10f;
     public float maxDistFromTerrain = 300f;
     public float speed = 2.0f;
     public float rotationSpeed = .05f;
-
 
     private float startZ;
     private float actualDist;
@@ -17,6 +17,7 @@ public class MovableCamera : MonoBehaviour
     private Vector3 terrainCentrum;
     private Vector3 terrainDimensions;
     private float avgDeltaTime = 0;
+    private float waterPosition;
 
     private bool canBeMoved = true;
     void Awake()
@@ -42,6 +43,8 @@ public class MovableCamera : MonoBehaviour
         terrainCentrum.x = positionX;
         terrainCentrum.y = positionY;
         terrainCentrum.z = positionZ;
+
+        waterPosition = water.transform.position.y + 3;
     }
 
     void Update()
@@ -72,6 +75,8 @@ public class MovableCamera : MonoBehaviour
             transform.Translate(new Vector3(-1, 0, 0), Space.World);
         if (transform.position.x <= terrainCentrum.x - terrainDimensions.x/2 - maxDistFromTerrain)
             transform.Translate(new Vector3(1, 0, 0), Space.World);
+        if (transform.position.y <= waterPosition)
+            transform.Translate(new Vector3(0, 1, 0), Space.World);
 
         //check if is too cloce to terrain
         float heightTerrainInMyPosition = TerrainManager.instance.GetHeight(transform.position.x, transform.position.z);
@@ -199,8 +204,9 @@ public class MovableCamera : MonoBehaviour
             (transform.position.y + movement.y >= terrainCentrum.y + terrainDimensions.y / 2 + maxDistFromTerrain) ||
             (transform.position.y + movement.y <= terrainCentrum.y - terrainDimensions.y / 2 + minDistFromTerrain) ||
             (transform.position.x + movement.x >= terrainCentrum.x + terrainDimensions.x/2 + maxDistFromTerrain) ||
-            (transform.position.x + movement.x <= terrainCentrum.x - terrainDimensions.x/2 - maxDistFromTerrain))
-            return false;
+            (transform.position.x + movement.x <= terrainCentrum.x - terrainDimensions.x/2 - maxDistFromTerrain) ||
+            (transform.position.y <= waterPosition))
+                return false;
         else if (transform.position.y + movement.y < terrainHeightInNewPoint + minDistFromTerrain)
         {
             if (terrainHeightInNewPoint == 1.0 / 0.0)
@@ -222,7 +228,8 @@ public class MovableCamera : MonoBehaviour
             (transform.position.y + movement.y >= terrainCentrum.y + terrainDimensions.y / 2 + maxDistFromTerrain) ||
             (transform.position.y + movement.y <= terrainCentrum.y - terrainDimensions.y / 2 + minDistFromTerrain) ||
             (transform.position.x + movement.x >= terrainCentrum.x + terrainDimensions.x / 2 + maxDistFromTerrain) ||
-            (transform.position.x + movement.x <= terrainCentrum.x - terrainDimensions.x / 2 - maxDistFromTerrain))
+            (transform.position.x + movement.x <= terrainCentrum.x - terrainDimensions.x / 2 - maxDistFromTerrain) ||
+            (transform.position.y <= waterPosition))
             {
                 if (transform.position.z + movement.z >= terrainCentrum.z + terrainDimensions.z / 2 + maxDistFromTerrain)
                     movement.z =  (terrainCentrum.z + terrainDimensions.z / 2 + maxDistFromTerrain) - transform.position.z;
@@ -236,7 +243,8 @@ public class MovableCamera : MonoBehaviour
                     movement.x = terrainCentrum.x + terrainDimensions.x / 2 + maxDistFromTerrain - transform.position.x;
                 if (transform.position.x + movement.x <= terrainCentrum.x - terrainDimensions.x / 2 - maxDistFromTerrain)
                     movement.x = terrainCentrum.x - terrainDimensions.x / 2 - maxDistFromTerrain - transform.position.x;
-
+                if (transform.position.y <= waterPosition)
+                    movement.y = waterPosition - transform.position.y;
                 return movement;
             }
         else if (transform.position.y + movement.y < terrainHeightInNewPoint + minDistFromTerrain)
