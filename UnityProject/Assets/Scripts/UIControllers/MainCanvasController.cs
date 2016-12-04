@@ -37,7 +37,10 @@ public class MainCanvasController : MonoBehaviour {
     Ray ray;
     RaycastHit hit;
     public bool IsScreenPopup = false; 
-	
+    //private bool firstClick = false;
+    //private float timeFromFirstClick = 0;
+    //private bool doubleClick = false;
+
 	void Start () {
 
         animatorLeftMenu = leftMenuPanel.GetComponent<Animator>();
@@ -79,55 +82,61 @@ public class MainCanvasController : MonoBehaviour {
 
         if (Input.GetMouseButtonDown(0))
         {
-            ray = cam.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-            {
-
-                if (hit.transform.gameObject.tag == "Tree")
+            
+                ray = cam.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
 
-                    if (selectedTrees.Contains(hit.transform.gameObject) == false)
+                    if (hit.transform.gameObject.tag == "Tree")
                     {
-                        if (activeTree != null)
+
+                        if (selectedTrees.Contains(hit.transform.gameObject) == false)
                         {
-                            activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-                            activeTree.GetComponent<TreeController>().ReturnDefaultColour();
+                            if (activeTree != null)
+                            {
+                                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+                                //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
+                                //activeTree.GetComponent<TreeController>().UnselectTreeByType();
+                                activeTree.GetComponent<TreeController>().SelectTree("green");
+                            }
+
+                            activeTree = hit.transform.gameObject;
+
+                            //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
+                            activeTree.GetComponent<TreeController>().SelectTree("normal");
+
+
+                            selectedTrees.Add(hit.transform.gameObject);
                         }
-                        hit.transform.gameObject.GetComponent<TreeController>().SelectTree("normal");
-                        activeTree = hit.transform.gameObject;
-                        
-                        //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
-                        activeTree.GetComponent<Renderer>().material.color = Color.blue;
-                        
-                        
-                        selectedTrees.Add(hit.transform.gameObject);
-                    }
-                    else
-                    {
-                        selectedTrees.Remove(hit.transform.gameObject);
-                        if (hit.transform.gameObject == activeTree)
+                        else
                         {
-                            if (selectedTrees.Count != 0)
+                            selectedTrees.Remove(hit.transform.gameObject);
+                            if (hit.transform.gameObject == activeTree)
                             {
-                                activeTree = selectedTrees[0];
-                                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
-                                activeTree.GetComponent<Renderer>().material.color = Color.blue;
+                                if (selectedTrees.Count != 0)
+                                {
+                                    activeTree = selectedTrees[0];
+                                    //activeTree.GetComponent<Renderer>().material.color = Color.blue;
+                                    //activeTree.GetComponent<TreeController>().UnselectTreeByType("green");
+                                    activeTree.GetComponent<TreeController>().SelectTree("normal");
+                                }
+                                else
+                                {
+                                    activeTree = null;
+
+                                }
                             }
-                            else
-                            {
-                                activeTree = null;
-                                
-                            }
+                            hit.transform.gameObject.GetComponent<TreeController>().UnselectTree();
+                            //hit.transform.gameObject.GetComponent<TreeController>().ReturnDefaultColour();
                         }
-                        hit.transform.gameObject.GetComponent<TreeController>().UnselectTreeByType("normal");
-                        //hit.transform.gameObject.GetComponent<TreeController>().ReturnDefaultColour();
+
                     }
-                    
+
+
+
                 }
-
-
-
-            }
+           
+            
 
         }
 
@@ -175,38 +184,54 @@ public class MainCanvasController : MonoBehaviour {
         {
             if (index > 0)
             {
-                activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-                activeTree.GetComponent<TreeController>().ReturnDefaultColour();
+                //activeTree.GetComponent<TreeController>().UnselectTreeByType("normal");
+                activeTree.GetComponent<TreeController>().SelectTree("green");
+                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+                //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
                 activeTree = selectedTrees[index - 1];
+               // activeTree.GetComponent<TreeController>().UnselectTreeByType("green");
+                activeTree.GetComponent<TreeController>().SelectTree();
                 //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
-                activeTree.GetComponent<Renderer>().material.color = Color.blue;
+                //activeTree.GetComponent<Renderer>().material.color = Color.blue;
             }
             else
             {
-                activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-                activeTree.GetComponent<TreeController>().ReturnDefaultColour();
+                //activeTree.GetComponent<TreeController>().UnselectTreeByType("normal");
+                activeTree.GetComponent<TreeController>().SelectTree("green");
+                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+                //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
                 activeTree = selectedTrees[selectedTrees.Count - 1];
                 //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
-                activeTree.GetComponent<Renderer>().material.color = Color.blue;
+                //activeTree.GetComponent<Renderer>().material.color = Color.blue;
+                //activeTree.GetComponent<TreeController>().UnselectTreeByType("green");
+                activeTree.GetComponent<TreeController>().SelectTree();
             }
         }
         else
         {
             if (index < selectedTrees.Count - 1)
             {
-                activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-                activeTree.GetComponent<TreeController>().ReturnDefaultColour();
+                //activeTree.GetComponent<TreeController>().UnselectTreeByType("normal");
+                activeTree.GetComponent<TreeController>().SelectTree("green");
+                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+                //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
                 activeTree = selectedTrees[index + 1];
                 //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
-                activeTree.GetComponent<Renderer>().material.color = Color.blue;
+                //activeTree.GetComponent<Renderer>().material.color = Color.blue;
+                //activeTree.GetComponent<TreeController>().UnselectTreeByType("green");
+                activeTree.GetComponent<TreeController>().SelectTree();
             }
             else
             {
-                activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-                activeTree.GetComponent<TreeController>().ReturnDefaultColour();
+               // activeTree.GetComponent<TreeController>().UnselectTreeByType("normal");
+                activeTree.GetComponent<TreeController>().SelectTree("green");
+                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+                //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
                 activeTree = selectedTrees[0];
                 //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
-                activeTree.GetComponent<Renderer>().material.color = Color.blue;
+                //activeTree.GetComponent<Renderer>().material.color = Color.blue;
+                //activeTree.GetComponent<TreeController>().UnselectTreeByType("green");
+                activeTree.GetComponent<TreeController>().SelectTree();
             }
         }
     }
@@ -291,8 +316,8 @@ public class MainCanvasController : MonoBehaviour {
     {
         foreach (GameObject t in selectedTrees)
         {
-            activeTree.GetComponent<TreeController>().ReturnDefaultColour();
-            activeTree.GetComponent<TreeController>().UnselectTreeByType("normal");
+            //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
+            activeTree.GetComponent<TreeController>().UnselectTree();
         }
         selectedTrees.Clear();
     }

@@ -53,7 +53,9 @@ public class SelectCanvasController : MonoBehaviour {
         {
 
             //t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-            t.GetComponent<TreeController>().ReturnDefaultColour();
+            //t.GetComponent<TreeController>().ReturnDefaultColour();
+            //t.GetComponent<TreeController>().UnselectTree();
+            t.GetComponent<TreeController>().SelectTree("green");
         }
         infoText.text = "";
         ClearValues();
@@ -98,14 +100,14 @@ public class SelectCanvasController : MonoBehaviour {
                     {
                         if (selectedTrees.Contains(hit.transform.gameObject) == false)
                         {
-                            hit.transform.gameObject.GetComponent<TreeController>().SelectTree("normal");
+                            hit.transform.gameObject.GetComponent<TreeController>().SelectTree("green");
                             selectedTrees.Add(hit.transform.gameObject);
                         }
 
                     }
                     else
                     {
-                        hit.transform.gameObject.GetComponent<TreeController>().UnselectTreeByType("normal");
+                        hit.transform.gameObject.GetComponent<TreeController>().UnselectTree();
                         selectedTrees.Remove(hit.transform.gameObject);
                     }
                 }
@@ -149,7 +151,9 @@ public class SelectCanvasController : MonoBehaviour {
         {
             
             //t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-            t.GetComponent<TreeController>().ReturnDefaultColour();
+            //t.GetComponent<TreeController>().ReturnDefaultColour();
+            //t.GetComponent<TreeController>().UnselectTree();
+            t.GetComponent<TreeController>().SelectTree("green");
         }
         
         if (b.name == "AddKoraButton")
@@ -199,7 +203,9 @@ public class SelectCanvasController : MonoBehaviour {
             {
                 //jesli nie wyswietlenie go na czerwono
                 //t.GetComponent<Renderer>().material.shader = Shader.Find("markRed");
-                t.GetComponent<Renderer>().material.color = Color.red;
+                //t.GetComponent<Renderer>().material.color = Color.red;
+               // t.GetComponent<TreeController>().UnselectTreeByType("green");
+                t.GetComponent<TreeController>().SelectTree("red");
             }
             
         }
@@ -211,18 +217,18 @@ public class SelectCanvasController : MonoBehaviour {
 
     public void UpgradeTrees()
     {
-        bool ulep = false;
+        bool upgraded = false;
         foreach (GameObject t in selectedTrees)
         {
             if (t.GetComponent<TreeController>().CanBeUpgraded(addRoots, addLeaves, addBark))
             {
                 
                 t.GetComponent<TreeController>().Upgrade(addRoots, addLeaves, addBark);
-                ulep = true;
+                upgraded = true;
             }
 
         }
-        if (ulep) 
+        if (upgraded) 
         {
             if (addRoots != 0 && addLeaves != 0 && addBark != 0 )
                 infoText.text = "Zaznaczone drzewa zostały ulepszone";
@@ -282,7 +288,7 @@ public class SelectCanvasController : MonoBehaviour {
     {
         foreach (GameObject t in selectedTrees)
         {
-            t.GetComponent<TreeController>().UnselectTreeByType("normal");
+            t.GetComponent<TreeController>().UnselectTree();
         }
 
         selectedTrees.Clear();

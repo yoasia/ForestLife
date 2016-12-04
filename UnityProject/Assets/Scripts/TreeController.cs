@@ -133,13 +133,28 @@ public class TreeController : MonoBehaviour
         switch (selectionType)
         {
             case "normal":
-                normalSelectionEffect.Play();
+                {
+                    normalSelectionEffect.Play();
+                    greenSelectionEffect.Stop();
+                    redSelectionEffect.Stop();
+                }
+                
                 break;
             case "green":
-                greenSelectionEffect.Play();
+                {
+                    greenSelectionEffect.Play();
+                    normalSelectionEffect.Stop();
+                    redSelectionEffect.Stop();
+                }
+                
                 break;
             case "red":
-                redSelectionEffect.Play();
+                {
+                    redSelectionEffect.Play();
+                    normalSelectionEffect.Stop();
+                    greenSelectionEffect.Stop();
+                }
+                
                 break;
         }
     }
@@ -300,7 +315,7 @@ public class TreeController : MonoBehaviour
 
         growth = growth - growthDemand;
 
-        Debug.LogFormat("Growth: {0}, Demand: {1}", growth, growthDemand);
+        //Debug.LogFormat("Growth: {0}, Demand: {1}", growth, growthDemand);
 
         growthTimeAdjusted = growth * (Time.time - lastGrowth) * growthRatePerSecond;
 
