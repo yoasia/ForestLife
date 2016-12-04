@@ -4,15 +4,14 @@ using System;
 
 public class Cloud : MonoBehaviour {
 
-    public bool staticCloud = false;
-
+    public bool staticCloud = false; 
+    public bool rainOnlyAfterShakeDetection = true;
     public ParticleSystem rain;
     public float speed = 5.0f;
     public float maxLifeTime = 60.0f;
+    public Vector3 scalingSpeed = new Vector3(20F, 10F, 20F);
     public Vector3 maxScale = new Vector3(6000, 3000, 6000);
-    
 
-    Vector3 scale = new Vector3(20F, 10F, 20F);
     Vector3 startScale = new Vector3(20F, 10F, 20F);
     bool ifItRains = false;
     bool stopRain = false;
@@ -39,10 +38,11 @@ public class Cloud : MonoBehaviour {
 
     void Start()
     {
+        GameManager.instance.mainCanvas.GetComponent<MainCanvasController>().SetWeatherIcon("claud");
         rain.Stop();
         StartCoroutine(ChangeScaleAfterTime(maxLifeTime / 3.0f));
-        //if (staticCloud)
-        //    StartCoroutine(StartRainAfterTime(maxLifeTime / 3.0f));
+       if (!rainOnlyAfterShakeDetection)
+            StartCoroutine(StartRainAfterTime(maxLifeTime / 3.0f));
         StartCoroutine(DestroyAfterTime(maxLifeTime));
 
         shakeDetectionThreshold *= shakeDetectionThreshold;
@@ -121,7 +121,7 @@ public class Cloud : MonoBehaviour {
 
     void Scale()
     {
-        transform.localScale += scale * Time.deltaTime;
+        transform.localScale += scalingSpeed * Time.deltaTime;
 
         //odmierzamy ile czasu minęło od rozpoczęcia skalowania
         scalingTimer += Time.deltaTime;
@@ -163,17 +163,17 @@ public class Cloud : MonoBehaviour {
     IEnumerator DontScaleAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
-        scale = new Vector3(0.0F, 0.0F, 0.0F);
+        scalingSpeed = new Vector3(0.0F, 0.0F, 0.0F);
     }
     IEnumerator ChangeScaleAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
-        scale = new Vector3(0, 0, 0);
+        scalingSpeed = new Vector3(0, 0, 0);
     }
     IEnumerator DestroyAfterTime(float time)
     {
         yield return new WaitForSeconds(time);
-        scale = -startScale;
+        scalingSpeed = -startScale;
         ifScale = true;
         scalingTime = scalingTime;
         //destroy rain after 5 s
