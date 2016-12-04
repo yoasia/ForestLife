@@ -138,7 +138,7 @@ public class MovableCamera : MonoBehaviour
                     if (ifCanBeMoved(moveVec * speed * Time.deltaTime))
                     {
                         transform.RotateAround(transform.position, Vector3.up, rotationSpeed * Time.deltaTime * moveVec.x);
-                        transform.RotateAround(transform.position, transform.right, rotationSpeed * Time.deltaTime * moveVec.y);
+                        transform.RotateAround(transform.position, transform.right, rotationSpeed * Time.deltaTime * (-moveVec.y));
                     }
                 }
                 else
@@ -147,7 +147,7 @@ public class MovableCamera : MonoBehaviour
                     {
 
                         transform.RotateAround(transform.position, Vector3.up, rotationSpeed * Time.deltaTime * moveVec.x);
-                        transform.RotateAround(transform.position, transform.right, rotationSpeed * Time.deltaTime * moveVec.y);
+                        transform.RotateAround(transform.position, transform.right, rotationSpeed * Time.deltaTime * (-moveVec.y));
                     }
                 }
 
