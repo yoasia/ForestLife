@@ -44,6 +44,7 @@ public class QuizController : MonoBehaviour {
                         {
                             DisplayQuestion();
                         }
+                        
 
 
                     }
