@@ -102,15 +102,15 @@ public class TreeController : MonoBehaviour
 
             transform.localScale = new Vector3(size, size, size);
 
-            if (selected)
-            {
-                SelectTree("normal");
+            //if (selected)
+            //{
+            //    SelectTree("normal");
 
-            }
-            else
-            {
-                UnselectTreeByType("normal");
-            }
+            //}
+            //else
+            //{
+            //    UnselectTreeByType("normal");
+            //}
 
             if(sowsLeft > 1 && Age - lastSow > timeToSow)
                 Sow();
@@ -133,14 +133,30 @@ public class TreeController : MonoBehaviour
         switch (selectionType)
         {
             case "normal":
-                normalSelectionEffect.Play();
-                break;
+                {
+                    normalSelectionEffect.Play();
+                    greenSelectionEffect.Stop();
+                    redSelectionEffect.Stop();
+                    break;
+                }
+
+                
             case "green":
-                greenSelectionEffect.Play();
-                break;
+                {
+                    greenSelectionEffect.Play();
+                    normalSelectionEffect.Stop();
+                    redSelectionEffect.Stop();
+                    break;
+                }
+
+                
             case "red":
-                redSelectionEffect.Play();
-                break;
+                {
+                    redSelectionEffect.Play();
+                    normalSelectionEffect.Stop();
+                    greenSelectionEffect.Stop();
+                    break;
+                } 
         }
     }
 

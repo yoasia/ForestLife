@@ -2,7 +2,8 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class NewSeedChooseCanvasController : MonoBehaviour {
+public class NewSeedChooseCanvasController : MonoBehaviour
+{
 
     public GameObject popupPanel;
     public GameObject choosingTreePanel;
@@ -16,15 +17,17 @@ public class NewSeedChooseCanvasController : MonoBehaviour {
     private Animator animatorPopup;
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
 
         animatorPopup = popupPanel.GetComponent<Animator>();
         animatorPopup.enabled = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
 
         if (choosingMode)
         {
@@ -54,13 +57,13 @@ public class NewSeedChooseCanvasController : MonoBehaviour {
                 {
                     PopupOff();
                     choosingMode = true;
-                
+
                 }
 
             }
         }
 
-	}
+    }
 
 
     private void PointSelect()
@@ -77,15 +80,17 @@ public class NewSeedChooseCanvasController : MonoBehaviour {
                     if (selectedTree == null)
                     {
                         selectedTree = hit.transform.gameObject;
-                        selectedTree.GetComponent<Renderer>().material.color = Color.blue;
+                        //selectedTree.GetComponent<Renderer>().material.color = Color.blue;
+                        selectedTree.GetComponent<TreeController>().SelectTree();
                     }
                     else
                     {
-                        selectedTree.GetComponent<TreeController>().ReturnDefaultColour();
+                        //selectedTree.GetComponent<TreeController>().ReturnDefaultColour();
+                        selectedTree.GetComponent<TreeController>().UnselectTreeByType();
                         selectedTree = hit.transform.gameObject;
-                        selectedTree.GetComponent<Renderer>().material.color = Color.blue;
+                        selectedTree.GetComponent<TreeController>().SelectTree();
                     }
-                    
+
                 }
 
             }
@@ -100,13 +105,14 @@ public class NewSeedChooseCanvasController : MonoBehaviour {
         {
             popupPanel.SetActive(false);
             choosingTreePanel.SetActive(false);
-            selectedTree.GetComponent<TreeController>().ReturnDefaultColour();
+            //selectedTree.GetComponent<TreeController>().ReturnDefaultColour();
+            selectedTree.GetComponent<TreeController>().UnselectTreeByType();
             choosingMode = false;
 
             GameManager.instance.NewSeed(selectedTree);
             selectedTree = null;
         }
-        
+
     }
 
 
