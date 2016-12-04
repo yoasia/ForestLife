@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         //załadowanie nowej ciekawostki
-        if (lastTrivia > timeBetweenTrivia)
+        if (currentGameState == GameState.GS_ISLAND && lastTrivia > timeBetweenTrivia)
         {
             if (JsonDataManager.instance.triviaLoaded)
             {

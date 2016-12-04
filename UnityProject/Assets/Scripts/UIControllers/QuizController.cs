@@ -14,7 +14,7 @@ public class QuizController : MonoBehaviour {
     public Text popupHeaderText, correctText, allText, bonusText; 
 
     private bool displayNextQuestion = true;
-    
+    private JsonData quizData;
     private bool clickedAnswer;
     private int maxRoundQuestions = 1, thisRoundQuestion=0;
     private int correctAnswers = 0, wrongAnswers = 0;
@@ -71,31 +71,43 @@ public class QuizController : MonoBehaviour {
                 }
             }
             JsonDataManager.instance.NewQuestionNumber();
-            questionText.text = JsonDataManager.instance.quizData["data"][JsonDataManager.instance.currentQuestionNumber]["question"].ToString();
-
-            for (int i = 0; i < JsonDataManager.instance.quizData["data"][JsonDataManager.instance.currentQuestionNumber]["answers"].Count; i++)
+            if (JsonDataManager.instance.allQuestionsDisplayed == false)
             {
-                GameObject answer = Instantiate(answerPrefab);
-                answer.GetComponentInChildren<Text>().text = JsonDataManager.instance.quizData["data"][JsonDataManager.instance.currentQuestionNumber]["answers"][i].ToString();
-                answer.transform.SetParent(answersContainer.transform, false);
-
-                string x = i.ToString();
-
-                if (i == 0)
+                if (JsonDataManager.instance.currentQuestionFile == 's')
                 {
-                    answer.name = "correctAnswer";
-                    answer.GetComponent<Button>().onClick.AddListener(() => answerListener("0"));
+                    quizData = JsonDataManager.instance.quizSpeciesData;
                 }
-                else
+                else if (JsonDataManager.instance.currentQuestionFile == 'o')
                 {
-                    answer.name = "wrongAnswer" + x;
-                    answer.GetComponent<Button>().onClick.AddListener(() => answerListener(x));
+                    quizData = JsonDataManager.instance.quizOtherData;
                 }
-                answer.transform.SetSiblingIndex(Random.Range(0, 3));
+                questionText.text = quizData["data"][JsonDataManager.instance.currentQuestionNumber]["question"].ToString();
+
+                for (int i = 0; i < quizData["data"][JsonDataManager.instance.currentQuestionNumber]["answers"].Count; i++)
+                {
+                    GameObject answer = Instantiate(answerPrefab);
+                    answer.GetComponentInChildren<Text>().text = quizData["data"][JsonDataManager.instance.currentQuestionNumber]["answers"][i].ToString();
+                    answer.transform.SetParent(answersContainer.transform, false);
+
+                    string x = i.ToString();
+
+                    if (i == 0)
+                    {
+                        answer.name = "correctAnswer";
+                        answer.GetComponent<Button>().onClick.AddListener(() => answerListener("0"));
+                    }
+                    else
+                    {
+                        answer.name = "wrongAnswer" + x;
+                        answer.GetComponent<Button>().onClick.AddListener(() => answerListener(x));
+                    }
+                    answer.transform.SetSiblingIndex(Random.Range(0, 3));
+                }
+                displayNextQuestion = false;
+                thisRoundQuestion++;
+                clickedAnswer = false;
             }
-            displayNextQuestion = false;
-            thisRoundQuestion++;
-            clickedAnswer = false;
+            
         }
         
     }
