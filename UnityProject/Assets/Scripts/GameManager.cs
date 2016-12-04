@@ -575,8 +575,14 @@ public class GameManager : MonoBehaviour
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.AppendLine(data);
+        string date = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+        string time = DateTime.Now.TimeOfDay.ToString();
 
+        //dodanie daty i czasu
+        data = date + ',' + time + ',' + data;
+        
+        sb.AppendLine(data);
+        //zapisanie linijki
         File.AppendAllText(filePath, sb.ToString());
     }
 
