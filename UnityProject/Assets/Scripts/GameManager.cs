@@ -605,7 +605,6 @@ public class GameManager : MonoBehaviour
 
     void BehaviouralData(String game_event)
     {
-        float time = Time.time;
         DeviceOrientation orientation = Input.deviceOrientation;
         Vector3 acceleration = Input.acceleration;
         //Compass compass = Input.compass;
@@ -618,7 +617,6 @@ public class GameManager : MonoBehaviour
 
         if (firstSave == true)
         {
-            data_list += "time" + ",";
             data_list += "orientation" + ",";
             data_list += "acceleration_x" + ",";
             data_list += "acceleration_y" + ",";
@@ -680,7 +678,6 @@ public class GameManager : MonoBehaviour
             is_second_touch = false;
         }
 
-        data_list += time.ToString("F3") + ",";
         data_list += orientation.ToString() + ",";
         data_list += acceleration.x.ToString() + ",";
         data_list += acceleration.y.ToString() + ",";
