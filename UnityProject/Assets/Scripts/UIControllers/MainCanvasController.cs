@@ -320,8 +320,9 @@ public class MainCanvasController : MonoBehaviour
         foreach (GameObject t in selectedTrees)
         {
             //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
-            activeTree.GetComponent<TreeController>().UnselectTree();
+            t.GetComponent<TreeController>().UnselectTree();
         }
+        activeTree = null;
         selectedTrees.Clear();
     }
 
