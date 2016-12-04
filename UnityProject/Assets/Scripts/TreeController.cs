@@ -187,17 +187,17 @@ public class TreeController : MonoBehaviour
 
         if (species == "Magnolia")
         {
-            newColor.b = 1 * (1f-value);
+            newColor.b = 1 * value;
             rend.material.color = newColor;
         }
         else if (species == "Birch")
         {
-            newColor.r = 1 * value;
+            newColor.r = 1 * (1f-value);
             rend.material.color = newColor;
         }
         else if (species == "Spruce")
         {
-            newColor.r = 1 * value;
+            newColor.r = 1 * (1f - value);
             rend.material.color = newColor;
         }
         currentColour = rend.material.color;
