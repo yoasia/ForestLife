@@ -102,15 +102,15 @@ public class TreeController : MonoBehaviour
 
             transform.localScale = new Vector3(size, size, size);
 
-            if (selected)
-            {
-                SelectTree("normal");
+            //if (selected)
+            //{
+            //    SelectTree("normal");
 
-            }
-            else
-            {
-                UnselectTreeByType("normal");
-            }
+            //}
+            //else
+            //{
+            //    UnselectTreeByType("normal");
+            //}
 
             if(sowsLeft > 1 && Age - lastSow > timeToSow)
                 Sow();
@@ -133,14 +133,40 @@ public class TreeController : MonoBehaviour
         switch (selectionType)
         {
             case "normal":
-                normalSelectionEffect.Play();
-                break;
+                {
+                    normalSelectionEffect.gameObject.SetActive(true);
+                    normalSelectionEffect.Play();
+                    greenSelectionEffect.Stop();
+                    redSelectionEffect.Stop();
+                    greenSelectionEffect.gameObject.SetActive(false);
+                    redSelectionEffect.gameObject.SetActive(false);
+                    break;
+                }
+
+                
             case "green":
-                greenSelectionEffect.Play();
-                break;
+                {
+                    greenSelectionEffect.gameObject.SetActive(true);
+                    greenSelectionEffect.Play();
+                    normalSelectionEffect.Stop();
+                    redSelectionEffect.Stop();
+                    
+                    redSelectionEffect.gameObject.SetActive(false);
+                    normalSelectionEffect.gameObject.SetActive(false);
+                    break;
+                }
+
+                
             case "red":
-                redSelectionEffect.Play();
-                break;
+                {
+                    redSelectionEffect.gameObject.SetActive(true);
+                    redSelectionEffect.Play();
+                    normalSelectionEffect.Stop();
+                    greenSelectionEffect.Stop();
+                    greenSelectionEffect.gameObject.SetActive(false);
+                    normalSelectionEffect.gameObject.SetActive(false);
+                    break;
+                } 
         }
     }
 
@@ -154,12 +180,15 @@ public class TreeController : MonoBehaviour
         {
             case "normal":
                 normalSelectionEffect.Stop();
+                normalSelectionEffect.gameObject.SetActive(false);
                 break;
             case "green":
                 greenSelectionEffect.Stop();
+                greenSelectionEffect.gameObject.SetActive(false);
                 break;
             case "red":
                 redSelectionEffect.Stop();
+                redSelectionEffect.gameObject.SetActive(false);
                 break;
         }
     }
@@ -168,8 +197,11 @@ public class TreeController : MonoBehaviour
     {
         selected = false;
         normalSelectionEffect.Stop();
+        normalSelectionEffect.gameObject.SetActive(false);
         greenSelectionEffect.Stop();
+        greenSelectionEffect.gameObject.SetActive(false);
         redSelectionEffect.Stop();
+        redSelectionEffect.gameObject.SetActive(false);
     }
 
     //funkcja przyjmuje wartość od 0 do 1

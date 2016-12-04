@@ -11,6 +11,7 @@ public class Trivia
     public int id;
     public string title;
     public string content;
+    public char fileSymbol;
 }
 
 public class TriviaListController : MonoBehaviour {
@@ -40,15 +41,28 @@ public class TriviaListController : MonoBehaviour {
 
     public void LoadNewTrivia()
     {
+        JsonDataManager.instance.SetNextTriviaNumber();
         if (!JsonDataManager.instance.allTriviaDisplayed)
         {
-
+            
             Trivia newTrivia = new Trivia();
             newTrivia.id = JsonDataManager.instance.currentTriviaNumber;
-            newTrivia.title = JsonDataManager.instance.triviaData["data"][JsonDataManager.instance.currentTriviaNumber]["title"].ToString();
-            newTrivia.content = JsonDataManager.instance.triviaData["data"][JsonDataManager.instance.currentTriviaNumber]["content"].ToString();
-
-            JsonDataManager.instance.SetNextTriviaNumber();
+            if (JsonDataManager.instance.currentTriviaFile == 's')
+            {
+                
+                newTrivia.fileSymbol = 's';
+                newTrivia.title = JsonDataManager.instance.triviaSpeciesData["data"][JsonDataManager.instance.currentTriviaNumber]["title"].ToString();
+                newTrivia.content = JsonDataManager.instance.triviaSpeciesData["data"][JsonDataManager.instance.currentTriviaNumber]["content"].ToString();
+            }
+            else if (JsonDataManager.instance.currentTriviaFile == 'o')
+            {
+                
+                newTrivia.fileSymbol = 'o';
+                newTrivia.title = JsonDataManager.instance.triviaOtherData["data"][JsonDataManager.instance.currentTriviaNumber]["title"].ToString();
+                newTrivia.content = JsonDataManager.instance.triviaOtherData["data"][JsonDataManager.instance.currentTriviaNumber]["content"].ToString();
+            }
+            
+            
             AddTrivia(newTrivia);
         }
 

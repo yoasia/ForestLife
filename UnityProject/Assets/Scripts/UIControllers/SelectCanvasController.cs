@@ -4,10 +4,11 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-public class SelectCanvasController : MonoBehaviour {
+public class SelectCanvasController : MonoBehaviour
+{
 
-    
-    
+
+
     public Camera cam;
     public GameObject rightMenuPanel;
     public bool selectingMode = true;
@@ -15,7 +16,7 @@ public class SelectCanvasController : MonoBehaviour {
     public Button selectButton, deselectButton;
     public Button acceptSelButton, returnButton;
     public Button subKora, subKorzen, subLiscie;
-    
+
     public EventSystem eventSystem;
     public Text koraAddText, korzenAddText, liscieAddText;
     public Text infoText;
@@ -29,20 +30,22 @@ public class SelectCanvasController : MonoBehaviour {
     private Animator animatorRightMenu;
     private bool rightMenuVisable = false;
 
-	
-	void Start () {
+
+    void Start()
+    {
         animatorRightMenu = rightMenuPanel.GetComponent<Animator>();
         animatorRightMenu.enabled = false;
         SelectModeOn();
-	}
-	
-	
-	void Update () {
+    }
+
+
+    void Update()
+    {
         if (GameManager.instance.currentGameState == GameManager.GameState.GS_SELECTING)
         {
             PointSelect();
         }
-	}
+    }
 
 
 
@@ -53,7 +56,9 @@ public class SelectCanvasController : MonoBehaviour {
         {
 
             //t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-            t.GetComponent<TreeController>().ReturnDefaultColour();
+            //t.GetComponent<TreeController>().ReturnDefaultColour();
+            //t.GetComponent<TreeController>().UnselectTree();
+            t.GetComponent<TreeController>().SelectTree("green");
         }
         infoText.text = "";
         ClearValues();
@@ -98,14 +103,14 @@ public class SelectCanvasController : MonoBehaviour {
                     {
                         if (selectedTrees.Contains(hit.transform.gameObject) == false)
                         {
-                            hit.transform.gameObject.GetComponent<TreeController>().SelectTree("normal");
+                            hit.transform.gameObject.GetComponent<TreeController>().SelectTree("green");
                             selectedTrees.Add(hit.transform.gameObject);
                         }
 
                     }
                     else
                     {
-                        hit.transform.gameObject.GetComponent<TreeController>().UnselectTreeByType("normal");
+                        hit.transform.gameObject.GetComponent<TreeController>().UnselectTree();
                         selectedTrees.Remove(hit.transform.gameObject);
                     }
                 }
@@ -125,7 +130,7 @@ public class SelectCanvasController : MonoBehaviour {
 
         selectButton.image.color = c;
         deselectButton.image.color = Color.white;
-        
+
 
     }
 
@@ -135,7 +140,7 @@ public class SelectCanvasController : MonoBehaviour {
         Color c = new Color(0.98f, 1, 0.13f, 1);
         deselectButton.image.color = c;
         selectButton.image.color = Color.white;
-        
+
 
     }
 
@@ -147,11 +152,13 @@ public class SelectCanvasController : MonoBehaviour {
         infoText.text = "";
         foreach (GameObject t in selectedTrees)
         {
-            
+
             //t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-            t.GetComponent<TreeController>().ReturnDefaultColour();
+            //t.GetComponent<TreeController>().ReturnDefaultColour();
+            //t.GetComponent<TreeController>().UnselectTree();
+            t.GetComponent<TreeController>().SelectTree("green");
         }
-        
+
         if (b.name == "AddKoraButton")
         {
             addBark += upgradeAddValue;
@@ -199,11 +206,13 @@ public class SelectCanvasController : MonoBehaviour {
             {
                 //jesli nie wyswietlenie go na czerwono
                 //t.GetComponent<Renderer>().material.shader = Shader.Find("markRed");
-                t.GetComponent<Renderer>().material.color = Color.red;
+                //t.GetComponent<Renderer>().material.color = Color.red;
+                // t.GetComponent<TreeController>().UnselectTreeByType("green");
+                t.GetComponent<TreeController>().SelectTree("red");
             }
-            
+
         }
-        
+
 
 
 
@@ -211,25 +220,39 @@ public class SelectCanvasController : MonoBehaviour {
 
     public void UpgradeTrees()
     {
-        bool ulep = false;
-        foreach (GameObject t in selectedTrees)
+        bool upgraded = false;
+        if (addRoots != 0 || addLeaves != 0 || addBark != 0)
         {
-            if (t.GetComponent<TreeController>().CanBeUpgraded(addRoots, addLeaves, addBark))
+            foreach (GameObject t in selectedTrees)
             {
-                
-                t.GetComponent<TreeController>().Upgrade(addRoots, addLeaves, addBark);
-                ulep = true;
-            }
+                if (t.GetComponent<TreeController>().CanBeUpgraded(addRoots, addLeaves, addBark))
+                {
 
-        }
-        if (ulep) 
-        {
-            if (addRoots != 0 && addLeaves != 0 && addBark != 0 )
+                    t.GetComponent<TreeController>().Upgrade(addRoots, addLeaves, addBark);
+                    upgraded = true;
+                }
+
+            }
+            if (upgraded)
+            {
+
                 infoText.text = "Zaznaczone drzewa zostały ulepszone";
-            
+
+            }
+            else
+            {
+                infoText.text = "Nie można wykonać ulepszenia";
+            }
         }
-        
-       
+        else
+        {
+            infoText.text = "wybierz wartości ulepszenia";
+        }
+
+        ClearValues();
+        DisableSubButtons();
+        DeleteRedSelection();
+
     }
 
     public void DisableSubButtons()
@@ -282,10 +305,20 @@ public class SelectCanvasController : MonoBehaviour {
     {
         foreach (GameObject t in selectedTrees)
         {
-            t.GetComponent<TreeController>().UnselectTreeByType("normal");
+            t.GetComponent<TreeController>().UnselectTree();
         }
 
         selectedTrees.Clear();
+
+    }
+
+    public void DeleteRedSelection()
+    {
+        foreach (GameObject t in selectedTrees)
+        {
+            t.GetComponent<TreeController>().SelectTree("green");
+        }
+
 
     }
 
