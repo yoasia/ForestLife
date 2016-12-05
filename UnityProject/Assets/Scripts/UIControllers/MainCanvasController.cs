@@ -14,15 +14,18 @@ public class MainCanvasController : MonoBehaviour
     public Slider koraSlider, liscieSlider, korzenSlider;
     public Text livePointsText;
     public GameObject selectionParticle;
-
+    public GameObject optionsPanel;
     public Text treeAmountText;
     public Text timeText;
     public Image weatherImage;
     public Image windImage;
+    public Image treeHealthImage;
     public Sprite rainSprite, sunSprite, claudSprite;
+    public Sprite veryGoodHealthSprite, goodHealthSprite, neutralHealthSprite, badHealthSprite, veryBadHealthSprite;
 
     public Button SelectionModeButton, LeftMenuButton;
 
+    public Text QualityText;
 
     public GameObject activeTree;
 
@@ -178,6 +181,27 @@ public class MainCanvasController : MonoBehaviour
         korzenSlider.value = activeTree.GetComponent<TreeController>().rootsStrength;
         int p = (int)activeTree.GetComponent<TreeController>().upgradePoints;
         livePointsText.text = p.ToString();
+        float health = activeTree.GetComponent<TreeController>().healthPoints;
+        if (health > 80)
+        {
+            treeHealthImage.sprite = veryGoodHealthSprite;
+        }
+        else if (health <= 80 && health > 60)
+        {
+            treeHealthImage.sprite = goodHealthSprite;
+        }
+        else if (health <= 60 && health > 40)
+        {
+            treeHealthImage.sprite = neutralHealthSprite;
+        }
+        else if (health <= 40 && health > 20)
+        {
+            treeHealthImage.sprite = badHealthSprite;
+        }
+        else
+        {
+            treeHealthImage.sprite = veryBadHealthSprite;
+        }
     }
 
     public void ChangeActive(Button directionButton)
@@ -354,4 +378,43 @@ public class MainCanvasController : MonoBehaviour
         IsScreenPopup = false;
     }
 
+    public void ChangeQuality(Button b)
+    {
+        if (b.name == "plus")
+        {
+            QualitySettings.IncreaseLevel();
+
+        }
+        else
+        {
+            QualitySettings.DecreaseLevel();
+        }
+
+        QualityText.text = QualitySettings.names[QualitySettings.GetQualityLevel()];
+    }
+
+    public void ShowOptionsPanel()
+    {
+        Time.timeScale = 0;
+        if (leftMenuVisable)
+        {
+            leftMenuVisable = false;
+            animatorLeftMenu.Play("LeftMenuSlideOut");
+        }
+        SelectionModeButton.gameObject.SetActive(false);
+        LeftMenuButton.gameObject.SetActive(false);
+        IsScreenPopup = true;
+        optionsPanel.SetActive(true);
+        QualityText.text = QualitySettings.names[QualitySettings.GetQualityLevel()];
+
+        
+    }
+    public void HideOptionsPanel()
+    {
+        optionsPanel.SetActive(false);
+        Time.timeScale = 1;
+        SelectionModeButton.gameObject.SetActive(true);
+        LeftMenuButton.gameObject.SetActive(true);
+        IsScreenPopup = false;
+    }
 }
