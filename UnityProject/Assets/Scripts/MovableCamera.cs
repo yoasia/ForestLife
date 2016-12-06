@@ -4,11 +4,11 @@ using System.Collections;
 public class MovableCamera : MonoBehaviour
 {
     public static MovableCamera instance;
+    public GameObject water;
     public float minDistFromTerrain = 10f;
     public float maxDistFromTerrain = 300f;
     public float speed = 2.0f;
-    public float rotationSpeed = 2f;
-
+    public float rotationSpeed = .05f;
 
     private float startZ;
     private float actualDist;
@@ -17,6 +17,7 @@ public class MovableCamera : MonoBehaviour
     private Vector3 terrainCentrum;
     private Vector3 terrainDimensions;
     private float avgDeltaTime = 0;
+    private float waterPosition;
 
     private bool canBeMoved = true;
     void Awake()
@@ -42,6 +43,8 @@ public class MovableCamera : MonoBehaviour
         terrainCentrum.x = positionX;
         terrainCentrum.y = positionY;
         terrainCentrum.z = positionZ;
+
+        waterPosition = water.transform.position.y + 3;
     }
 
     void Update()
@@ -66,12 +69,14 @@ public class MovableCamera : MonoBehaviour
             transform.Translate(new Vector3(0, 0, +1), Space.World);
         if (transform.position.y >= terrainCentrum.y + terrainDimensions.y / 2 + maxDistFromTerrain)
             transform.Translate(new Vector3(0, -1, 0), Space.World);
-        if (transform.position.y <= terrainCentrum.y - terrainDimensions.y / 2 + 10)
+        if (transform.position.y <= terrainCentrum.y - terrainDimensions.y / 2 + minDistFromTerrain)
             transform.Translate(new Vector3(0, +1, 0), Space.World);
         if (transform.position.x >= terrainCentrum.x + terrainDimensions.x/2 + maxDistFromTerrain)
             transform.Translate(new Vector3(-1, 0, 0), Space.World);
         if (transform.position.x <= terrainCentrum.x - terrainDimensions.x/2 - maxDistFromTerrain)
             transform.Translate(new Vector3(1, 0, 0), Space.World);
+        if (transform.position.y <= waterPosition)
+            transform.Translate(new Vector3(0, 1, 0), Space.World);
 
         //check if is too cloce to terrain
         float heightTerrainInMyPosition = TerrainManager.instance.GetHeight(transform.position.x, transform.position.z);
@@ -91,22 +96,9 @@ public class MovableCamera : MonoBehaviour
                     break;
 
                 case TouchPhase.Moved:
-                    Vector3 pos = Camera.main.ScreenToWorldPoint(touch.position);
-                    pos.z = startZ;
-                    transform.position = Camera.main.ScreenToWorldPoint(touch.position);
-                    //here i gave condition to move camera with in required position
-                    moveVec = -(touch.position - dragStartPos) * speed;
-                    if (Time.timeScale > 0)
-                        moveVec *= Time.deltaTime;
-                    else
-                        moveVec *= avgDeltaTime;
-
-                    if (ifCanBeMoved(moveVec))
-                    {
-                        transform.Translate(moveVec);
-                        Vector3 val = moveVec;
-                        dragStartPos = touch.position;
-                    }
+                    //obrót
+                    rotateAfterTouch(touch);
+                    dragStartPos = touch.position;
                     break;
 
                 case TouchPhase.Ended:
@@ -127,45 +119,80 @@ public class MovableCamera : MonoBehaviour
             {
                 dragStartPos = touch.position;
                 moveVec = Vector2.zero;
+
+                //przesunięcie
+                moveAfterTouch(touch);
+                dragStartPos = touch.position;
+
+                //przybliż / oddal
+                zoomInAfterTouch(touch, touch1);
             }
 
             if (touch.phase == TouchPhase.Moved && touch1.phase == TouchPhase.Moved)
             {
-                //obrót
-                moveVec = -(touch.position - dragStartPos);
-                if (Time.timeScale > 0)
-                {
-                    if (ifCanBeMoved(moveVec * speed * Time.deltaTime))
-                    {
-                        transform.RotateAround(transform.position, Vector3.up, rotationSpeed * Time.deltaTime * moveVec.x);
-                        transform.RotateAround(transform.position, transform.right, rotationSpeed * Time.deltaTime * (-moveVec.y));
-                    }
-                }
-                else
-                {
-                    if (ifCanBeMoved(moveVec * speed * avgDeltaTime))
-                    {
-
-                        transform.RotateAround(transform.position, Vector3.up, rotationSpeed * Time.deltaTime * moveVec.x);
-                        transform.RotateAround(transform.position, transform.right, rotationSpeed * Time.deltaTime * (-moveVec.y));
-                    }
-                }
-
+                //przesunięcie
+                moveAfterTouch(touch);
                 dragStartPos = touch.position;
 
-                //przybliżenie   
-                Vector2 curDist = touch.position - touch1.position;
-                Vector2 prevDist = (touch.position - touch.deltaPosition) - (touch1.position - touch1.deltaPosition);
-                float delta = curDist.magnitude - prevDist.magnitude;
-                if (Mathf.Abs(delta) > 10)
-                {
-                    if (ifCanBeMoved(new Vector3(0, 0, delta * .5f)))
-                        Camera.main.transform.Translate(0, 0, delta * .5f);
-                }
-
+                //przybliż / oddal
+                zoomInAfterTouch(touch, touch1);
 
             }
         }
+    }
+
+    private void moveAfterTouch(Touch touch)
+    {
+        Vector3 pos = Camera.main.ScreenToWorldPoint(touch.position);
+        pos.z = startZ;
+        transform.position = Camera.main.ScreenToWorldPoint(touch.position);
+        //here i gave condition to move camera with in required position
+        moveVec = -(touch.position - dragStartPos) * speed;
+        if (Time.timeScale > 0)
+            moveVec *= Time.deltaTime;
+        else
+            moveVec *= avgDeltaTime;
+
+
+        if (ifCanBeMoved(moveVec))
+        {
+            transform.Translate(moveVec);
+            Vector3 val = moveVec;
+            dragStartPos = touch.position;
+        }
+        else
+        {
+            //sprawdź jak dużo możesz jeszcze przesunąć kamerę
+            Vector3 newMove = howMuchCanBeMoved(moveVec);
+            transform.Translate(newMove, Space.World);
+        }
+
+    }
+
+    private void zoomInAfterTouch(Touch touch, Touch touch1)
+    {
+        Vector2 curDist = touch.position - touch1.position;
+        Vector2 prevDist = (touch.position - touch.deltaPosition) - (touch1.position - touch1.deltaPosition);
+        float delta = curDist.magnitude - prevDist.magnitude;
+        if (Mathf.Abs(delta) > 10)
+        {
+            Vector3 move = new Vector3(0, 0, delta * .5f);
+            if (ifCanBeMoved(move))
+                transform.Translate(move);
+            else
+            {
+                Vector3 newMove = howMuchCanBeMoved(move);
+                transform.Translate(newMove);
+            }
+        }
+    }
+    private void rotateAfterTouch(Touch touch)
+    {
+        moveVec = -(touch.position - dragStartPos);
+
+        transform.RotateAround(transform.position, Vector3.up, rotationSpeed * Time.deltaTime * moveVec.x);
+        transform.RotateAround(transform.position, transform.right, rotationSpeed * Time.deltaTime * (-moveVec.y));
+
     }
 
     public bool ifCanBeMoved(Vector3 movement)
@@ -175,10 +202,11 @@ public class MovableCamera : MonoBehaviour
         if ((transform.position.z + movement.z >= terrainCentrum.z + terrainDimensions.z/2 + maxDistFromTerrain) ||
             (transform.position.z + movement.z <= terrainCentrum.z  - terrainDimensions.z/2 - maxDistFromTerrain) ||
             (transform.position.y + movement.y >= terrainCentrum.y + terrainDimensions.y / 2 + maxDistFromTerrain) ||
-            (transform.position.y + movement.y <= terrainCentrum.y + terrainDimensions.y / 2 + 10) ||
+            (transform.position.y + movement.y <= terrainCentrum.y - terrainDimensions.y / 2 + minDistFromTerrain) ||
             (transform.position.x + movement.x >= terrainCentrum.x + terrainDimensions.x/2 + maxDistFromTerrain) ||
-            (transform.position.x + movement.x <= terrainCentrum.x - terrainDimensions.x/2 - maxDistFromTerrain))
-            return false;
+            (transform.position.x + movement.x <= terrainCentrum.x - terrainDimensions.x/2 - maxDistFromTerrain) ||
+            (transform.position.y <= waterPosition))
+                return false;
         else if (transform.position.y + movement.y < terrainHeightInNewPoint + minDistFromTerrain)
         {
             if (terrainHeightInNewPoint == 1.0 / 0.0)
@@ -188,6 +216,46 @@ public class MovableCamera : MonoBehaviour
         }
         else
             return true;
+    }
+
+    public Vector3 howMuchCanBeMoved(Vector3 movement)
+    {
+
+        float terrainHeightInNewPoint = TerrainManager.instance.GetHeight(transform.position.x + movement.x, transform.position.z + movement.z);
+
+        if ((transform.position.z + movement.z >= terrainCentrum.z + terrainDimensions.z / 2 + maxDistFromTerrain) ||
+            (transform.position.z + movement.z <= terrainCentrum.z - terrainDimensions.z / 2 - maxDistFromTerrain) ||
+            (transform.position.y + movement.y >= terrainCentrum.y + terrainDimensions.y / 2 + maxDistFromTerrain) ||
+            (transform.position.y + movement.y <= terrainCentrum.y - terrainDimensions.y / 2 + minDistFromTerrain) ||
+            (transform.position.x + movement.x >= terrainCentrum.x + terrainDimensions.x / 2 + maxDistFromTerrain) ||
+            (transform.position.x + movement.x <= terrainCentrum.x - terrainDimensions.x / 2 - maxDistFromTerrain) ||
+            (transform.position.y <= waterPosition))
+            {
+                if (transform.position.z + movement.z >= terrainCentrum.z + terrainDimensions.z / 2 + maxDistFromTerrain)
+                    movement.z =  (terrainCentrum.z + terrainDimensions.z / 2 + maxDistFromTerrain) - transform.position.z;
+                if (transform.position.z + movement.z <= terrainCentrum.z - terrainDimensions.z / 2 - maxDistFromTerrain)
+                    movement.z = terrainCentrum.z - terrainDimensions.z / 2 - maxDistFromTerrain - transform.position.z;
+                if (transform.position.y + movement.y >= terrainCentrum.y + terrainDimensions.y / 2 + maxDistFromTerrain)
+                    movement.y = terrainCentrum.y + terrainDimensions.y / 2 + maxDistFromTerrain - transform.position.y;
+                if (transform.position.y + movement.y <= terrainCentrum.y - terrainDimensions.y / 2 + minDistFromTerrain)
+                    movement.y = terrainCentrum.y + terrainDimensions.y / 2 + minDistFromTerrain - transform.position.y;
+                if (transform.position.x + movement.x >= terrainCentrum.x + terrainDimensions.x / 2 + maxDistFromTerrain)
+                    movement.x = terrainCentrum.x + terrainDimensions.x / 2 + maxDistFromTerrain - transform.position.x;
+                if (transform.position.x + movement.x <= terrainCentrum.x - terrainDimensions.x / 2 - maxDistFromTerrain)
+                    movement.x = terrainCentrum.x - terrainDimensions.x / 2 - maxDistFromTerrain - transform.position.x;
+                if (transform.position.y <= waterPosition)
+                    movement.y = waterPosition - transform.position.y;
+                return movement;
+            }
+        else if (transform.position.y + movement.y < terrainHeightInNewPoint + minDistFromTerrain)
+        {
+            if (terrainHeightInNewPoint == 1.0 / 0.0)
+                return movement;
+            else
+                return new Vector3(0, 0, 0);
+        }
+        else
+            return movement;
     }
 
     public void dontMove()
