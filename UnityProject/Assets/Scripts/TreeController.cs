@@ -15,26 +15,22 @@ public class TreeController : MonoBehaviour
 
     public float upgradePoints = 0F;
     public float maxUpgradePoints = 100F;
-    public float healthPoints = 10F;
+    public float healthPoints = 50F;
     public float baseMaxHealthPoints = 100F;
     public float baseGrowthDemand = 5F;
 
     public float size;
 
-    public float growthRate = 1F;
-    public float maxGrowth = 1F;
-
     public float badTerrainFactor = 1F;
     public float goodTerrainFactor = 1F;
 
     public float minWaterLevel = 6F;
-    //public float maxWaterLevel = 8F;
     public float sunFactor = 1F;
 
     public int minSeeds = 2;
     public int maxSeeds = 6;
     public float maxSowDistance = 10f;
-    public float minTreeDistance = 1f;
+    public float minTreeDistance = 2f;
 
     public float timeBetweenSow = 120F;
     public int sowsLeft = 4;
@@ -47,11 +43,9 @@ public class TreeController : MonoBehaviour
     public Mesh deadSmallMesh;
     public Mesh deadMesh;
 
-    public float sun;
-    public float soil;
-    public float water;
-    public float growth;
-    public float growthTimeAdjusted;
+    public bool isAlive = true;
+
+    public float Age { get { return Time.time - startTime; } }
 
     Renderer rend;
 
@@ -67,11 +61,7 @@ public class TreeController : MonoBehaviour
 
     private float maxUpgradedValue = 100F;
 
-    private float soilMid = 5;
-
-    public bool isAlive = true;
-
-    public float Age { get { return Time.time - startTime; } }
+    private float soilMid = 5;  
 
     private Color defaultColour;
     private Color currentColour;
@@ -301,14 +291,13 @@ public class TreeController : MonoBehaviour
         //float soil = 5; // 0 - 10
         //float sun = 1;  // 0 - 1
         //float water = 5;    // 0 - 10
-        soil = GameManager.instance.terrainManager.GetFertility(x, z); // 0 - 10
-        sun = 1F;
-        //sun = GameManager.instance.terrainManager.GetLight(x, z) / 10;  // 0 - 1
-        water = 10 - GameManager.instance.terrainManager.GetIrrigation(x, z);    // 0 - 10
+        var soil = GameManager.instance.terrainManager.GetFertility(x, z); // 0 - 10
+        var sun = 1F;
+        var water = 10 - GameManager.instance.terrainManager.GetIrrigation(x, z);    // 0 - 10
         
         //Debug.LogFormat("Soil: {0}; Sun: {1}; Water: {2}", soil, sun, water);
 
-        //growth;// = 1F;
+        float growth;// = 1F;
         if (soil < soilMid)
             growth = soilMid - badTerrainFactor/2 * (soilMid - soil);
         else
@@ -334,7 +323,7 @@ public class TreeController : MonoBehaviour
 
         Debug.LogFormat("Growth: {0}, Demand: {1}", growth, growthDemand);
 
-        growthTimeAdjusted = growth * (Time.time - lastGrowth) * growthRatePerSecond;
+        var growthTimeAdjusted = growth * (Time.time - lastGrowth) * growthRatePerSecond;
 
         if (growth > 0)
         {
