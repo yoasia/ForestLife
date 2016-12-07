@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PopupController : MonoBehaviour {
 
@@ -8,6 +9,7 @@ public class PopupController : MonoBehaviour {
     bool goodPopVisable = false, badPopVisable = false;
     private Animator animatorGoodLanding;
     private Animator animatorBadLanding;
+    public Text tt;
 
 	// Use this for initialization
 	void Start () {
@@ -33,6 +35,7 @@ public class PopupController : MonoBehaviour {
 
     public void GoodLandingPopupOn()
     {
+        badLandingPopup.SetActive(false);
         //goodPopVisable = true;
         goodLandingPopup.SetActive(true);
         animatorGoodLanding.enabled = true;
@@ -41,6 +44,7 @@ public class PopupController : MonoBehaviour {
     }
     public void GoodLandingPopupOff()
     {
+        
         if (goodLandingPopup.activeSelf)
         {
             animatorGoodLanding.Play("GoodLandPopupOut");
@@ -50,11 +54,13 @@ public class PopupController : MonoBehaviour {
         }
     }
 
-    public void BadLandingPopupOn()
+    public void BadLandingPopupOn(string s)
     {
+        goodLandingPopup.SetActive(false);
         //badPopVisable = true;
         badLandingPopup.SetActive(true);
         animatorBadLanding.enabled = true;
+        tt.text = s;
         animatorBadLanding.Play("BadLandPopupIn");
         
     }
