@@ -13,6 +13,8 @@ public class SeedController : MonoBehaviour
     public MobileInput MobInput;
     public Camera SeedCamera;
 
+    public bool verticalEnabled = false;
+
     private Vector3 startingCameraPosition;
     private Vector3 startPosition;
     private Quaternion startRotation;
@@ -56,7 +58,12 @@ public class SeedController : MonoBehaviour
         {
             var baseSpeed = Speed * 1.5F;
 
-            var vertAxis = MobInput.GetAxis("Vertical");
+            float vertAxis;
+            if (verticalEnabled)
+                vertAxis = MobInput.GetAxis("Vertical");
+            else
+                vertAxis = 0;
+
             var horAxis = MobInput.GetAxis("Horizontal");
             if (Mathf.Abs(vertAxis) == 1)
                 horAxis = 0;
