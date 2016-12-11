@@ -65,6 +65,10 @@ public class MainCanvasController : MonoBehaviour
                 int t = (int)Time.time;
                 SetDateText(t.ToString());
                 PointSelect();
+                 foreach(Touch touch in Input.touches){
+                 if(touch.tapCount == 2)
+                  DeselectAllTrees();
+                 }
                 if (selectedTrees.Count != 0)
                 {
                     UpdateActiveTreeInfo();

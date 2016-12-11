@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
         //załadowanie nowej ciekawostki
         if (currentGameState == GameState.GS_ISLAND && lastTrivia > timeBetweenTrivia)
         {
-            if (JsonDataManager.instance.triviaLoaded)
+            if (JsonDataManager.instance.triviaLoaded && (!JsonDataManager.instance.allTriviaDisplayed))
             {
                 triviaCanvas.GetComponent<TriviaListController>().LoadNewTrivia();
                 MyNotifications.CallNotification("nowa ciekawostka", 3.0f);
@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour
         //wywołanie nowego quizu
         if (currentGameState == GameState.GS_ISLAND && lastQuiz > timeBetweenQuiz)
         {
-            if (JsonDataManager.instance.questionsLoaded)
+            if (JsonDataManager.instance.questionsLoaded && (!JsonDataManager.instance.allQuestionsDisplayed))
             {
                 if (!JsonDataManager.instance.allQuestionsDisplayed)
                 {
@@ -640,7 +640,7 @@ public class GameManager : MonoBehaviour
         return Mathf.Sqrt(x * x + y * y);
     }
 
-    void BehaviouralData(String game_event)
+    public void BehaviouralData(String game_event)
     {
         DeviceOrientation orientation = Input.deviceOrientation;
         Vector3 acceleration = Input.acceleration;

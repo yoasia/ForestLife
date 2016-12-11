@@ -50,8 +50,11 @@ public class QuizController : MonoBehaviour {
                 }
                 
             }
-        
-        
+
+            if (JsonDataManager.instance.allQuestionsDisplayed)
+            {
+                GameManager.instance.SetGameState(GameManager.GameState.GS_ISLAND);
+            }
 
 	}
 
@@ -120,12 +123,14 @@ public class QuizController : MonoBehaviour {
             if (x == "0")
             {
                 GameObject.Find("correctAnswer").GetComponent<Button>().image.color = Color.green;
+                GameManager.instance.BehaviouralData("Good answer");
                 correctAnswers++;
             }
             else
             {
                 GameObject.Find("wrongAnswer" + x).GetComponent<Button>().image.color = Color.red;
                 GameObject.Find("correctAnswer").GetComponent<Button>().image.color = Color.green;
+                GameManager.instance.BehaviouralData("Bad answer");
                 wrongAnswers++;
             }
             displayNextQuestion = true;
