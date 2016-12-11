@@ -114,7 +114,6 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         if (currentGameState == GameState.GS_SEED)
             Time.timeScale = 1;
-        //currentGameState = GameState.GS_SEED;
         Wind = UnityEngine.Random.insideUnitCircle * maxWind;
         StartCoroutine(createCloudByTime(periodOfCreatingCloud));
         StartCoroutine(askAboutEmotions(questionPeriod));
@@ -138,7 +137,7 @@ public class GameManager : MonoBehaviour
         lastTrivia += Time.deltaTime;
 
         //wywołanie nowego quizu
-        if (currentGameState == GameState.GS_ISLAND && lastQuiz > timeBetweenQuiz)
+        if (currentGameState == GameState.GS_ISLAND && lastQuiz > timeBetweenQuiz && lastTrivia > 5)
         {
             if (JsonDataManager.instance.questionsLoaded && (!JsonDataManager.instance.allQuestionsDisplayed))
             {
@@ -211,7 +210,6 @@ public class GameManager : MonoBehaviour
             seedCamera.enabled = false;
             seed.SetActive(false);
         }
-        //Time.timeScale = 0;
     }
 
     public void NewSeed(GameObject selectedTree)
@@ -225,7 +223,6 @@ public class GameManager : MonoBehaviour
         seedCamera = seed.GetComponentInChildren<Camera>();
         SetGameState(GameState.GS_SEED);
         BehaviouralData("Start of new seed stage");
-        //Debug.LogFormat(species);
     }
 
     public bool seedLanding(float x, float z, string type, bool automatic = false)
@@ -644,7 +641,6 @@ public class GameManager : MonoBehaviour
     {
         DeviceOrientation orientation = Input.deviceOrientation;
         Vector3 acceleration = Input.acceleration;
-        //Compass compass = Input.compass;
         Touch first_touch;
         bool is_first_touch = false;
         Touch second_touch;
