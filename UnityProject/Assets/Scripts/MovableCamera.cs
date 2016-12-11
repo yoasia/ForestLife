@@ -174,7 +174,7 @@ public class MovableCamera : MonoBehaviour
         Vector2 curDist = touch.position - touch1.position;
         Vector2 prevDist = (touch.position - touch.deltaPosition) - (touch1.position - touch1.deltaPosition);
         float delta = curDist.magnitude - prevDist.magnitude;
-        if (Mathf.Abs(delta) > 10)
+        if (Mathf.Abs(delta) > 2)
         {
             Vector3 move = new Vector3(0, 0, delta * .5f);
             if (ifCanBeMoved(move))
