@@ -17,7 +17,7 @@ public class NewSeedChooseCanvasController : MonoBehaviour
     private Animator animatorPopup;
 
 
-    // Use this for initialization
+    
     void Start()
     {
 
@@ -25,7 +25,6 @@ public class NewSeedChooseCanvasController : MonoBehaviour
         animatorPopup.enabled = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
 
@@ -80,12 +79,10 @@ public class NewSeedChooseCanvasController : MonoBehaviour
                     if (selectedTree == null)
                     {
                         selectedTree = hit.transform.gameObject;
-                        //selectedTree.GetComponent<Renderer>().material.color = Color.blue;
                         selectedTree.GetComponent<TreeController>().SelectTree();
                     }
                     else
                     {
-                        //selectedTree.GetComponent<TreeController>().ReturnDefaultColour();
                         selectedTree.GetComponent<TreeController>().UnselectTreeByType();
                         selectedTree = hit.transform.gameObject;
                         selectedTree.GetComponent<TreeController>().SelectTree();
@@ -105,7 +102,6 @@ public class NewSeedChooseCanvasController : MonoBehaviour
         {
             popupPanel.SetActive(false);
             choosingTreePanel.SetActive(false);
-            //selectedTree.GetComponent<TreeController>().ReturnDefaultColour();
             selectedTree.GetComponent<TreeController>().UnselectTreeByType();
             choosingMode = false;
 

@@ -4,12 +4,6 @@ using UnityEngine.UI;
 
 public class SelectionCameraController : MonoBehaviour {
 
-
-    
-
-    
-    
-    //public Sprite selSpriteNorm, deselSppriteNorm, selSpriteHi, deselSppriteHi;
     public Camera cam;
     
 
@@ -17,11 +11,6 @@ public class SelectionCameraController : MonoBehaviour {
     public float moveSpeed = 0.2f;
 
     
-
-    Ray ray;
-    RaycastHit hit;
-
-	
 	void Start () {
 
         
@@ -38,7 +27,6 @@ public class SelectionCameraController : MonoBehaviour {
 
             
         }
-        //Button b = GameObject.Find("UI/SelectCanvas/AcceptSelectionButton").GetComponent<Button>();
         
         
 	}

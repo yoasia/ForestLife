@@ -93,7 +93,6 @@ public class TriviaListController : MonoBehaviour {
     {
         triviaListWindowPanel.SetActive(true);
         triviaContentPopup.SetActive(false);
-
     }
 
 }

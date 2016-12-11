@@ -55,9 +55,6 @@ public class SelectCanvasController : MonoBehaviour
         foreach (GameObject t in selectedTrees)
         {
 
-            //t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-            //t.GetComponent<TreeController>().ReturnDefaultColour();
-            //t.GetComponent<TreeController>().UnselectTree();
             t.GetComponent<TreeController>().SelectTree("green");
         }
         infoText.text = "";
@@ -67,22 +64,18 @@ public class SelectCanvasController : MonoBehaviour
         {
             rightMenuVisable = false;
             animatorRightMenu.Play("ChangeTreesPamMenuOut");
-            //selectButton.gameObject.SetActive(true);
-            //deselectButton.gameObject.SetActive(true);
             acceptSelButton.gameObject.SetActive(true);
             returnButton.gameObject.SetActive(true);
-            //Time.timeScale = 1;
+            
         }
         else
         {
             animatorRightMenu.enabled = true;
             animatorRightMenu.Play("ChangeTreesPamMenuIn");
             rightMenuVisable = true;
-            //selectButton.gameObject.SetActive(false);
-            //deselectButton.gameObject.SetActive(false);
             acceptSelButton.gameObject.SetActive(false);
             returnButton.gameObject.SetActive(false);
-            //Time.timeScale = 0;
+            
         }
 
     }
@@ -153,9 +146,6 @@ public class SelectCanvasController : MonoBehaviour
         foreach (GameObject t in selectedTrees)
         {
 
-            //t.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-            //t.GetComponent<TreeController>().ReturnDefaultColour();
-            //t.GetComponent<TreeController>().UnselectTree();
             t.GetComponent<TreeController>().SelectTree("green");
         }
 
@@ -204,10 +194,6 @@ public class SelectCanvasController : MonoBehaviour
         {
             if (t.GetComponent<TreeController>().CanBeUpgraded(addRoots, addLeaves, addBark) != true)
             {
-                //jesli nie wyswietlenie go na czerwono
-                //t.GetComponent<Renderer>().material.shader = Shader.Find("markRed");
-                //t.GetComponent<Renderer>().material.color = Color.red;
-                // t.GetComponent<TreeController>().UnselectTreeByType("green");
                 t.GetComponent<TreeController>().SelectTree("red");
             }
 

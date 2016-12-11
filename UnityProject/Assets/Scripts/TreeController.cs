@@ -92,16 +92,6 @@ public class TreeController : MonoBehaviour
 
             transform.localScale = new Vector3(size, size, size);
 
-            //if (selected)
-            //{
-            //    SelectTree("normal");
-
-            //}
-            //else
-            //{
-            //    UnselectTreeByType("normal");
-            //}
-
             if(sowsLeft > 1 && Age - lastSow > timeToSow)
                 Sow();
 

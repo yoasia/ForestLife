@@ -6,12 +6,11 @@ public class PopupController : MonoBehaviour {
 
 
     public GameObject goodLandingPopup, badLandingPopup;
-    bool goodPopVisable = false, badPopVisable = false;
     private Animator animatorGoodLanding;
     private Animator animatorBadLanding;
-    public Text tt;
+    public Text soilInfo;
 
-	// Use this for initialization
+	
 	void Start () {
 
         animatorGoodLanding = goodLandingPopup.GetComponent<Animator>();
@@ -20,26 +19,19 @@ public class PopupController : MonoBehaviour {
         animatorBadLanding.enabled = false;
 	}
 	
-	// Update is called once per frame
+	
 	void Update () {
 
-        //if (!badPopVisable)
-        //{
-        //    badLandingPopup.SetActive(false);
-        //}
-        //if (!goodPopVisable)
-        //{
-        //    goodLandingPopup.SetActive(false);
-        //}
 	}
 
-    public void GoodLandingPopupOn()
+    public void GoodLandingPopupOn(string soil)
     {
         badLandingPopup.SetActive(false);
-        //goodPopVisable = true;
         goodLandingPopup.SetActive(true);
         animatorGoodLanding.enabled = true;
+        soilInfo.text = soil;
         animatorGoodLanding.Play("GoodLandPopupIn");
+
         
     }
     public void GoodLandingPopupOff()
@@ -48,19 +40,15 @@ public class PopupController : MonoBehaviour {
         if (goodLandingPopup.activeSelf)
         {
             animatorGoodLanding.Play("GoodLandPopupOut");
-            //StartCoroutine(Wait(300.0f));
-            //goodPopVisable = false;
             goodLandingPopup.SetActive(false);
         }
     }
 
-    public void BadLandingPopupOn(string s)
+    public void BadLandingPopupOn()
     {
         goodLandingPopup.SetActive(false);
-        //badPopVisable = true;
         badLandingPopup.SetActive(true);
         animatorBadLanding.enabled = true;
-        tt.text = s;
         animatorBadLanding.Play("BadLandPopupIn");
         
     }
@@ -69,7 +57,6 @@ public class PopupController : MonoBehaviour {
         if (badLandingPopup.activeSelf)
         {
             animatorBadLanding.Play("BadLandPopupOut");
-            //badPopVisable = false;
             badLandingPopup.SetActive(false);
         }
     }

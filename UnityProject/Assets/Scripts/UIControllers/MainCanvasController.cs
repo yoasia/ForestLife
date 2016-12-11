@@ -37,13 +37,11 @@ public class MainCanvasController : MonoBehaviour
     private bool leftMenuVisable = false;
 
     private Animator animatorRightMenu;
-    private bool rightMenuVisable = false;
+
     Ray ray;
     RaycastHit hit;
     public bool IsScreenPopup = false;
-    //private bool firstClick = false;
-    //private float timeFromFirstClick = 0;
-    //private bool doubleClick = false;
+    
 
     void Start()
     {
@@ -100,18 +98,12 @@ public class MainCanvasController : MonoBehaviour
                     {
                         if (activeTree != null)
                         {
-                            //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-                            //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
-                            //activeTree.GetComponent<TreeController>().UnselectTreeByType();
+                            
                             activeTree.GetComponent<TreeController>().SelectTree("green");
                         }
 
                         activeTree = hit.transform.gameObject;
-
-                        //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
                         activeTree.GetComponent<TreeController>().SelectTree("normal");
-
-
                         selectedTrees.Add(hit.transform.gameObject);
                     }
                     else
@@ -122,8 +114,6 @@ public class MainCanvasController : MonoBehaviour
                             if (selectedTrees.Count != 0)
                             {
                                 activeTree = selectedTrees[0];
-                                //activeTree.GetComponent<Renderer>().material.color = Color.blue;
-                                //activeTree.GetComponent<TreeController>().UnselectTreeByType("green");
                                 activeTree.GetComponent<TreeController>().SelectTree("normal");
                             }
                             else
@@ -133,7 +123,6 @@ public class MainCanvasController : MonoBehaviour
                             }
                         }
                         hit.transform.gameObject.GetComponent<TreeController>().UnselectTree();
-                        //hit.transform.gameObject.GetComponent<TreeController>().ReturnDefaultColour();
                     }
 
                 }
@@ -211,26 +200,15 @@ public class MainCanvasController : MonoBehaviour
         {
             if (index > 0)
             {
-                //activeTree.GetComponent<TreeController>().UnselectTreeByType("normal");
                 activeTree.GetComponent<TreeController>().SelectTree("green");
-                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-                //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
                 activeTree = selectedTrees[index - 1];
-                // activeTree.GetComponent<TreeController>().UnselectTreeByType("green");
                 activeTree.GetComponent<TreeController>().SelectTree();
-                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
-                //activeTree.GetComponent<Renderer>().material.color = Color.blue;
+                
             }
             else
             {
-                //activeTree.GetComponent<TreeController>().UnselectTreeByType("normal");
                 activeTree.GetComponent<TreeController>().SelectTree("green");
-                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-                //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
                 activeTree = selectedTrees[selectedTrees.Count - 1];
-                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
-                //activeTree.GetComponent<Renderer>().material.color = Color.blue;
-                //activeTree.GetComponent<TreeController>().UnselectTreeByType("green");
                 activeTree.GetComponent<TreeController>().SelectTree();
             }
         }
@@ -238,26 +216,14 @@ public class MainCanvasController : MonoBehaviour
         {
             if (index < selectedTrees.Count - 1)
             {
-                //activeTree.GetComponent<TreeController>().UnselectTreeByType("normal");
                 activeTree.GetComponent<TreeController>().SelectTree("green");
-                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-                //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
                 activeTree = selectedTrees[index + 1];
-                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
-                //activeTree.GetComponent<Renderer>().material.color = Color.blue;
-                //activeTree.GetComponent<TreeController>().UnselectTreeByType("green");
                 activeTree.GetComponent<TreeController>().SelectTree();
             }
             else
             {
-                // activeTree.GetComponent<TreeController>().UnselectTreeByType("normal");
                 activeTree.GetComponent<TreeController>().SelectTree("green");
-                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
-                //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
                 activeTree = selectedTrees[0];
-                //activeTree.GetComponent<Renderer>().material.shader = Shader.Find("markBlue");
-                //activeTree.GetComponent<Renderer>().material.color = Color.blue;
-                //activeTree.GetComponent<TreeController>().UnselectTreeByType("green");
                 activeTree.GetComponent<TreeController>().SelectTree();
             }
         }
@@ -325,15 +291,12 @@ public class MainCanvasController : MonoBehaviour
                 break;
             case 'e':
                 windImage.transform.localEulerAngles = new Vector3(0, 0, -90);
-                //windImage.transform.Rotate(0, 0, 90);
                 break;
             case 'w':
                 windImage.transform.localEulerAngles = new Vector3(0, 0, 90);
-                //windImage.transform.Rotate(0, 0, -90);
                 break;
             default:
                 windImage.transform.localEulerAngles = new Vector3(0, 0, 0);
-                //windImage.transform.Rotate(0, 0, 0);
                 break;
 
         }
@@ -343,7 +306,6 @@ public class MainCanvasController : MonoBehaviour
     {
         foreach (GameObject t in selectedTrees)
         {
-            //activeTree.GetComponent<TreeController>().ReturnDefaultColour();
             t.GetComponent<TreeController>().UnselectTree();
         }
         activeTree = null;

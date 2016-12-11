@@ -34,8 +34,6 @@ public class TriviaButtonController : MonoBehaviour {
 
     public void HandleClick()
     {
-        //scrollList.TryTransferItemToOtherShop(item);
-        
         newImage.SetActive(false);
         triviaListController.DisplayTriviaContent(trivia);
     }

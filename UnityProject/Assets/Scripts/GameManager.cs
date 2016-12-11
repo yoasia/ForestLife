@@ -239,11 +239,12 @@ public class GameManager : MonoBehaviour
             var rotation = UnityEngine.Random.Range(0, 360);
             var tree = (GameObject)Instantiate(treeToAdd, pos, Quaternion.Euler(0, rotation, 0));
             treesOnIsland.Add(tree);
-
+            var soil = terrainManager.GetFertility(x, z);
+            string soilStrng = SoilToString(soil);
             if (automatic == false)
             {
                 timeToNextSeed = timeBetweenSeeds;
-                OnGoodLandingPopup();
+                OnGoodLandingPopup(soilStrng);
                 BehaviouralData("Good seed landing");
             }
             return true;
@@ -252,7 +253,7 @@ public class GameManager : MonoBehaviour
         {
             if (automatic == false)
             {
-                OnBadLandingPopup("sl");
+                OnBadLandingPopup();
                 BehaviouralData("Bad seed landing");
             }
             return false;
@@ -260,8 +261,33 @@ public class GameManager : MonoBehaviour
 
     }
 
+    public string SoilToString(float soil) {
+        if (soil >= 10)
+        {
+            return "bardzo dobra";
+        }
+        else if (soil < 10 && soil >= 7)
+        {
+            return "dobra";
+        }
+        else if (soil < 7 && soil >= 4)
+        {
+            return "przeciętna";
+        }
+        else if (soil < 4 && soil >= 2)
+        {
+            return "nie dobra";
+        }
+        else
+        {
+            return "zła";
+        }
 
-    public void OnGoodLandingPopup()
+
+    }
+
+
+    public void OnGoodLandingPopup(string soil)
     {
         selectCanvas.SetActive(false);
         mainCanvas.SetActive(false);
@@ -285,10 +311,10 @@ public class GameManager : MonoBehaviour
         }
 
         popupCanvas.GetComponent<PopupController>().BadLandingPopupOff();
-        popupCanvas.GetComponent<PopupController>().GoodLandingPopupOn();
+        popupCanvas.GetComponent<PopupController>().GoodLandingPopupOn(soil);
     }
 
-    public void OnBadLandingPopup(string s)
+    public void OnBadLandingPopup()
     {
         selectCanvas.SetActive(false);
         mainCanvas.SetActive(false);
@@ -311,7 +337,7 @@ public class GameManager : MonoBehaviour
         }
 
         popupCanvas.GetComponent<PopupController>().GoodLandingPopupOff();
-        popupCanvas.GetComponent<PopupController>().BadLandingPopupOn(s);
+        popupCanvas.GetComponent<PopupController>().BadLandingPopupOn();
     }
 
     public void CameraChange()

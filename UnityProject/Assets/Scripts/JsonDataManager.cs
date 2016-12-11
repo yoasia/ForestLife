@@ -22,11 +22,11 @@ public class JsonDataManager : MonoBehaviour {
 
     public string treeSpecies;
 
-    private List<int> notUsedSpeciesQuestions = new List<int>();
-    private List<int> notUsedOtherQuestions = new List<int>();
+    public List<int> notUsedSpeciesQuestions = new List<int>();
+    public List<int> notUsedOtherQuestions = new List<int>();
 
-    private List<int> notDisplayedSpeciesTrivia = new List<int>();
-    private List<int> notDisplayedOtherTrivia = new List<int>();
+    public List<int> notDisplayedSpeciesTrivia = new List<int>();
+    public List<int> notDisplayedOtherTrivia = new List<int>();
 
     private string tSpeciesFilePath, tOtherFilePath;
     private string triviaSpeciesJsonString, triviaOtherJsonString;
@@ -59,8 +59,19 @@ public class JsonDataManager : MonoBehaviour {
 
             tSpeciesFilePath = System.IO.Path.Combine(Application.streamingAssetsPath, treeSpecies + ".json");
             
-            StartCoroutine("Jsont");
-            
+            if (tSpeciesFilePath.Contains("://"))
+            {
+                WWW www = new WWW(tSpeciesFilePath);
+                while (!www.isDone)
+                {
+                    ;     
+                }
+                triviaSpeciesJsonString = www.text;
+            }
+            else
+            {
+                triviaSpeciesJsonString = System.IO.File.ReadAllText(tSpeciesFilePath);
+            }
 
             triviaSpeciesData = JsonMapper.ToObject(triviaSpeciesJsonString);
             JsonData td = triviaSpeciesData["data"];
@@ -74,8 +85,21 @@ public class JsonDataManager : MonoBehaviour {
 
         tOtherFilePath = System.IO.Path.Combine(Application.streamingAssetsPath, "Ogolne" + ".json");
 
-        StartCoroutine("Jsonto");
         
+        if (tOtherFilePath.Contains("://"))
+        {
+            WWW www = new WWW(tOtherFilePath);
+            while (!www.isDone)
+            {
+                ;       
+            }
+            triviaOtherJsonString = www.text;
+        }
+        else
+        {
+            triviaOtherJsonString = System.IO.File.ReadAllText(tOtherFilePath);
+        }
+
         triviaOtherData = JsonMapper.ToObject(triviaOtherJsonString);
         JsonData tdo = triviaOtherData["data"];
         triviaOtherNumber = tdo.Count;
@@ -89,34 +113,7 @@ public class JsonDataManager : MonoBehaviour {
             triviaLoaded = true;
     }
 
-    IEnumerator Jsont()
-    {
-        if (tSpeciesFilePath.Contains("://"))
-        {
-            WWW www = new WWW(tSpeciesFilePath);
-            yield return www;
-            triviaSpeciesJsonString = www.text;
-        }
-        else
-        {
-            triviaSpeciesJsonString = System.IO.File.ReadAllText(tSpeciesFilePath);
-        }
-
-    }
-    IEnumerator Jsonto()
-    {
-        if (tOtherFilePath.Contains("://"))
-        {
-            WWW www = new WWW(tOtherFilePath);
-            yield return www;
-            triviaOtherJsonString = www.text;
-        }
-        else
-        {
-            triviaOtherJsonString = System.IO.File.ReadAllText(tOtherFilePath);
-        }
-    }
-
+  
 
     public void LoadQuizData()
     {
@@ -124,8 +121,20 @@ public class JsonDataManager : MonoBehaviour {
         {
             qSpeciesFilePath = System.IO.Path.Combine(Application.streamingAssetsPath, treeSpecies + "_q.json");
             
-            StartCoroutine("Jsonq");
             
+            if (qSpeciesFilePath.Contains("://"))
+            {
+                WWW www = new WWW(qSpeciesFilePath);
+                while (!www.isDone)
+                {
+                    ;     
+                }
+                quizSpeciesJsonString = www.text;
+            }
+            else
+            {
+                quizSpeciesJsonString = System.IO.File.ReadAllText(qSpeciesFilePath);
+            }
             quizSpeciesData = JsonMapper.ToObject(quizSpeciesJsonString);
             
             JsonData td = quizSpeciesData["data"];
@@ -135,8 +144,21 @@ public class JsonDataManager : MonoBehaviour {
 
         qOtherFilePath = System.IO.Path.Combine(Application.streamingAssetsPath, "Ogolne" + "_q.json");
 
-        StartCoroutine("Jsonqo");
         
+        if (qOtherFilePath.Contains("://"))
+        {
+            WWW www = new WWW(qOtherFilePath);
+            while (!www.isDone)
+            {
+                ;    
+            }
+            quizOtherJsonString = www.text;
+        }
+        else
+        {
+            quizOtherJsonString = System.IO.File.ReadAllText(qOtherFilePath);
+        }
+
         quizOtherData = JsonMapper.ToObject(quizOtherJsonString);
         JsonData tdo = quizOtherData["data"];
         questionOtherNumber = tdo.Count;
@@ -146,32 +168,7 @@ public class JsonDataManager : MonoBehaviour {
 
     }
 
-    IEnumerator Jsonq()
-    {
-        if (qSpeciesFilePath.Contains("://"))
-        {
-            WWW www = new WWW(qSpeciesFilePath);
-            yield return www;
-            quizSpeciesJsonString = www.text;
-        }
-        else
-        {
-            quizSpeciesJsonString = System.IO.File.ReadAllText(qSpeciesFilePath);
-        }
-    }
-    IEnumerator Jsonqo()
-    {
-        if (qOtherFilePath.Contains("://"))
-        {
-            WWW www = new WWW(qOtherFilePath);
-            yield return www;
-            quizOtherJsonString = www.text;
-        }
-        else
-        {
-            quizOtherJsonString = System.IO.File.ReadAllText(qOtherFilePath);
-        }
-    }
+  
 
     public void SetNextTriviaNumber()
     {

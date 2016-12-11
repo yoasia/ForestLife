@@ -7,7 +7,6 @@ public class QuizController : MonoBehaviour {
 
 
     public Text questionText;
-    //public int questionNumber = 0;
     public GameObject answerPrefab;
     public GameObject answersContainer;
     public GameObject resultPopUp;
@@ -19,13 +18,13 @@ public class QuizController : MonoBehaviour {
     private int maxRoundQuestions = 1, thisRoundQuestion=0;
     private int correctAnswers = 0, wrongAnswers = 0;
     bool newQuiz = true;
-	// Use this for initialization
-	void Start () {
+	
+    void Start () {
         
         
 	}
 	
-	// Update is called once per frame
+	
 	void Update () {
         
             

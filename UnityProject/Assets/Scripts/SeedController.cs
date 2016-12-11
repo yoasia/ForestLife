@@ -51,7 +51,7 @@ public class SeedController : MonoBehaviour
             }
         }
         else
-            GameManager.instance.OnBadLandingPopup("oncol");
+            GameManager.instance.OnBadLandingPopup();
     }
 
     void FixedUpdate()
@@ -87,7 +87,7 @@ public class SeedController : MonoBehaviour
             SeedCamera.transform.localPosition = newCameraPosition;
 
             if (transform.position.y < GameManager.instance.terrainManager.water.transform.position.y)
-                GameManager.instance.OnBadLandingPopup("sfu");
+                GameManager.instance.OnBadLandingPopup();
         }
     }
 }
