@@ -74,9 +74,6 @@ public class SeedController : MonoBehaviour
             float move = vertAxis * Speed + baseSpeed;
             float rotation = horAxis * RotationSpeed;
 
-        //Debug.LogFormat("Vertical: {0}", vertAxis);
-        //Debug.LogFormat("Horizontal: {0}", horAxis);
-
             move *= Time.deltaTime;
             rotation *= Time.deltaTime;
 
