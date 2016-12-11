@@ -135,12 +135,15 @@ public class GameManager : MonoBehaviour
         //wywołanie nowego quizu
         if (currentGameState == GameState.GS_ISLAND && lastQuiz > timeBetweenQuiz)
         {
-
-            if (!JsonDataManager.instance.allQuestionsDisplayed)
+            if (JsonDataManager.instance.questionsLoaded)
             {
-                lastQuiz = 0;
-                SetGameState(GameState.GS_QUIZ);
+                if (!JsonDataManager.instance.allQuestionsDisplayed)
+                {
+                    lastQuiz = 0;
+                    SetGameState(GameState.GS_QUIZ);
+                }
             }
+            
 
         }
         if (triviasBeforeQuiz <= 0)
@@ -235,20 +238,21 @@ public class GameManager : MonoBehaviour
             if (automatic == false)
             {
                 timeToNextSeed = timeBetweenSeeds;
-                BehaviouralData("Good seed landing");
                 OnGoodLandingPopup();
+                BehaviouralData("Good seed landing");
             }
+            return true;
         }
         else
         {
             if (automatic == false)
             {
-                OnBadLandingPopup();
+                OnBadLandingPopup("sl");
                 BehaviouralData("Bad seed landing");
             }
+            return false;
         }
 
-        return true;
     }
 
 
@@ -279,7 +283,7 @@ public class GameManager : MonoBehaviour
         popupCanvas.GetComponent<PopupController>().GoodLandingPopupOn();
     }
 
-    public void OnBadLandingPopup()
+    public void OnBadLandingPopup(string s)
     {
         selectCanvas.SetActive(false);
         mainCanvas.SetActive(false);
@@ -302,7 +306,7 @@ public class GameManager : MonoBehaviour
         }
 
         popupCanvas.GetComponent<PopupController>().GoodLandingPopupOff();
-        popupCanvas.GetComponent<PopupController>().BadLandingPopupOn();
+        popupCanvas.GetComponent<PopupController>().BadLandingPopupOn(s);
     }
 
     public void CameraChange()
@@ -446,10 +450,11 @@ public class GameManager : MonoBehaviour
         else if (newGameState == GameState.GS_SEED)
         {
             Time.timeScale = 1;
+            MovableCamera.instance.dontMove();
         }
         else if (newGameState == GameState.GS_SELECTING)
         {
-            MovableCamera.instance.canBeMove();
+            MovableCamera.instance.dontMove();
             Time.timeScale = 1;
             //selectingMode = true;
         }
@@ -461,6 +466,7 @@ public class GameManager : MonoBehaviour
         else if (newGameState == GameState.GS_SELECT_TREEKIND)
         {
             Time.timeScale = 0;
+            MovableCamera.instance.dontMove();
         }
         else if (newGameState == GameState.GS_QUIZ)
         {

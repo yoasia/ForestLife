@@ -13,6 +13,8 @@ public class SeedController : MonoBehaviour
     public MobileInput MobInput;
     public Camera SeedCamera;
 
+    public bool verticalEnabled = false;
+
     private Vector3 startingCameraPosition;
     private Vector3 startPosition;
     private Quaternion startRotation;
@@ -33,10 +35,12 @@ public class SeedController : MonoBehaviour
         transform.rotation = startRotation;
         rigidBody.velocity = new Vector3(0f, 0f, 0f);
         rigidBody.angularVelocity = new Vector3(0f, 0f, 0f);
+        gameObject.SetActive(true);
     }
 
     void OnCollisionEnter(Collision collision)
     {
+        gameObject.SetActive(false);
         if(collision.gameObject.tag == "Terrain")
         {
             var position = collision.contacts[0].point;
@@ -46,8 +50,8 @@ public class SeedController : MonoBehaviour
                 return;
             }
         }
-
-        GameManager.instance.OnBadLandingPopup();
+        else
+            GameManager.instance.OnBadLandingPopup("oncol");
     }
 
     void FixedUpdate()
@@ -56,7 +60,12 @@ public class SeedController : MonoBehaviour
         {
             var baseSpeed = Speed * 1.5F;
 
-            var vertAxis = MobInput.GetAxis("Vertical");
+            float vertAxis;
+            if (verticalEnabled)
+                vertAxis = MobInput.GetAxis("Vertical");
+            else
+                vertAxis = 0;
+
             var horAxis = MobInput.GetAxis("Horizontal");
             if (Mathf.Abs(vertAxis) == 1)
                 horAxis = 0;
@@ -77,8 +86,8 @@ public class SeedController : MonoBehaviour
             Vector3 newCameraPosition = new Vector3(startingCameraPosition.x - horAxis * HorizontalSway, startingCameraPosition.y - vertAxis * VerticalSway, startingCameraPosition.z);
             SeedCamera.transform.localPosition = newCameraPosition;
 
-            if(transform.position.y < GameManager.instance.terrainManager.water.transform.position.y)
-                GameManager.instance.OnBadLandingPopup();
+            if (transform.position.y < GameManager.instance.terrainManager.water.transform.position.y)
+                GameManager.instance.OnBadLandingPopup("sfu");
         }
     }
 }
