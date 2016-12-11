@@ -92,16 +92,6 @@ public class TreeController : MonoBehaviour
 
             transform.localScale = new Vector3(size, size, size);
 
-            //if (selected)
-            //{
-            //    SelectTree("normal");
-
-            //}
-            //else
-            //{
-            //    UnselectTreeByType("normal");
-            //}
-
             if(sowsLeft > 1 && Age - lastSow > timeToSow)
                 Sow();
 
@@ -287,15 +277,11 @@ public class TreeController : MonoBehaviour
     {
         float x = transform.position.x;
         float z = transform.position.z;
-        //TO DO pobieranie jakości gleby, wody i nasłonecznienia z terenu
-        //float soil = 5; // 0 - 10
-        //float sun = 1;  // 0 - 1
-        //float water = 5;    // 0 - 10
+
         var soil = GameManager.instance.terrainManager.GetFertility(x, z); // 0 - 10
         var sun = 1F;
         var water = 10 - GameManager.instance.terrainManager.GetIrrigation(x, z);    // 0 - 10
         
-        //Debug.LogFormat("Soil: {0}; Sun: {1}; Water: {2}", soil, sun, water);
 
         float growth;// = 1F;
         if (soil < soilMid)
@@ -348,8 +334,6 @@ public class TreeController : MonoBehaviour
             treeCondition = 0;
 
         ChangeColor(treeCondition);
-
-        //Debug.LogFormat("Size: {0}; Health: {1}; Upgrade Points: {2}", size, healthPoints, upgradePoints);
     }
 
     private float GetShadeFactor()
