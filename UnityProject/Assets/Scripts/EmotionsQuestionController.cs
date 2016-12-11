@@ -9,7 +9,7 @@ public class EmotionsQuestionController : MonoBehaviour {
     public Canvas panelQuestions1;
     public Canvas panelQuestions2;
     public Canvas panelQuestions3;
-    public string fileName;
+    private string fileName;
 
     string[] answers;
     public Canvas[] panelsQuestions;
@@ -18,6 +18,7 @@ public class EmotionsQuestionController : MonoBehaviour {
     
     // Use this for initialization
     void Start () {
+        fileName = GameManager.instance.getNameOfEmotionsFile();
         instance = this;
         panelsQuestions = new Canvas[3];
         answers = new string[5];
@@ -30,6 +31,8 @@ public class EmotionsQuestionController : MonoBehaviour {
         panelQuestions2.enabled = false;
         panelQuestions3.enabled = false;
         Time.timeScale = 0;
+
+
     }
 	
 	// Update is called once per frame
@@ -57,7 +60,10 @@ public class EmotionsQuestionController : MonoBehaviour {
     void saveAnswer()
     {
         string newRow = String.Join(",", answers);
-        GameManager.addRowToFile(fileName, newRow);
+
+        string date = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+        string time = DateTime.Now.TimeOfDay.ToString();
+        GameManager.addRowToFile(fileName, date + ',' + time + ',' + newRow);
     }
 
     void Destroy()
@@ -65,4 +71,6 @@ public class EmotionsQuestionController : MonoBehaviour {
         Time.timeScale = 1;
         DestroyObject(gameObject);
     }
+
+    
 }

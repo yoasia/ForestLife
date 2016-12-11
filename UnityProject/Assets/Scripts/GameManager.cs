@@ -63,7 +63,8 @@ public class GameManager : MonoBehaviour
 
     public float timeBetweenSavingData = 0.1F;
     private bool firstSave = true;
-    private String behaviouralDataFile = "beh_data.csv";
+    private String behaviouralDataFileName = "beh_data.csv";
+    private String emotionsDataFileName = "emotions.csv";
 
     private float timeToNextDataSave = 0;
     private float timeToNextSeed;
@@ -97,6 +98,10 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        behaviouralDataFileName = getCurrentDateAndTime() + "_" + behaviouralDataFileName;
+        emotionsDataFileName = getCurrentDateAndTime() + "_" + emotionsDataFileName;
+        addHeadersTofiles();
+
         seedDefaultRotation = seed.transform.rotation;
 
         timeToNextSeed = timeBetweenSeeds;
@@ -581,12 +586,6 @@ public class GameManager : MonoBehaviour
     {
         StringBuilder sb = new StringBuilder();
 
-        string date = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
-        string time = DateTime.Now.TimeOfDay.ToString();
-
-        //dodanie daty i czasu
-        data = date + ',' + time + ',' + data;
-        
         sb.AppendLine(data);
         //zapisanie linijki
         File.AppendAllText(Application.persistentDataPath+"/"+filePath, sb.ToString());
@@ -627,49 +626,6 @@ public class GameManager : MonoBehaviour
 
         String data_list = "";
 
-        if (firstSave == true)
-        {
-            data_list += "orientation" + ",";
-            data_list += "acceleration_x" + ",";
-            data_list += "acceleration_y" + ",";
-            data_list += "acceleration_z" + ",";
-            //data_list+="compass_heading_accuracy"+",";
-            //data_list+="compass_magnetic_heading"+",";
-            //data_list+="compass_true_heading"+",";
-            data_list += "touch_count" + ",";
-
-            data_list += "first_touch_finger_id" + ",";
-            data_list += "first_touch_delta_time" + ",";
-            //data_list+="first_touch_type"+",";
-            data_list += "first_touch_tap_count" + ",";
-            data_list += "first_touch_phase" + ",";
-            data_list += "first_touch_position_x" + ",";
-            data_list += "first_touch_position_y" + ",";
-            //data_list+="first_touch_delta_position_x"+",";
-            //data_list+="first_touch_delta_position_y"+",";
-            //data_list+="first_touch_radius"+",";
-
-            data_list += "second_touch_finger_id" + ",";
-            data_list += "second_touch_delta_time" + ",";
-            //data_list+="second_touch_type"+",";
-            data_list += "second_touch_tap_count" + ",";
-            data_list += "second_touch_phase" + ",";
-            data_list += "second_touch_position_x" + ",";
-            data_list += "second_touch_position_y" + ",";
-            //data_list+="second_touch_delta_position_x"+",";
-            //data_list+="second_touch_delta_position_y"+",";
-            //data_list+="second_touch_radius"+",";
-
-            data_list += "current_game_state" + ",";
-            data_list += "game_event" + ",";
-            data_list += "score";
-
-            addRowToFile(behaviouralDataFile, data_list);
-            data_list = "";
-
-            firstSave = false;
-        }
-
         try
         {
             first_touch = Input.GetTouch(0);
@@ -701,6 +657,7 @@ public class GameManager : MonoBehaviour
 
         if (is_first_touch == true)
         {
+            first_touch = Input.GetTouch(0);
             data_list += first_touch.fingerId.ToString() + ",";
             data_list += first_touch.deltaTime.ToString() + ",";
             //data_list+=first_touch.type.ToString()+",";
@@ -728,6 +685,7 @@ public class GameManager : MonoBehaviour
 
         if (is_second_touch == true)
         {
+            second_touch = Input.GetTouch(1);
             data_list += second_touch.fingerId.ToString() + ",";
             data_list += second_touch.deltaTime.ToString() + ",";
             //data_list+=second_touch.type.ToString()+",";
@@ -756,8 +714,10 @@ public class GameManager : MonoBehaviour
         data_list += currentGameState.ToString() + ",";
         data_list += game_event + ",";
         data_list += score.ToString("F2");
+        string date = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+        string time = DateTime.Now.TimeOfDay.ToString();
 
-        addRowToFile(behaviouralDataFile, data_list);
+        addRowToFile( behaviouralDataFileName, date + ',' + time + ',' + data_list);
     }	
 
 
@@ -771,5 +731,73 @@ public class GameManager : MonoBehaviour
                 newScore += tree.healthPoints * tree.size;
         }
         return newScore;
+    }
+
+    string getCurrentDateAndTime()
+    {
+        string date = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+        string time = DateTime.Now.Hour.ToString() + "-" + DateTime.Now.Minute.ToString();
+
+        return date + "_" + time;
+    }
+
+    public string getNameOfEmotionsFile ()
+    {
+        return emotionsDataFileName;
+    }
+
+    void addHeadersTofiles()
+    {
+
+        string dataList = "";
+        dataList += "date" + ",";
+        dataList += "time" + ",";
+        dataList += "orientation" + ",";
+        dataList += "acceleration_x" + ",";
+        dataList += "acceleration_y" + ",";
+        dataList += "acceleration_z" + ",";
+        //data_list+="compass_heading_accuracy"+",";
+        //data_list+="compass_magnetic_heading"+",";
+        //data_list+="compass_true_heading"+",";
+        dataList += "touch_count" + ",";
+
+        dataList += "first_touch_finger_id" + ",";
+        dataList += "first_touch_delta_time" + ",";
+        //data_list+="first_touch_type"+",";
+        dataList += "first_touch_tap_count" + ",";
+        dataList += "first_touch_phase" + ",";
+        dataList += "first_touch_position_x" + ",";
+        dataList += "first_touch_position_y" + ",";
+        //data_list+="first_touch_delta_position_x"+",";
+        //data_list+="first_touch_delta_position_y"+",";
+        //data_list+="first_touch_radius"+",";
+
+        dataList += "second_touch_finger_id" + ",";
+        dataList += "second_touch_delta_time" + ",";
+        //data_list+="second_touch_type"+",";
+        dataList += "second_touch_tap_count" + ",";
+        dataList += "second_touch_phase" + ",";
+        dataList += "second_touch_position_x" + ",";
+        dataList += "second_touch_position_y" + ",";
+        //data_list+="second_touch_delta_position_x"+",";
+        //data_list+="second_touch_delta_position_y"+",";
+        //data_list+="second_touch_radius"+",";
+
+        dataList += "current_game_state" + ",";
+        dataList += "game_event" + ",";
+        dataList += "score";
+
+
+        string emotionsDataList = "";
+
+        emotionsDataList += "date" + ",";
+        emotionsDataList += "time" + ",";
+        emotionsDataList += "pleasure" + ",";
+        emotionsDataList += "arousal" + ",";
+        emotionsDataList += "dominance" + ",";
+
+
+        addRowToFile(behaviouralDataFileName, dataList);
+        addRowToFile(emotionsDataFileName, emotionsDataList);
     }
 }
