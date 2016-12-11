@@ -46,8 +46,6 @@ public class EmotionsQuestionController : MonoBehaviour {
         if (currentQuestion == panelsQuestions.Length)
         {
             //jeżeli to było ostatnie pytanie
-            answers[currentQuestion++] = DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
-            answers[currentQuestion++] = DateTime.Now.TimeOfDay.ToString();
             saveAnswer();
             Destroy();
             return;

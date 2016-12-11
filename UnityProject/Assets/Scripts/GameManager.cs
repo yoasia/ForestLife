@@ -583,7 +583,7 @@ public class GameManager : MonoBehaviour
         
         sb.AppendLine(data);
         //zapisanie linijki
-        File.AppendAllText(filePath, sb.ToString());
+        File.AppendAllText(Application.persistentDataPath+"/"+filePath, sb.ToString());
     }
 
 
